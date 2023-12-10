@@ -1,0 +1,52 @@
+/*------- custom fonts -------*/
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+@font-face {
+  font-family: PDMSIslam;
+  src: url("../public/fonts/pdms-islamic/_PDMS_IslamicFont Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: AlQalam;
+  src: url("../public/fonts/al-qalam/Al_Qalam_Quran_2.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Othmani;
+  src: url("../public/fonts/othmani/Othmani Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: SolaimanLipi;
+  src: url("../public/fonts/solaiman-lipi/SolaimanLipi_20-04-07.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Kalpurush;
+  src: url("../public/fonts/kalpurush/kalpurush.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: PalatinoLinotype;
+  src: url("../public/fonts/palatino-linotype/pala.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: TimesNewRoman;
+  src: url("../public/fonts/times-new-roman/times_new_roman.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}

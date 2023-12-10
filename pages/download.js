@@ -1,0 +1,44 @@
+import { server } from "../lib/config";
+import { getChaptersInfo } from "../lib/fetch";
+import Layout from "../components/layouts/layout-content";
+import Meta from "../components/core/meta";
+import DownloadContent from "../components/pages/download";
+
+export default function DownloadPage({ chapters, pageTitle }) {
+  return (
+    <>
+      <Meta
+        title={`${pageTitle}`}
+        description={`${pageTitle}`}
+        url={`${server}/download`}
+        image={`${server}/img/s_logo.png`}
+        type="website"
+      />
+
+      <DownloadContent chapters={chapters} />
+    </>
+  );
+}
+
+DownloadPage.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
+};
+
+export async function getStaticProps(context) {
+  const chapters = await getChaptersInfo();
+
+  if (!chapters) {
+    return {
+      notFound: true,
+    };
+  }
+
+  // Pass data to the page via props
+  return {
+    props: {
+      chapters,
+      pageTitle: "Download audio and pdf",
+      bgColor: "secondary",
+    },
+  };
+}

@@ -1,0 +1,72 @@
+.title {}
+
+.title h2 {
+  margin-bottom: 5px;
+}
+
+.title h4 {
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--bdr14);
+}
+
+.wrapper {
+  width: 100%;
+}
+
+.content {
+  width: 100%;
+  padding: 0 15px 15px;
+}
+
+.item {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.inner {
+  width: 100%;
+}
+
+.inner div,
+.inner svg {
+  color: var(--txt11);
+}
+
+.inner::before {
+  border-bottom: 1px solid var(--bdr11) !important;
+}
+
+.inner::after {
+  display: none;
+}
+
+.btn {
+  text-transform: capitalize !important;
+  width: 50%;
+  padding: 6px 10px !important;
+  background-color: var(--bg12) !important;
+  color: var(--txt11) !important;
+}
+
+.btn svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--txt11);
+}
+
+.custom_select {
+  width: 200px;
+  max-height: 400px !important;
+  padding: 10px 0;
+  background-color: var(--bg11) !important;
+  color: var(--txt11) !important;
+}
+
+.custom_select ul {
+  padding: 0;
+}
+
+.custom_select li {
+  padding: 6px 20px;
+  cursor: pointer;
+}

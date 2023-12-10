@@ -1,0 +1,35 @@
+.scrollbar {
+  height: 100%;
+  padding: 16px 32px;
+}
+.header {
+  position: relative;
+}
+.title {
+  font-size: 16px;
+  margin-bottom: 18px;
+}
+.close {
+  position: absolute;
+  top: -4px;
+  right: -14px;
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: var(--bg22);
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1;
+}
+// .close:hover {
+//   background-color: var(--bg22);
+// }
+.close svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--txt12);
+}

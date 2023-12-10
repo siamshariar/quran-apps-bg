@@ -1,0 +1,94 @@
+.sidenav {
+  display: none;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 86px;
+  padding: 24px 24px 0;
+  width: 500px;
+  height: 500px;
+  max-height: 500px;
+  background: var(--bg11);
+  z-index: 999;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.sidenav.open {
+  display: block;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: var(--bg22);
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.close:hover {
+  background-color: var(--bg22);
+}
+
+.close svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--txt12);
+}
+
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  min-height: unset !important;
+  margin-bottom: 20px;
+}
+
+.tab_indicator {
+  display: none !important;
+}
+
+.tab {
+  padding: 0 !important;
+  min-height: unset !important;
+  min-width: unset !important;
+  margin-right: 14px !important;
+  padding-right: 20px !important;
+}
+
+.tab::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 1px;
+  height: 13px;
+  background-color: #999;
+  transform: translateY(-50%);
+}
+.tab:last-child::after {
+  display: none;
+}
+
+.tab_wrapper {
+  text-transform: capitalize;
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+.tab span svg {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 0 !important;
+  margin-right: 6px;
+  fill: var(--txt11);
+  left: -2px;
+  position: relative;
+}

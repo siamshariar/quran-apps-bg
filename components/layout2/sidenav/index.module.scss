@@ -1,0 +1,83 @@
+.sidenav {
+  display: none;
+}
+
+@media only screen and (min-width: 1024px) {
+  .sidenav {
+    display: block;
+    align-self: start;
+    position: sticky;
+    top: 24px;
+    height: auto;
+    z-index: 10;
+  }
+
+  ul.menu {
+    display: flex;
+    flex-direction: column;
+    margin-right: 16px;
+    box-shadow: var(--bs21);
+  }
+
+  ul.menu li {
+    position: relative;
+    background-color: var(--bg11);
+    display: block;
+    width: 70px;
+    min-width: 40px;
+    height: 50px;
+    box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.05);
+  }
+
+  ul.menu li.open {
+    background-color: var(--bg11) !important; // no change right now
+  }
+
+  ul.menu li.open::after {
+    content: "";
+    height: 100%;
+    width: 16px;
+    background: var(--bg11);
+    position: absolute;
+    top: 0;
+    left: 100%;
+    z-index: 999;
+    box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.05);
+  }
+
+  ul.menu li:first-child {
+    border-radius: 8px 8px 0 0;
+  }
+
+  ul.menu li:first-child.open {
+    border-radius: 8px 0 0 0;
+  }
+
+  ul.menu li:last-child {
+    border-radius: 0 0 8px 8px;
+    box-shadow: none;
+  }
+
+  ul.menu li:last-child.open {
+    border-radius: 0 0 0 8px;
+  }
+
+  ul.menu li:hover {
+    background-color: var(--bg11); // no change right now
+  }
+
+  .icon, .icon a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .icon svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--txt11);
+  }
+}

@@ -1,0 +1,138 @@
+.header {
+  display: none;
+}
+
+@media only screen and (min-width: 1024px) {
+  .header {
+    display: block;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-bottom: none;
+    background: var(--bg11);
+    box-shadow: var(--bs21);
+    z-index: 999;
+    transition: background 150ms ease-in, box-shadow 150ms ease-in;
+  }
+
+  .header.home {
+    position: fixed;
+    background: none;
+    box-shadow: none;
+  }
+
+  .header.home.scrolled {
+    background: var(--bg11);
+    box-shadow: var(--bs21);
+  }
+
+  .header.surah {
+    position: absolute;
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 66px;
+  }
+
+  .left {}
+
+
+  .logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .logo img {}
+
+  .logo.logo_normal,
+  .logo.logo_full_white,
+  .header.home .logo.logo_white,
+  .header.home.scrolled .logo.logo_normal {
+    display: flex;
+  }
+
+  .logo.logo_white,
+  .header.home .logo.logo_normal,
+  .header.home.scrolled .logo.logo_white {
+    display: none;
+  }
+
+
+  .right {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn {
+    width: 48px !important;
+    min-width: 48px !important;
+    height: 48px !important;
+    border-radius: 50% !important;
+  }
+
+  .btn:hover {
+    //background-color: var(--bg22) !important;
+  }
+
+  .btn span {
+    width: 100%;
+    min-width: 24px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn svg {
+    fill: var(--txt11);
+    width: 24px;
+    height: 24px;
+  }
+
+  .header.home .btn svg {
+    fill: #fff;
+    transition: fill 150ms ease-in;
+  }
+
+  .header.home.scrolled .btn svg {
+    fill: var(--txt11);
+  }
+
+  //popover
+  .menu {
+    background-color: var(--bg11);
+  }
+
+  .link {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .icon {
+    margin-right: 11px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .icon svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--txt11);
+  }
+
+  .text {
+    font-size: 15px;
+    color: var(--txt11);
+    padding-right: 14px;
+  }
+}

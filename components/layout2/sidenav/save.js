@@ -1,0 +1,121 @@
+import { useState, useEffect } from "react";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import PropTypes from "prop-types";
+import BookmarkList from "../../bookmark/list";
+import PinList from "../../pin/list";
+import LastReadList from "../../last-read/list";
+import Scrollbar from "../../core/scrollbar";
+import PinIcon from "../../icons/PinOutline";
+import BookmarkBorderIcon from "../../icons/BookmarkBorder";
+import AutoStoriesIcon from "../../icons/AutoStories";
+import CloseIcon from "../../icons/Close";
+import styles from "./save.module.scss";
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`save-tabpanel-${index}`}
+      aria-labelledby={`save-tab-${index}`}
+      {...other}
+    >
+      {value === index && children}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `save-tab-${index}`,
+    "aria-controls": `save-tabpanel-${index}`,
+  };
+}
+
+export default function Save({ open, controller }) {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    open == false ? setValue(0) : setValue(open - 1)
+  }, [open])
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Scrollbar
+      className={open ? `${styles.sidenav} ${styles.open}` : styles.sidenav}
+    >
+      <span className={styles.close} onClick={controller(false)}>
+        <CloseIcon />
+      </span>
+
+      <Tabs
+        classes={{
+          root: styles.tabs,
+          indicator: styles.tab_indicator,
+        }}
+        value={value}
+        onChange={handleChange}
+        aria-label="Save tabs"
+      >
+        <Tab
+          classes={{
+            root: styles.tab,
+            wrapper: styles.tab_wrapper,
+          }}
+          icon={<BookmarkBorderIcon />}
+          label="Bookmarks"
+          disableRipple
+          disableFocusRipple
+          {...a11yProps(0)}
+        />
+
+        <Tab
+          classes={{
+            root: styles.tab,
+            wrapper: styles.tab_wrapper,
+          }}
+          icon={<PinIcon />}
+          label="Pin"
+          disableRipple
+          disableFocusRipple
+          {...a11yProps(1)}
+        />
+
+        <Tab
+          classes={{
+            root: styles.tab,
+            wrapper: styles.tab_wrapper,
+          }}
+          icon={<AutoStoriesIcon />}
+          label="Last Read"
+          disableRipple
+          disableFocusRipple
+          {...a11yProps(2)}
+        />
+      </Tabs>
+
+      <TabPanel value={value} index={0}>
+        <BookmarkList controller={controller} />
+      </TabPanel>
+
+      <TabPanel value={value} index={1}>
+        <PinList controller={controller} />
+      </TabPanel>
+
+      <TabPanel value={value} index={2}>
+        <LastReadList controller={controller} />
+      </TabPanel>
+    </Scrollbar>
+  );
+}

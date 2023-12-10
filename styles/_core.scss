@@ -1,0 +1,149 @@
+// by default enable print background graphics
+* {
+  -webkit-print-color-adjust: exact !important; /* Chrome, Safari, Edge */
+  color-adjust: exact !important; /*Firefox*/
+}
+
+// custom styles
+body {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--txt11);
+  background: var(--bg12);
+}
+
+@media print {
+  body {
+    background-color: #fff;
+  }
+}
+
+.text_arabic {
+  text-align: right;
+  font-family: PDMSIslam;
+  font-weight: 400;
+  color: var(--txt00);
+  font-size: 36px;
+}
+
+.text_trans {
+  text-align: left;
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--txt11);
+}
+
+// viewport
+.viewport {
+  display: block;
+  padding-top: 54px;
+  padding-bottom: 0;
+  padding-right: 24px;
+  margin-right: -24px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 54px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.viewport_no_footer {
+  bottom: 0;
+}
+
+.viewport_surah {
+  background-color: var(--bg11);
+}
+
+@media only screen and (min-width: 1024px) {
+  .viewport {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 0;
+    margin-right: 0;
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    overflow-y: unset;
+    overflow-x: unset;
+    min-height: calc(100vh - 72px);
+  }
+  .viewport_surah {
+    background-color: transparent;
+  }
+}
+
+// page content
+.content {
+  display: block;
+  width: 100%;
+  max-width: 1100px;
+  padding: 10px 0;
+  margin: 0 auto;
+}
+
+.content.layout2 {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+@media only screen and (min-width: 1024px) {
+  .content {
+    padding-top: 98px;
+    padding-bottom: 32px;
+  }
+
+  //layout2
+  .content.layout2 {
+    display: flex;
+    max-width: 1186px;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 98px;
+    margin: 0 auto;
+  }
+
+  .content_wrapper {
+    padding: 32px;
+    box-shadow: var(--bs21);
+    border-radius: 8px;
+    background-color: var(--bg11);
+    width: 100%;
+  }
+}
+// pages
+.settings_page {
+  padding: 0 15px 15px;
+  max-width: 599px;
+  margin: 0 auto;
+  background: var(--bg11);
+}
+
+// conditional view
+.view_on_mobile {
+  display: block;
+}
+.view_on_web {
+  display: none;
+}
+
+@media only screen and (min-width: 1024px) {
+  .view_on_mobile {
+    display: none;
+  }
+  .view_on_web {
+    display: block;
+  }
+}
+
+// highlighted
+.highlight {
+  background-color: rgba(160, 232, 175, 0.1) !important;
+  transition: background-color 250ms ease-in-out;
+}

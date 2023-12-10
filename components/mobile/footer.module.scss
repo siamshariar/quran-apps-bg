@@ -1,0 +1,44 @@
+.footer {
+  width: 100%;
+  height: 54px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: var(--bg11);
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--bdr11);
+  overflow: hidden;
+}
+
+.inner {
+  background-color: transparent !important;
+}
+
+
+
+
+
+
+// ul.menu {
+//   display: flex;
+//   justify-content: space-between;
+//   padding: 0 20px;
+// }
+// ul.menu li {}
+// ul.menu li a {}
+// ul.menu li svg {
+//   fill: #A4AAB3;
+//   transition: fill 250ms ease-in-out;
+// }
+
+// ul.menu li svg:hover {
+//   fill: var(--main-color);
+// }
+
+@media only screen and (min-width: 1024px) {
+  .footer {
+    display: none;
+  }
+}

@@ -1,0 +1,96 @@
+.search {
+  display: block;
+  position: relative;
+  padding: 20px 15px;
+  margin-top: -20px;
+  width: 100%;
+  border-bottom: 1px solid var(--bdr12);
+}
+
+.search input[type=text] {
+  padding-left: 14px;
+  padding-right: 40px;
+  line-height: 39px;
+  width: 100%;
+  border-radius: 25px;
+  height: unset;
+  margin: 0;
+  border: none;
+  display: block;
+  background: var(--bg22);
+  color: var(--txt11);
+}
+
+.search input[type=text]:focus {
+  border-bottom: none !important;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5) !important;
+}
+
+.search svg {
+  position: absolute;
+  top: 50%;
+  right: 38px;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  opacity: 0.7;
+  fill: var(--txt11);
+}
+
+.lists {
+  width: 100%;
+  position: relative;
+  padding: 15px 15px 0 15px;
+  background: var(--bg12);
+}
+
+.list {
+  position: relative;
+  padding: 18px;
+  padding-left: 70px;
+  background: var(--bg11);
+  margin-bottom: 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.list:hover {
+  transform: scale(1.05);
+  z-index: 1;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 -10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.list.active {
+  /*border: 1px solid var(--clr11);*/
+}
+
+.number {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  line-height: 34px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  background: var(--bg22);
+  color: var(--txt11);
+}
+
+.name {
+  display: block;
+}
+
+.name span {
+  display: block;
+  color: var(--txt11);
+}
+
+.name span:nth-child(2) {
+  font-size: 12px;
+  opacity: 0.6;
+}

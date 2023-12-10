@@ -1,0 +1,124 @@
+// search modal
+.modal {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999999;
+  overflow: hidden;
+  background: var(--bg12);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.75);
+  transition: all 0.1s ease-in-out;
+}
+
+.modal.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  transition: all 0.25s ease-in-out;
+}
+
+
+// close icon
+.close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+  opacity: 0.65;
+  z-index: 9;
+}
+
+.close:hover {
+  opacity: 1;
+}
+
+.close::before, .close::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 11px;
+  width: 2px;
+  height: 24px;
+  background-color: var(--txt11);
+}
+
+.close::before {
+  transform: rotate(45deg);
+}
+
+.close::after {
+  transform: rotate(-45deg);
+}
+
+
+// search form
+form.search {
+  width: 90%;
+  max-width: 740px;
+  z-index: 9;
+  position: relative;
+}
+
+form.search input[type="text"] {
+  width: 100%;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--bdr12);
+  height: auto;
+  font-size: 38px;
+  font-weight: bold;
+  color: var(--txt11);
+  background: none;
+  line-height: 1.6;
+  font-family: "Roboto", sans-serif;
+}
+
+form.search p {
+  color: var(--txt13);
+  font-size: 14px;
+}
+
+
+form.search input[type="text"]::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: var(--txt11);
+  opacity: 1; /* Firefox */
+}
+
+form.search input[type="text"]:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: var(--txt11);
+}
+
+form.search input[type="text"]::-ms-input-placeholder { /* Microsoft Edge */
+  color: var(--txt11);
+}
+
+
+@media only screen and (min-width: 1024px) {
+  .close {
+    top: 30px;
+    right: 30px;
+    height: 30px;
+    width: 30px;
+  }
+  .close::before, .close::after {
+    top: 1px;
+    left: 13px;
+    height: 28px;
+  }
+  form.search input[type="text"] {
+    margin-bottom: 24px;
+    font-size: 60px;
+    line-height: 1.8;
+  }
+  form.search p {
+    font-size: 18px;
+  }
+}

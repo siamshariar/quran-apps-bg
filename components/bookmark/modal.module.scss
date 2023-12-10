@@ -1,0 +1,120 @@
+.content {
+  width: 280px;
+  max-width: 80%;
+  background: var(--bg12);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 44px 34px;
+  transform: translate(-50%, -50%);
+}
+
+.close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  /* background-color: var(--bg22); */
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.close:hover {
+  background-color: var(--bg22);
+}
+
+.close svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--txt12);
+}
+
+.title {
+  border-bottom: 1px dashed var(--bdr11);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.input_area {
+}
+
+.sub_title {
+  margin-bottom: 12px;
+  font-weight: normal;
+  font-size: 15px;
+  color: var(--txt11);
+}
+
+.title_desc {
+  padding-bottom: 22px;
+  border-bottom: 1px dashed var(--bdr11);
+  margin-bottom: 19px;
+  font-size: 15px;
+}
+
+.input_area select,
+.input_area input {
+  width: 100%;
+  padding: 10px 7px;
+  font-size: 14px;
+  border: 1px solid var(--bdr11);
+  border-radius: 8px;
+  margin-bottom: 19px;
+  color: var(--txt12);
+  background-color: transparent;
+}
+
+.input_area input {
+  display: none;
+}
+
+.input_area input.open {
+  display: block;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: 24px;
+  min-width: 74px;
+}
+
+.btn_add {
+  background-color: var(--main-color);
+  color: var(--bg22);
+}
+
+.btn_remove {
+  background-color: #e81123;
+  color: #fff;
+}
+
+.message {
+  color: #FF0000;
+  font-size: 12px;
+  overflow: hidden;
+  line-height: 0;
+  transition: line-height 250ms ease;
+}
+
+.message.open {
+  line-height: 1.4;
+}
+
+@media only screen and (min-width: 600px) {
+  .content {
+    width: 340px;
+    padding: 50px 44px;
+  }
+}

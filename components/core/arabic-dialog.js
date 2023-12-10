@@ -1,0 +1,82 @@
+import { useState, useEffect, useContext } from 'react'
+import { SettingsContext } from '../../contexts/SettingsContext'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import styles from './arabic-dialog.module.scss'
+
+export default function ArabicDialog() {
+    const { view, changeView } = useContext(SettingsContext)
+
+    const [open, setOpen] = useState(false)
+
+    useEffect(() => {
+        const arabicDialog = localStorage.getItem('arabicDialog')
+        if (arabicDialog === null) {
+            setOpen(true)
+            localStorage.setItem('arabicDialog', 'opened')
+        }
+    }, [])
+
+    const handleClickYes = () => {
+        const newView = { ...view, ['arabic']: true }
+        changeView(newView)
+        setOpen(false)
+    }
+
+    const handleClickNo = () => {
+        const newView = { ...view, ['arabic']: false }
+        changeView(newView)
+        setOpen(false)
+    }
+
+    return (
+        <Dialog
+            open={open}
+            onClose={handleClickYes}
+            //aria-labelledby="alert-dialog-title"
+            //aria-describedby="alert-dialog-description"
+            classes={{
+                paper: styles.paper
+            }}
+        >
+            <DialogTitle
+                //id="alert-dialog-title"
+                classes={{
+                    root: styles.title
+                }}
+            >
+                Do you want to display Arabic?
+            </DialogTitle>
+
+            <DialogContent>
+                <DialogContentText
+                    //id="alert-dialog-description"
+                    classes={{
+                        root: styles.desc
+                    }}
+                >
+                    {"You can change the display in the settings 'Settings -> View'."}
+                </DialogContentText>
+            </DialogContent>
+
+            <DialogActions>
+                <Button
+                    onClick={handleClickNo}
+                    className={styles.btn}
+                >
+                    No
+                </Button>
+                <Button
+                    onClick={handleClickYes}
+                    className={styles.btn}
+                >
+                    Yes
+                </Button>
+            </DialogActions>
+        </Dialog>
+    )
+}

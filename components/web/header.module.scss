@@ -1,0 +1,75 @@
+.header {
+  display: none;
+}
+
+@media only screen and (min-width: 1024px) {
+  .header {
+    display: block;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-bottom: none;
+    background: var(--bg11);
+    box-shadow: var(--bs21);
+    z-index: 999;
+  }
+
+  .header.home {
+    position: fixed;
+  }
+
+  .header.surah {
+    position: absolute;
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 66px;
+  }
+
+  .left {}
+
+  .logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .logo img {}
+
+
+  .right {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn {
+    width: 48px !important;
+    min-width: 48px !important;
+    height: 48px !important;
+    border-radius: 50% !important;
+  }
+
+  .btn:hover {
+    //background-color: var(--bg22) !important;
+  }
+
+  .btn span {
+    width: 100%;
+    min-width: 24px;
+    height: 100%;
+    display: flex;
+  }
+
+  .btn svg {
+    fill: var(--txt11);
+    width: 24px;
+    height: 24px;
+  }
+}

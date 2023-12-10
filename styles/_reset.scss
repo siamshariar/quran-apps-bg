@@ -1,0 +1,119 @@
+// material ui custom radio
+.verse_mode_radio {
+  margin-left: -4px !important;
+  padding: 8px 0;
+  margin-right: 17px !important;
+}
+.settings_radio svg.MuiSvgIcon-root {
+  width: 20px;
+  height: 20px;
+  fill: var(--bdr11);
+}
+
+.settings_radio .Mui-checked svg.MuiSvgIcon-root {
+  fill: var(--main-color);
+}
+
+.settings_radio .MuiFormControlLabel-label {
+  color: var(--txt12);
+  font-size: 14px;
+}
+
+.settings_radio .MuiRadio-root {
+  width: 30px;
+  height: 30px;
+}
+.verse_mode_radio .MuiRadio-root {
+  display: none;
+}
+
+.settings_radio .MuiTouchRipple-root {}
+
+.settings_radio .MuiTouchRipple-child {
+  background-color: #999;
+}
+.verse_mode_radio .MuiTypography-root {
+  padding: 6px 0;
+  background-color: #F5F5F5;
+  background-color: var(--bg22);
+  border-radius: 28px;
+  width: 60px;
+  text-align: center;
+}
+.verse_mode_radio.checked .MuiTypography-root {
+  background-color: var(--main-color);
+  color: #fff;
+  color: var(--bg22);
+}
+
+// material ui tooltip
+.MuiTooltip-tooltipArrow {
+  background: #223645 !important;
+}
+
+.MuiTooltip-arrow::before {
+  background-color: #223645 !important;
+}
+
+
+// mui grid
+@media only screen and (max-width: 1023px) {
+  .MuiGrid-spacing-xs-2 {
+    width: calc(100% + 10px) !important;
+    margin: -5px !important;
+  }
+  .MuiGrid-spacing-xs-2 > .MuiGrid-item {
+    padding: 5px !important;
+  }
+}
+
+
+
+// nprogress
+#nprogress .bar {
+  background: var(--main-color);
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px var(--main-color), 0 0 5px var(--main-color);
+}
+#nprogress .spinner {
+  display: none;
+}
+
+
+
+
+
+// bottom navigation
+.MuiBottomNavigationAction-root {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+  color: var(--txt12) !important;
+}
+
+.MuiBottomNavigationAction-root svg {
+	fill: var(--txt11);
+	width: 20px;
+	height: 20px;
+}
+
+.MuiBottomNavigationAction-root.Mui-selected {
+	color: var(--main-color) !important;
+}
+
+.MuiBottomNavigationAction-root.Mui-selected svg {
+	fill: var(--main-color);
+}
+
+
+
+
+// go to verse select popover menu
+.MuiInput-root.Mui-focused .MuiSelect-root {
+  background: none !important;
+}
+
+// mui menu item
+.MuiMenuItem-root {
+  min-height: auto !important;
+}

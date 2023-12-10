@@ -1,0 +1,141 @@
+.content {
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.lists {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item {
+  padding: 8px 0;
+  width: 100%;
+  position: relative;
+  /* padding-right: 46px; */
+  /* border-bottom: 1px dashed var(--bdr14); */
+}
+
+.link {
+  position: relative;
+  z-index: 9;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.item .left {
+  display: flex;
+  flex-direction: row;
+}
+.item .right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.item .icon {
+  margin-right: 8px;
+  padding-top: 2px;
+  display: flex;
+}
+
+.item .icon svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--txt12);
+}
+
+.item .delete_icon {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  z-index: 9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: var(--bg12);
+}
+
+.delete_icon svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--txt12);
+}
+
+.item .desc {
+  display: flex;
+  flex-direction: column;
+}
+
+.item .desc span:nth-child(1) {
+  font-size: 15px;
+  //font-weight: bold;
+  word-wrap: break-word;
+  padding-right: 46px;
+}
+
+.item .desc span:nth-child(2) {
+  opacity: 0.6;
+  font-size: 14px;
+}
+
+.item .time {
+  color: inherit;
+  font-size: 14px;
+  //font-weight: bold;
+  text-align: right;
+  opacity: 0.6;
+}
+
+.no_record {
+  padding: 8px 0;
+  font-weight: 400;
+  font-family: "Roboto", sans-serif;
+}
+
+@media only screen and (min-width: 600px) {
+  .lists {
+    justify-content: space-between;
+  }
+  .item {
+    width: calc(50% - 16px);
+  }
+  .item .delete_icon {
+    right: 0;
+  }
+  .link {
+    flex-direction: column;
+  }
+  .item .right {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-left: 28px;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .content {
+    padding-top: 0;
+    padding-bottom: 18px;
+  }
+  .item .delete_icon {
+    visibility: hidden;
+    background-color: transparent;
+  }
+  .item:hover .delete_icon {
+    visibility: visible;
+  }
+  .item .delete_icon:hover {
+    background-color: var(--bg12);
+  }
+}

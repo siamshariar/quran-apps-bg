@@ -1,0 +1,149 @@
+:root {
+	--clr11: #1DB296;
+	--bg21: #eff1f2;
+	--bdr12: #eff1f2;
+	--cbg: #fff;
+	--snib: #e7e7e9;
+	--snbs: #1db296;
+
+
+
+	--theme-color: #1F7EF9;
+
+	--main-color: #1F7EF9; // main theme color
+    --txt00: #000000; // arabic text color
+	--txt11: #2e3031; // bold text
+	--txt12: #666666; // normal text
+	--txt13: #9EABBE; // light text
+
+	--bg11: #ffffff; // main bg
+	--bg12: #F4F4F4; // main bg rev
+	--bg21: #444444;
+	--bg22: #eeeeee; // icon bg
+
+	--bdr11: #E8E8EA;
+	--bdr12: #E8E8EA;
+	--bdr13: #CFCFCF;
+	--bdr14: #eff1f2;
+
+	--bs11: 0 5px 30px rgba(0,0,0,.2); // card shadow 1
+	--bs21: 0 2px 4px -2px rgba(0, 0, 0, 0.06); // header, footer etc.
+
+	--scrollbar-thumb: #A8A8A8;
+
+	--hbnc1: #E80013;
+	--hbnc2: #FCE802;
+
+  // update
+  --theme-color: #466548;
+  --main-color: #466548;
+  --audio-player-color: #466548;
+  --bsc11: #466548;
+}
+
+.dark {
+	--bg11: #232A3B;
+	--bg12: #293145;
+	--bg21: #25262c;
+    --bg22: #313a55;
+    --txt00: #ffffff;
+	--txt11: rgba(226, 232, 240, 1);
+	--txt12: #ffffff;
+	--bdr11: #313a55;
+	--bdr12: #313a55;
+	--bs11: 0px 3px 15px #293145;
+	--cbg: #33363c;
+	--snib: #888888;
+	--snbs: #737c84;
+
+	--hbnc1: #2b395d;
+	// --hbnc2: #2b395d;
+	--hbnc2: #909090;
+
+  // update
+  --main-color: #ffffff;
+  --audio-player-color: #293145;
+  --bsc11: #313a55;
+}
+
+.blue {
+  --clr11: #1DB296;
+	--bg21: #eff1f2;
+	--bdr12: #eff1f2;
+	--cbg: #fff;
+	--snib: #e7e7e9;
+	--snbs: #1db296;
+
+
+
+	--theme-color: #1F7EF9;
+
+	--main-color: #1F7EF9; // main theme color
+  --txt00: #000000; // arabic text color
+	--txt11: #2e3031; // bold text
+	--txt12: #666666; // normal text
+	--txt13: #9EABBE; // light text
+
+	--bg11: #ffffff; // main bg
+	--bg12: #F4F4F4; // main bg rev
+	--bg21: #444444;
+	--bg22: #eeeeee; // icon bg
+
+	--bdr11: #E8E8EA;
+	--bdr12: #E8E8EA;
+	--bdr13: #CFCFCF;
+	--bdr14: #eff1f2;
+
+	--bs11: 0 5px 30px rgba(0,0,0,.2); // card shadow 1
+	--bs21: 0 2px 4px -2px rgba(0, 0, 0, 0.06); // header, footer etc.
+
+	--scrollbar-thumb: #A8A8A8;
+}
+.orange {
+  --bg11: #232A3B;
+	--bg12: #293145;
+	--bg21: #25262c;
+  --bg22: #313a55;
+  --txt00: #ffffff;
+	--txt11: rgba(226, 232, 240, 1);
+	--txt12: #ffffff;
+	--bdr11: #313a55;
+	--bdr12: #313a55;
+	--bs11: 0px 3px 15px #293145;
+	--cbg: #33363c;
+	--snib: #888888;
+	--snbs: #737c84;
+}
+.red {
+  --clr11: #1DB296;
+	--bg21: #eff1f2;
+	--bdr12: #eff1f2;
+	--cbg: #fff;
+	--snib: #e7e7e9;
+	--snbs: #1db296;
+
+
+
+	--theme-color: #1F7EF9;
+
+	--main-color: #1F7EF9; // main theme color
+  --txt00: #000000; // arabic text color
+	--txt11: #2e3031; // bold text
+	--txt12: #666666; // normal text
+	--txt13: #9EABBE; // light text
+
+	--bg11: #ffffff; // main bg
+	--bg12: #F4F4F4; // main bg rev
+	--bg21: #444444;
+	--bg22: #eeeeee; // icon bg
+
+	--bdr11: #E8E8EA;
+	--bdr12: #E8E8EA;
+	--bdr13: #CFCFCF;
+	--bdr14: #eff1f2;
+
+	--bs11: 0 5px 30px rgba(0,0,0,.2); // card shadow 1
+	--bs21: 0 2px 4px -2px rgba(0, 0, 0, 0.06); // header, footer etc.
+
+	--scrollbar-thumb: #A8A8A8;
+}

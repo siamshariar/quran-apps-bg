@@ -1,0 +1,33 @@
+.close {
+  position: absolute;
+  //top: 40px;
+  top: 20px;
+  right: 20px;
+
+  height: 34px;
+  width: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: #eff1f2;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.close:hover {
+  background: #e1e5e7;
+}
+
+.close svg {
+  width: 22px;
+  height: 22px;
+  fill: #223645;
+}
+
+.title {
+  margin-bottom: 20px;
+  padding: 0 20px;
+  width: 100%;
+}

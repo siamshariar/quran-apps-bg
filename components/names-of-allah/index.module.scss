@@ -1,0 +1,190 @@
+.wrapper {
+  display: block;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 16px;
+  background-color: var(--bg11);
+  min-height: 100%;
+}
+
+.content {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  padding-bottom: 50px;
+}
+
+.title {
+  display: none;
+}
+
+.search {
+  width: 100%;
+  padding: 0 16px;
+  margin-bottom: 16px;
+  margin-top: 0;
+}
+
+.search input {
+  background: var(--bg12);
+  padding: 14px 20px;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.list {
+  display: block;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-bottom: 10px; */
+  width: 100%;
+  padding-top: 13px;
+  padding-bottom: 13px;
+  padding-right: 16px;
+  padding-left: 66px;
+  position: relative;
+  background-color: var(--bg11);
+  border-radius: 0;
+}
+
+// .item:last-child {
+//   margin-bottom: 0;
+// }
+
+.number {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  color: var(--txt11);
+  background: var(--bg22);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 15px;
+}
+
+.left {
+  max-width: 45%;
+  width: 55%;
+}
+
+.name {
+  display: block;
+  color: var(--txt11);
+  font-size: 16px;
+  font-family: Roboto;
+  font-weight: 400;
+}
+
+.meaning {
+  font-size: 13px;
+  color: var(--txt13);
+  display: block;
+}
+
+.right {
+  max-width: 45%;
+  line-height: 30px;
+  text-align: right;
+  font-family: PDMSIslam;
+  font-size: 26px;
+  color: var(--txt11);
+  display: -moz-box;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty {
+  font-size: 16px;
+  padding: 5px 16px;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}
+
+@media only screen and (min-width: 600px) {
+  .content {
+    padding-bottom: 50px;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .wrapper {
+    display: flex;
+    max-width: 1186px;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 98px;
+    margin: 0 auto;
+    background-color: transparent;
+  }
+  .content {
+    padding-top: 32px;
+    padding-bottom: 32px;
+    box-shadow: var(--bs21);
+    border-radius: 8px;
+    background: var(--bg11);
+    margin-bottom: 30px;
+  }
+  .title {
+    display: flex;
+    padding: 0 32px;
+    margin-bottom: 32px;
+  }
+  .title h2 {
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    font-weight: normal;
+    color: var(--txt11);
+    padding: 8px;
+    background: var(--bg12);
+    border-radius: 8px;
+  }
+  .search {
+    padding: 0 32px;
+  }
+  .item {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 32px;
+    padding-left: 90px;
+    // border-radius: 4px;
+    // border: 1px solid var(--bdr11);
+  }
+  .item:hover {
+    // box-shadow: var(--bs11);
+  }
+  .number {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    left: 32px;
+  }
+  .left {
+    width: 60%;
+  }
+  .name {
+    font-size: 18px;
+  }
+  .meaning {
+    font-size: 14px;
+  }
+  .empty {
+    padding: 5px 32px;
+  }
+}

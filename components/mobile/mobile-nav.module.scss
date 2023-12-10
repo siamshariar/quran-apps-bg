@@ -1,0 +1,140 @@
+.menu_root {
+	display: block;
+	z-index: 99 !important;
+}
+
+// hide scrollbar
+.paper::-webkit-scrollbar {
+  display: none; // chrome, safari and opera
+}
+
+// hide scrollbar
+.paper {
+  -ms-overflow-style: none; // IE and edge
+  scrollbar-width: none; // firefox
+}
+
+.wrapper {
+	display: block;
+	width: 260px;
+	max-width: 85vw;
+	height: 100vh;
+	padding: 0;
+	margin: 0;
+}
+
+.menu_ctn {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	min-height: 100vh;
+	justify-content: flex-start;
+	overflow-y: auto;
+	padding-top: 0;
+  padding-bottom: 20px;
+  background: var(--bg11);
+}
+
+.menu_top {
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  background-color: #F4F4F4;
+  margin-bottom: 18px;
+  background: linear-gradient(90deg, var(--hbnc1) 0, var(--hbnc2) 50%, var(--hbnc2) 50%, var(--hbnc1) 100%);
+}
+.logo {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+.logo img {
+  margin: 0;
+}
+.logo span {
+  display: none;
+}
+
+// for center logo
+// .logo {
+//   flex-direction: column;
+// 	justify-content: center;
+// 	align-items: center;
+// }
+// .logo img {
+//   width: 37px;
+//   height: 45px;
+//   object-fit: cover;
+//   object-position: left center;
+// }
+// .logo span {
+//   display: block;
+//   color: var(--txt11);
+//   text-align: center;
+//   margin-top: 10px;
+//   font-size: 14px;
+//   line-height: 1.5;
+// }
+
+ul.menu {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	padding: 0 16px;
+}
+
+ul.menu li {
+	display: block;
+}
+
+ul.menu li a {
+	color: var(--txt11);
+	line-height: 44px;
+	padding: 0;
+	font-size: 14px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	transition: all 250ms ease;
+}
+
+.icon {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	margin-right: 14px;
+}
+
+.icon svg {
+	width: 18px;
+	height: 18px;
+	fill: var(--txt11);
+	transition: all 250ms ease;
+}
+
+.text {
+	color: inherit;
+}
+
+ul.menu li a:hover {
+	color: var(--main-color);
+}
+
+ul.menu li a:hover .icon svg {
+	fill: var(--main-color);
+}
+
+hr.menu_hr {
+	width: 100%;
+	background: none;
+	margin: 14px auto;
+	border: none;
+	border-top: 1px solid var(--bdr11);
+}
+
+@media only screen and (min-width: 1024px) {
+	.menu_root {
+		display: none;
+	}
+}

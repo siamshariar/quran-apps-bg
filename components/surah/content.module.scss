@@ -1,0 +1,91 @@
+.content {
+  display: block;
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 32px;
+  background-color: var(--bg11);
+}
+
+.chapter {
+  width: 100%;
+  padding-bottom: 40px;
+}
+
+.chapter_tab {
+  display: block;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.title {
+  display: none;
+}
+
+
+.bismillah {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.bismillah svg {
+  max-width: 200px;
+  fill: var(--txt11);
+}
+
+.verses {
+  display: block;
+}
+
+@media only screen and (min-width: 1024px) {
+  .content {
+    max-width: 1100px;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 98px;
+    margin: 0 auto;
+    background-color: transparent;
+  }
+
+  .chapter_tab {
+    padding: 32px;
+    box-shadow: var(--bs21);
+    border-radius: 8px;
+    background: var(--bg11);
+  }
+
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+    background: var(--bg12);
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .title_icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 14px;
+  }
+
+  .title_icon svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--txt11);
+  }
+
+  .title_text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    color: var(--txt11);
+    font-weight: bold;
+  }
+}

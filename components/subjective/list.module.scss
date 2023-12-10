@@ -1,0 +1,134 @@
+.wrapper {
+  display: block;
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 16px;
+  background-color: var(--bg11);
+}
+
+.content {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  padding-bottom: 16px;
+}
+
+.title {
+  display: none;
+}
+
+// .bismillah {
+//   text-align: center;
+//   margin-bottom: 54px;
+// }
+
+// .bismillah svg {
+//   max-width: 200px;
+//   fill: var(--txt11);
+// }
+
+.search {
+  background: var(--bg12);
+  padding: 14px 20px;
+  margin-bottom: 16px;
+  margin-top: 0;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.list {
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--bdr11);
+}
+
+.item:first-child {
+  // border-top: 1px solid var(--bdr11);
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.left {
+  max-width: 72%;
+  padding-right: 15px;
+  word-wrap: break-word;
+}
+
+.right {
+  border-radius: 24px;
+  width: 104px;
+  max-width: 45%;
+  line-height: 30px;
+  text-align: center;
+  background-color: var(--bg22);
+  color: var(--txt11);
+  font-size: 14px;
+}
+
+.empty {
+  padding-top: 5px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}
+
+@media only screen and (min-width: 1024px) {
+  .wrapper {
+    display: flex;
+    max-width: 1186px;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 98px;
+    margin: 0 auto;
+    background-color: transparent;
+  }
+
+  .content {
+    padding: 32px;
+    box-shadow: var(--bs21);
+    border-radius: 8px;
+    background: var(--bg11);
+    margin-bottom: 30px;
+  }
+
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 32px;
+    background: var(--bg12);
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .title h2 {
+    margin: 0 14px;
+    font-size: 22px;
+    color: var(--txt11);
+    font-weight: normal;
+    white-space: normal;
+    display: -moz-box;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+  }
+  .left {
+    max-width: 80%;
+    padding-right: 0;
+  }
+}

@@ -1,0 +1,59 @@
+.wrapper {
+  z-index: 9999;
+  position: fixed;
+  bottom: 67px;
+  right: 16px;
+  width: auto;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.wrapper audio {
+  display: none;
+}
+
+.player {
+  width: 50px;
+  height: 50px;
+  background: var(--bg11);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  box-shadow: 0 1px 12px #aaa;
+}
+
+.player svg {
+  width: 30px;
+  height: 30px;
+  fill: #757575;
+}
+
+.player_btn,
+.player_btn span {
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+}
+
+.player_btn:hover {
+  background: none !important;
+}
+
+@media only screen and (min-width: 1024px) {
+  .wrapper {
+    -webkit-align-self: start;
+    align-self: start;
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 24px;
+    right: unset;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 32px;
+  }
+}

@@ -1,0 +1,43 @@
+.banner {
+  display: none;
+}
+
+// mobile banner
+.banner_mobile {
+  display: block;
+  padding: 40px 0;
+  background: #3134DE;
+  background: linear-gradient(90deg, #BE7AF8 0%, #3134DE 33%, #3134DE 66%, #BE7AF8 100%);
+  text-align: center;
+}
+
+.banner_mobile .banner_link {
+  color: #fff;
+  font-size: 16px;
+}
+
+
+
+@media only screen and (min-width: 1024px) {
+  .banner_mobile {
+    display: none;
+  }
+
+  .banner {
+    display: block;
+    padding-top: 126px;
+  }
+  .calligraphy {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+
+  .title h1 {
+    color: var(--main-color);
+    font-size: 34px;
+    font-weight: bold;
+    text-align: center;
+  }
+}

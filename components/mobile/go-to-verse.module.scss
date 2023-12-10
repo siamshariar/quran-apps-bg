@@ -1,0 +1,114 @@
+.root {
+  //z-index: 99999;
+}
+
+.modal {
+	background: var(--bg11);
+  width: 248px;
+  height: 344px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px 24px;
+  max-width: 80vw;
+  max-height: 340px;
+}
+
+.title {
+  padding: 0;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.title h2 {
+  font-family: Roboto;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--txt11);
+  margin-bottom: 5px;
+}
+
+.title h4 {
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--txt13);
+  margin-top: -5px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--bdr14);
+}
+
+.none {
+  display: none;
+}
+
+.loader {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  width: 100%;
+}
+
+.content {
+  width: 100%;
+}
+
+.item {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.inner {
+  width: 100%;
+}
+
+.inner div,
+.inner svg {
+  color: var(--txt11);
+}
+
+.inner::before {
+  border-bottom: 1px solid var(--bdr11) !important;
+}
+
+.inner::after {
+  display: none;
+}
+
+.btn {
+  text-transform: capitalize !important;
+  width: 50%;
+  padding: 6px 10px !important;
+  background-color: var(--bg12) !important;
+  color: var(--txt11) !important;
+}
+
+.btn svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--txt11);
+}
+
+
+.custom_select {
+  width: 200px;
+  max-height: 234px !important;
+  padding: 10px 0;
+  background-color: var(--bg11) !important;
+  color: var(--txt11) !important;
+}
+
+.custom_select ul {
+  padding: 0;
+}
+
+.custom_select li {
+  padding: 6px 20px;
+  cursor: pointer;
+}

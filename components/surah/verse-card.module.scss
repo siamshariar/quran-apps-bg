@@ -1,0 +1,157 @@
+.wrapper {
+  display: block;
+  border-bottom: 1px solid var(--bdr11);
+  padding-bottom: 40px;
+  padding-top: 78px;
+  margin-bottom: -38px;
+  position: relative;
+}
+
+.target {
+  height: calc(100% - 80px);
+  max-height: 80vh;
+  width: 100%;
+  position: absolute;
+  top: 40px;
+  left: 0;
+  z-index: -1;
+}
+
+.wrapper:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.verse_arabic {
+  display: block;
+  // margin-bottom: 30px;
+}
+
+.verse_arabic_display_none {
+  display: none;
+  // margin-bottom: 30px;
+}
+
+.verse_arabic .verse_text {
+  color: var(--txt00);
+}
+
+.verse_text {
+  width: 100%;
+}
+
+.verse_text .verse_no {
+  color: inherit;
+}
+
+.verse_translated {
+  margin-bottom: 14px;
+}
+
+.verse_translated_display_none {
+  margin-bottom: 14px;
+}
+
+.accordion {
+  box-shadow: none !important;
+  background: none !important;
+  width: 100%;
+  margin-top: 0 !important;
+}
+
+.accordion_display_none {
+  display: none !important;
+  box-shadow: none !important;
+  background: none !important;
+  width: 100%;
+  margin-top: 0 !important;
+}
+
+.accordion::before {
+  opacity: 0 !important;
+}
+
+.accordion_summary {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 38px !important;
+  padding: 0 !important;
+}
+
+.accordion_summary > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 !important;
+}
+
+.summary_text {
+  position: relative;
+  display: block;
+  font-size: 14px;
+}
+
+.summary_icon {}
+
+.summary_text, .summary_icon {
+  color: var(--main-color);
+}
+
+
+.summary_icon .btn {
+  width: 28px;
+  height: 28px;
+  padding: 0 !important;
+  min-height: unset !important;
+}
+.summary_icon .btn span {}
+.summary_icon .btn span svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 3px;
+  stroke: var(--main-color);
+  transition: stroke 250ms ease 0s;
+}
+
+
+.accordion_details {
+  padding: 0 !important;
+}
+.accordion_details p {}
+
+
+.none {
+  display: none;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.separator {
+  border: none;
+  background: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+}
+
+@media only screen and (min-width: 1024px) {
+  .wrapper {
+    padding-top: 40px;
+    margin-bottom: 0;
+  }
+}
+
+@media print {
+  // .wrapper {
+  //   border-bottom: none;
+  // }
+  .summary_icon {
+    display: none !important;
+  }
+}

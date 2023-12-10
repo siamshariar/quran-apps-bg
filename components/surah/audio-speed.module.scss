@@ -1,0 +1,61 @@
+.wrapper {
+  display: block;
+}
+.more_icon {
+  width: 24px;
+  height: 24px;
+  background: var(--bg11) !important;
+  padding: 0 !important;
+}
+.more_icon svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--txt00);
+}
+.speed_root {
+  z-index: 99999 !important;
+}
+.speed_paper {
+  background-color: var(--bg11) !important;
+  padding-top: 14px;
+  padding-bottom: 6px;
+}
+.playback_label {
+  padding: 6px 16px !important;
+  margin-bottom: 8px !important;
+  border-radius: 0 !important;
+}
+.playback_label::after {
+  content: "";
+  height: 0;
+  border-bottom: 1px solid var(--bdr11);
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -8px;
+}
+.icon {
+  width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.icon svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--txt11);
+}
+.speed_label {
+  width: 146px;
+  color: var(--txt11);
+  font-family: "Kalpurush" !important;
+  font-size: 16px;
+  text-transform: capitalize;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.playback_label svg {
+  width: 16px;
+  height: 16px;
+}

@@ -1,0 +1,54 @@
+[
+	{
+		"surah": 1,
+		"name": "arabic name",
+		"nameTranslation": "Al-Fatiha",
+		"nameMeaning": "The Opening",
+		"totalVerses": 7,
+		"type": "Meccan",
+		"pdfUrl": "sura pdf url",
+		"mp3Url": "sura mp3 url",
+		"verses": [
+			{
+				"ayah": 1,
+				"arabic": "Arabic",
+				"translation": "Ayat translation",
+				"footnotes": "Tafseer",
+				"mp3Url": "verse mp3 url"
+			},
+			{
+				"ayah": 2,
+				"arabic": "Arabic",
+				"translation": "Ayat translation",
+				"footnotes": "Tafseer",
+				"mp3Url": "verse mp3 url"
+			}
+		]
+	},
+	{
+		"surah": 2,
+		"name": "arabic name",
+		"nameTranslation": "Al-Baqara",
+		"nameMeaning": "The Cow",
+		"totalVerses": 286,
+		"type": "Meccan",
+		"pdfUrl": "sura pdf url",
+		"mp3Url": "sura mp3 url",
+		"verses": [
+			{
+				"ayah": 1,
+				"arabic": "Arabic",
+				"translation": "Ayat translation",
+				"footnotes": "Tafseer",
+				"mp3Url": "verse mp3 url"
+			},
+			{
+				"ayah": 2,
+				"arabic": "Arabic",
+				"translation": "Ayat translation",
+				"footnotes": "Tafseer",
+				"mp3Url": "verse mp3 url"
+			}
+		]
+	}
+]

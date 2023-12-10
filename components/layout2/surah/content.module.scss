@@ -1,0 +1,174 @@
+.content {
+  display: block;
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 32px;
+  background-color: var(--bg11);
+}
+
+.chapter {
+  width: 100%;
+  padding-bottom: 40px;
+}
+
+.chapter_tab {
+  display: block;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.title {
+  display: none;
+}
+
+
+.bismillah {
+  text-align: center;
+  margin-bottom: 54px;
+}
+
+.bismillah svg {
+  max-width: 200px;
+  fill: var(--txt11);
+}
+
+.verses {
+  display: block;
+  margin-top: -78px;
+}
+
+.quran_content p {
+  margin-bottom: 20px;
+}
+
+.quran_content_title {
+  color: var(--txt00);
+  font-family: Roboto;
+  font-size: 24px;
+  font-weight: normal;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.quran_content_text {
+  font-family: Roboto;
+  color: var(--txt11);
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+.no_record {
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}
+
+@media only screen and (min-width: 1024px) {
+  .content {
+    display: flex;
+    max-width: 1186px;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 98px;
+    margin: 0 auto;
+    background-color: transparent;
+  }
+
+  .chapter_tab {
+    padding: 32px;
+    box-shadow: var(--bs21);
+    border-radius: 8px;
+    background: var(--bg11);
+  }
+
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+    background: var(--bg12);
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .title_icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 14px;
+  }
+
+  .title_icon svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--txt11);
+  }
+
+  .title_text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    color: var(--txt11);
+    white-space: normal;
+    display: -moz-box;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+  }
+
+  .verses {
+    margin-top: -40px;
+  }
+}
+
+.print_footer {
+  display: none;
+}
+
+// print option
+@media print {
+  .chapter_tab {
+    background-color: #fff;
+  }
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+    background: var(--bg12);
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .title_text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    color: var(--txt11);
+  }
+
+  .print_footer {
+    border-top: 1px solid var(--bdr11);
+    margin-top: 30px;
+    padding-top: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .print_footer span {
+    font-size: 13px;
+    color: #777;
+  }
+  .print_footer span:nth-child(1) {}
+  .print_footer span:nth-child(2) {}
+}
