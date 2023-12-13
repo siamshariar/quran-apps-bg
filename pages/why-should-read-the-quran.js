@@ -1,4 +1,4 @@
-import { server } from "../lib/config";
+import { server, config } from "../lib/config";
 import { getChaptersInfo } from "../lib/fetch";
 import Layout from "../components/layouts/layout-content";
 import Meta from "../components/core/meta";
@@ -8,8 +8,8 @@ export default function ContentPage({ pageTitle }) {
   return (
     <>
       <Meta
-        title={`Why should read Quran - ${pageTitle}`}
-        description="Why should read Quran. Quran application in Vietnamese."
+        title={`Why should read Quran - ${pageTitle} | ${config?.metaTitle}`}
+        description={`Why should read Quran. ${config?.metaDescription}`}
         url={`${server}/why-should-read-the-quran`}
         image={`${server}/img/s_logo.png`}
         type="website"

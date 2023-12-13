@@ -1,4 +1,4 @@
-import { server } from "../lib/config";
+import { server, config } from "../lib/config";
 import { getChaptersInfo, getNamesOfAllah } from "../lib/fetch";
 import SettingsContextProvider from "../contexts/SettingsContext";
 import AudioPlayerContextProvider from "../contexts/AudioPlayerContext";
@@ -28,8 +28,8 @@ export default function AllahName({ chapters, names }) {
           <AudioPlayerContextProvider>
             <SidenavContextProvider>
               <Meta
-                title={`99 Names of Allah`}
-                description={`99 Names of Allah. Quran application in Vietnamese.`}
+                title={`99 Names of Allah | ${config?.metaTitle}`}
+                description={`99 Names of Allah. | ${config?.metaDescription}`}
                 url={`${server}/names-of-allah`}
                 image={`${server}/img/s_logo.png`}
                 type="website"

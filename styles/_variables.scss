@@ -127,7 +127,7 @@
 	--theme-color: #1F7EF9;
 
 	--main-color: #1F7EF9; // main theme color
-  --txt00: #000000; // arabic text color
+  	--txt00: #000000; // arabic text color
 	--txt11: #2e3031; // bold text
 	--txt12: #666666; // normal text
 	--txt13: #9EABBE; // light text
@@ -146,4 +146,15 @@
 	--bs21: 0 2px 4px -2px rgba(0, 0, 0, 0.06); // header, footer etc.
 
 	--scrollbar-thumb: #A8A8A8;
+}
+
+// localization
+.vn {
+	--hbnc1: #E80013;
+	--hbnc2: #FCE802;
+}
+
+.kh {
+	--hbnc1: #032EA1;
+	--hbnc2: #E00025;
 }

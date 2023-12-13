@@ -1,4 +1,4 @@
-import { server } from "../../../lib/config";
+import { server, config } from "../../../lib/config";
 import {
   getChaptersInfo,
   getParentSubjectives,
@@ -14,8 +14,8 @@ export default function Subjective({ slug, chapters, subjective }) {
   return (
     <>
       <Meta
-        title={`Subjective ${name}`}
-        description={`Subjective form the holy Quran`}
+        title={`Subjective ${name} | ${config?.metaTitle}`}
+        description={`Subjective form the holy Quran | ${config?.metaDescription}`}
         url={`${server}/subjective/${slug}`}
         image={`${server}/img/s_logo.png`}
         type="website"

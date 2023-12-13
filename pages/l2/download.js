@@ -10,6 +10,7 @@ import HeaderMobile from '../../components/mobile/header-content'
 import Sidenav from '../../components/sidenav'
 import Container from '../../components/core/container'
 import DownloadContent from '../../components/pages/download'
+import { config } from '../../lib/config'
 
 export default function DownloadPage({ chapters }) {
     const [searchModalOpen, updateSearchModalOpen] = useState(false)
@@ -21,8 +22,8 @@ export default function DownloadPage({ chapters }) {
     return (
         <SettingsContextProvider>
             <Meta
-                title="Download | Kinh Quran - Quran.vn"
-                description="Quran application in Vietnamese"
+                title={`Download | ${config?.metaTitle}`}
+                description={config?.metaDescription}
                 url="http://quran.vn/"
                 image="/img/web_image.jpg"
                 type="website"

@@ -1,4 +1,4 @@
-import { server } from "../../lib/config";
+import { server, config } from "../../lib/config";
 import { getChaptersInfo, getSubjectives } from "../../lib/fetch";
 import Layout from "../../components/layouts/layout-subjective";
 import Meta from "../../components/core/meta";
@@ -8,8 +8,8 @@ export default function Subjective({ chapters, subjectives }) {
   return (
     <>
       <Meta
-        title={`Subjective`}
-        description={`Subjective form the holy Quran`}
+        title={`Subjective | ${config?.metaTitle}`}
+        description={`Subjective form the holy Quran | ${config?.metaDescription}`}
         url={`${server}/subjective`}
         image={`${server}/img/s_logo.png`}
         type="website"

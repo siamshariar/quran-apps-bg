@@ -1,4 +1,4 @@
-import { server } from "../../lib/config"
+import { server, config } from "../../lib/config"
 import Head from 'next/head'
 
 export default function Meta(props) {
@@ -127,38 +127,39 @@ export default function Meta(props) {
 
             {/* favicon */}
             {/* Main Link Tags */}
-            <link href={`${server}/img/favicon/favicon-16x16.png`} rel="icon" type="image/png" sizes="16x16" />
-            <link href={`${server}/img/favicon/favicon-32x32.png`} rel="icon" type="image/png" sizes="32x32" />
-            <link href={`${server}/img/favicon/favicon-48x48.png`} rel="icon" type="image/png" sizes="48x48" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/favicon-16x16.png`} rel="icon" type="image/png" sizes="16x16" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/favicon-32x32.png`} rel="icon" type="image/png" sizes="32x32" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/favicon-48x48.png`} rel="icon" type="image/png" sizes="48x48" />
 
             {/* iOS */}
-            <link href={`${server}/img/favicon/apple-touch-icon.png`} rel="apple-touch-icon" />
-            <link href={`${server}/img/favicon/favicon-76x76.png`} rel="apple-touch-icon" sizes="76x76" />
-            <link href={`${server}/img/favicon/favicon-120x120.png`} rel="apple-touch-icon" sizes="120x120" />
-            <link href={`${server}/img/favicon/favicon-152x152.png`} rel="apple-touch-icon" sizes="152x152" />
-            <link href={`${server}/img/favicon/favicon-180x180.png`} rel="apple-touch-icon" sizes="180x180" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/apple-touch-icon.png`} rel="apple-touch-icon" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/favicon-76x76.png`} rel="apple-touch-icon" sizes="76x76" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/favicon-120x120.png`} rel="apple-touch-icon" sizes="120x120" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/favicon-152x152.png`} rel="apple-touch-icon" sizes="152x152" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/favicon-180x180.png`} rel="apple-touch-icon" sizes="180x180" />
 
             {/* Startup Image */}
-            <link href={`${server}/img/favicon/touch-icon-start-up-320x480.png`} rel="apple-touch-startup-image" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/touch-icon-start-up-320x480.png`} rel="apple-touch-startup-image" />
 
             {/* Pinned Tab */}
-            <link href={`${server}/img/favicon/safari-pinned-tab.svg`} rel="mask-icon" size="any" color="#5bbad5" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/safari-pinned-tab.svg`} rel="mask-icon" size="any" color="#5bbad5" />
 
             {/* Android */}
-            <link href={`${server}/img/favicon/android-chrome-192x192.png`} rel="icon" sizes="192x192" />
-            <link href={`${server}/img/favicon/favicon-128x128.png`} rel="icon" sizes="128x128" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/android-chrome-192x192.png`} rel="icon" sizes="192x192" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/favicon-128x128.png`} rel="icon" sizes="128x128" />
 
             {/* UC Browser */}
-            <link href={`${server}/img/favicon/favicon-57x57.png`} rel="apple-touch-icon-precomposed" sizes="57x57" />
-            <link href={`${server}/img/favicon/favicon-72x72.png`} rel="apple-touch-icon" sizes="72x72" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/favicon-57x57.png`} rel="apple-touch-icon-precomposed" sizes="57x57" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/favicon-72x72.png`} rel="apple-touch-icon" sizes="72x72" />
 
             {/* Others */}
-            <link href={`${server}/img/favicon/favicon.ico`} rel="shortcut icon" type="image/x-icon" />
+            <link href={`${server}/img/favicon/${config.localizationCode}/favicon.ico`} rel="shortcut icon" type="image/x-icon" />
 
-            <link rel="manifest" href="/site.webmanifest" />
+            <link rel="manifest" href={`webmanifest/${config.localizationCode}/site.webmanifest`} />
 
             {/* page title */}
-            <title>{props.title != "" ? props.title + " | " : ""} {"Kinh Quran | Quran in Vietnamese | Quran.vn"}</title>
+            {/* <title>{props.title != "" ? props.title + " | " : ""} {"Kinh Quran | Quran in Vietnamese | Quran.vn"}</title> */}
+            <title>{`${props?.title || config.metaTitle || ""} | ${config.metaDescription || ''}`}</title>
 
             {/* Manifest.json */}
             {/*<link rel='manifest' href='/manifest.json' />*/}

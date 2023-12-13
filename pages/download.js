@@ -1,4 +1,4 @@
-import { server } from "../lib/config";
+import { server, config } from "../lib/config";
 import { getChaptersInfo } from "../lib/fetch";
 import Layout from "../components/layouts/layout-content";
 import Meta from "../components/core/meta";
@@ -8,8 +8,8 @@ export default function DownloadPage({ chapters, pageTitle }) {
   return (
     <>
       <Meta
-        title={`${pageTitle}`}
-        description={`${pageTitle}`}
+        title={`${pageTitle} | ${config?.metaTitle}`}
+        description={`${pageTitle} | ${config?.metaDescription}`}
         url={`${server}/download`}
         image={`${server}/img/s_logo.png`}
         type="website"

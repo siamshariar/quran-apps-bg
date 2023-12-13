@@ -1,4 +1,4 @@
-import { server } from "../lib/config";
+import { server, config } from "../lib/config";
 import { useState } from "react";
 import SettingsContextProvider from "../contexts/SettingsContext";
 import Meta from "../components/core/meta";
@@ -27,9 +27,9 @@ export default function ContentPage() {
     <SettingsContextProvider>
       <PinContextProvider>
         <BookmarkContextProvider>
-          <Meta
-            title="Kinh Quran | Quran in Vietnamese"
-            description="Quran application in Vietnamese"
+          <Meta    
+            title={config?.metaTitle}
+            description={config?.metaDescription}
             url={`${server}/content`}
             image={`${server}/img/s_logo.png`}
             type="website"

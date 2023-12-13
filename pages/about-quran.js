@@ -1,4 +1,4 @@
-import { server } from "../lib/config";
+import { server, config } from "../lib/config";
 import { getChaptersInfo } from "../lib/fetch";
 import Layout from "../components/layouts/layout-home";
 import Meta from "../components/core/meta";
@@ -10,8 +10,8 @@ export default function AboutQuran() {
   return (
     <>
       <Meta
-        title="About Quran"
-        description="Quran application in Vietnamese"
+        title={config?.metaTitle}
+        description={config?.metaDescription}
         url={`${server}/about-quran`}
         image={`${server}/img/s_logo.png`}
         type="website"

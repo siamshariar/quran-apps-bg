@@ -1,4 +1,4 @@
-import { server } from "../lib/config";
+import { server, config } from "../lib/config";
 import { getChaptersInfo } from "../lib/fetch";
 import Layout from "../components/layouts/layout-content";
 import Meta from "../components/core/meta";
@@ -8,8 +8,8 @@ export default function AboutPage({ pageTitle }) {
   return (
     <>
       <Meta
-        title={pageTitle}
-        description={`Quran application in Vietnamese`}
+        title={`${pageTitle} | ${config?.metaTitle}`}
+        description={config?.metaDescription}
         url={`${server}/about`}
         image={`${server}/img/s_logo.png`}
         type="website"

@@ -24,7 +24,7 @@ const SettingsContextProvider = ({ children }) => {
 
     const initSettings = (settings) => {
         // init theme
-        document.body.setAttribute('class', settings.theme)
+        document.body.setAttribute('class', `${process.env.NEXT_PUBLIC_LOCALIZATION_CODE || ''} ${settings.theme}`)
 
         // init font css
         const elemsArabic = document.querySelectorAll('.text_arabic')
@@ -126,7 +126,7 @@ const SettingsContextProvider = ({ children }) => {
     }
 
     const changeTheme = (theme) => {
-        document.body.setAttribute('class', theme)
+        document.body.setAttribute('class', `${process.env.NEXT_PUBLIC_LOCALIZATION_CODE || ''} ${theme}`)
         const newSettings = { ...settings, ['theme']: theme }
         saveToLocalStorage(newSettings)
         setSettings(newSettings)
