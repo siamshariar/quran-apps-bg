@@ -8,6 +8,7 @@ import SearchIcon from '../icons/Search'
 import Brightness4Icon from '../icons/Brightness4'
 import Brightness7Icon from '../icons/Brightness7'
 import styles from './header.module.scss'
+import { config } from '../../lib/config'
 
 export default function HeaderWeb({ page, searchModalController }) {
     const { theme, changeTheme } = useContext(SettingsContext)
@@ -25,7 +26,7 @@ export default function HeaderWeb({ page, searchModalController }) {
                             <Link href="/">
                                 <a className={styles.logo}>
                                     <Image
-                                        src="/img/logo.png"
+                                        src={`/img/logo/${config?.localizationCode}/logo.png`}
                                         alt=""
                                         width={122}
                                         height={26}
@@ -39,7 +40,7 @@ export default function HeaderWeb({ page, searchModalController }) {
                             <Link href="/">
                                 <a className={styles.logo}>
                                     <Image
-                                        src="/img/logo_full_white.png"
+                                        src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                                         alt=""
                                         width={122}
                                         height={26}
