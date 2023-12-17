@@ -39,19 +39,19 @@
 	--main-color: #466548;
 	--audio-player-color: #466548;
 	--bsc11: #466548;
-	
-}
 
-.light {
-	.vn {
-		--hbnc1: #E80013;
-		--hbnc2: #FCE802;
+	.light {
+		&.vn {
+			--hbnc1: #E80013;
+			--hbnc2: #FCE802;
+		}
+		
+		&.kh {
+			--hbnc1: #032EA1;
+			--hbnc2: #E00025;
+		}
 	}
 	
-	.kh {
-		--hbnc1: #032EA1;
-		--hbnc2: #E00025;
-	}
 }
 
 .dark {
