@@ -31,7 +31,7 @@ export default function AllahName({ chapters, names }) {
                 title={`99 Names of Allah | ${config?.metaTitle}`}
                 description={`99 Names of Allah. | ${config?.metaDescription}`}
                 url={`${server}/names-of-allah`}
-                image={`${server}/img/s_logo.png`}
+                image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
                 type="website"
               />
 

@@ -17,7 +17,7 @@ export default function Subjective({ slug, chapters, subjective }) {
         title={`Subjective ${name} | ${config?.metaTitle}`}
         description={`Subjective form the holy Quran | ${config?.metaDescription}`}
         url={`${server}/subjective/${slug}`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 

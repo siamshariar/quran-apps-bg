@@ -24,7 +24,7 @@ export default function DownloadPage({ chapters }) {
             <Meta
                 title={`Download | ${config?.metaTitle}`}
                 description={config?.metaDescription}
-                url="http://quran.vn/"
+                url={`http://www.${config?.domain}`}
                 image="/img/web_image.jpg"
                 type="website"
             />

@@ -11,7 +11,7 @@ export default function AboutPage({ pageTitle }) {
         title={`${pageTitle} | ${config?.metaTitle}`}
         description={config?.metaDescription}
         url={`${server}/about`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 

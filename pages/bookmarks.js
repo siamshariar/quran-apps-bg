@@ -111,7 +111,7 @@ export default function Bookmark({ chapters }) {
                 title={`Bookmark ${bookmarkName} | ${config?.metaTitle}`}
                 description={`Quran Bookmark | ${config?.metaDescription}`}
                 url={`${server}/bookmarks`}
-                image={`${server}/img/s_logo.png`}
+                image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
                 type="website"
               />
               <HeaderMobile //
@@ -138,7 +138,7 @@ export default function Bookmark({ chapters }) {
               title={`Bookmark ${bookmarkName} | ${config?.metaTitle}`}
               description={`Bookmark ${bookmarkName} | ${config?.metaDescription}`}
               url={`${server}/bookmarks`}
-              image={`${server}/img/s_logo.png`}
+              image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
               type="website"
             />
 

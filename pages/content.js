@@ -31,7 +31,7 @@ export default function ContentPage() {
             title={config?.metaTitle}
             description={config?.metaDescription}
             url={`${server}/content`}
-            image={`${server}/img/s_logo.png`}
+            image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
             type="website"
           />
 

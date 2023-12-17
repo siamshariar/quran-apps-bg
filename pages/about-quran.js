@@ -13,7 +13,7 @@ export default function AboutQuran() {
         title={config?.metaTitle}
         description={config?.metaDescription}
         url={`${server}/about-quran`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 

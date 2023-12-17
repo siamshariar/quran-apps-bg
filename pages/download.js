@@ -11,7 +11,7 @@ export default function DownloadPage({ chapters, pageTitle }) {
         title={`${pageTitle} | ${config?.metaTitle}`}
         description={`${pageTitle} | ${config?.metaDescription}`}
         url={`${server}/download`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 

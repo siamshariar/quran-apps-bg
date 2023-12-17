@@ -6,6 +6,7 @@ import FacebookIcon from '../icons/Facebook'
 import TwitterIcon from '../icons/Twitter'
 import LinkedinIcon from '../icons/Linkedin'
 import styles from './footer.module.scss'
+import { config } from '../../lib/config'
 
 export default function FooterWeb() {
     return (
@@ -75,7 +76,7 @@ export default function FooterWeb() {
                     <p className={styles.copyright}>
                         <span>&copy; { new Date().getFullYear() } </span>
                         <Link href="/about">
-                            <a>Quran.vn</a>
+                            <a>{config.domain}</a>
                         </Link>
                         <span> All Rights Reserved</span>
                     </p>

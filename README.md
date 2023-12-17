@@ -5,10 +5,14 @@
 * set localizationCode into env file
 example `NEXT_PUBLIC_LOCALIZATION_CODE=kh`
 
-### make sure these file are available in folder:
-img/logo/<localizationCode>
+### make sure these file are available in public folder:
+img/logo/<localizationCode>/
 logo.png
 logo_full_white.png
+s_logo.png
 
-img/favicon/<localizationCode>
+img/favicon/<localizationCode>/
 favicon.png
+
+webmanifest/<localizationCode>/
+site.webmanifest

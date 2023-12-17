@@ -13,7 +13,7 @@ export default function SettingsPage() {
                 title={`Settings | ${config?.metaTitle}`}
 	            description={config?.metaDescription}
                 url={`${server}/settings`}
-                image={`${server}/img/s_logo.png`}
+                image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
                 type="website"
             />
 

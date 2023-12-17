@@ -34,11 +34,24 @@
 	--hbnc1: #E80013;
 	--hbnc2: #FCE802;
 
-  // update
-  --theme-color: #466548;
-  --main-color: #466548;
-  --audio-player-color: #466548;
-  --bsc11: #466548;
+	// update
+	--theme-color: #466548;
+	--main-color: #466548;
+	--audio-player-color: #466548;
+	--bsc11: #466548;
+	
+}
+
+.light {
+	.vn {
+		--hbnc1: #E80013;
+		--hbnc2: #FCE802;
+	}
+	
+	.kh {
+		--hbnc1: #032EA1;
+		--hbnc2: #E00025;
+	}
 }
 
 .dark {
@@ -146,15 +159,4 @@
 	--bs21: 0 2px 4px -2px rgba(0, 0, 0, 0.06); // header, footer etc.
 
 	--scrollbar-thumb: #A8A8A8;
-}
-
-// localization
-.vn {
-	--hbnc1: #E80013;
-	--hbnc2: #FCE802;
-}
-
-.kh {
-	--hbnc1: #032EA1;
-	--hbnc2: #E00025;
 }

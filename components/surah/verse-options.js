@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { AudioPlayerContext } from "../../contexts/AudioPlayerContext";
 import { PinContext } from "../../contexts/PinContext";
 import { BookmarkContext } from "../../contexts/BookmarkContext";
-import { server } from "../../lib/config";
+import { config, server } from "../../lib/config";
 import Popover from "@material-ui/core/Popover";
 import MenuList from "@material-ui/core/MenuList";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -145,7 +145,7 @@ export default function VerseOptions({
     handlePopoverClose();
 
     const url = `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
-    const title = "Chapter " + chapterName + " : Verse " + verseNumber + " | Kinh Quran | Quran in Vietnamese | Quran.vn";
+    const title = "Chapter " + chapterName + " : Verse " + verseNumber + ` | ${config?.quranInLocal} | ${config?.metaDescription} | ${config?.metaTitle}`;
 
     setShareUrl(url);
     setShareTitle(title);
@@ -156,7 +156,7 @@ export default function VerseOptions({
     handlePopoverClose();
 
     const url = `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
-    const title = "Chapter " + chapterName + " : Verse " + verseNumber + " | Kinh Quran | Quran in Vietnamese | Quran.vn";
+    const title = "Chapter " + chapterName + " : Verse " + verseNumber + ` | ${config?.quranInLocal} | ${config?.metaDescription} | ${config?.metaTitle}`;
 
     if (navigator.share) {
       navigator.share({

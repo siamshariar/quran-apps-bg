@@ -11,7 +11,7 @@ export default function ContentPage({ pageTitle }) {
         title={`Is the Quran God’s word - ${pageTitle} | ${config?.metaTitle}`}
         description={`Is the Quran God’s word. | ${config?.metaDescription}`}
         url={`${server}/is-quran-god-word`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 

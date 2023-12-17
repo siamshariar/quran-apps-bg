@@ -20,7 +20,7 @@ export default function Chapter({
         title={`Chapter ${chapterName} | ${config?.metaTitle}`}
         description={`Chapter ${chapterName}. ${config?.metaDescription}`}
         url={`${server}/chapters/${chapterSlug}`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 

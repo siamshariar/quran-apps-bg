@@ -12,7 +12,7 @@ export default function Home({ chapters }) {
         title={config?.metaTitle}
         description={config?.metaDescription}
         url={server}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 

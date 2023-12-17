@@ -11,7 +11,7 @@ export default function ContentPage({ pageTitle }) {
         title={`${pageTitle} | ${config?.metaTitle}`}
         description={`${config?.metaTitle} For all inquiries, please email us. We'll get back to you as soon as we can insha'Allah.`}
         url={`${server}/contact`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 

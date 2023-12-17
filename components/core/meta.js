@@ -30,7 +30,7 @@ export default function Meta(props) {
             {/* <meta name="msapplication-config" content="browserconfig.xml" /> */}
 
             {/* Pinned Sites */}
-            <meta name="application-name" content="Quran.vn" />
+            <meta name="application-name" content={config.domain} />
             <meta name="msapplication-tooltip" content="Tooltip Text" />
             <meta name="msapplication-starturl" content={props.url || ""} />
 

@@ -136,7 +136,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
                     height={26}
                     loading="eager"
                   />
-									<span>Quran.vn<br/>v1.0.1</span>
+									<span>{config.domain}<br/>v1.0.1</span>
 								</a>
 							</Link>
 						</div>

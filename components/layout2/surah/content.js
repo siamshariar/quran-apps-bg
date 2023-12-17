@@ -9,6 +9,7 @@ import PlayIcon from "../../icons/PlayArrow";
 import PauseIcon from "../../icons/Pause";
 import Bismillah from "../../icons/Bismillah";
 import styles from "./content.module.scss";
+import { config } from "../../../lib/config";
 
 export default function ChapterContent({
   contentType,
@@ -217,8 +218,8 @@ export default function ChapterContent({
         </div>
 
         <div className={styles.print_footer}>
-          <span>Vietnamese Hassan</span>
-          <span>www.quran.vn</span>
+          {/* todo <span>Vietnamese Hassan</span> */}
+          <span>www.{config.domain}</span>
         </div>
       </div>
 

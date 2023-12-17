@@ -9,7 +9,7 @@ export default function SupportContent() {
             <div className={css.page_item}>
                 <div className={styles.quran_content}>
                     <p>Please mail us if you want to support. Any kind of support is highly appreciable.</p>
-                    <p>Email: deeniinfotech@gmail.com | quran.vn@gmail.com</p>
+                    <p>Email: info@deeniinfotech.com</p>
                 </div>
             </div>
         </div>

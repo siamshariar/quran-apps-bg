@@ -11,7 +11,7 @@ export default function WhatIsQuranPage({ pageTitle }) {
         title={`What is Quran - ${pageTitle} | ${config?.metaTitle}`}
         description={`What is Quran. ${config?.metaDescription}`}
         url={`${server}/what-is-quran`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 
