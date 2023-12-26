@@ -99,7 +99,7 @@ export default function FooterWeb() {
                         </li>
                     </ul>
 
-                    <p className={styles.credit}>Powered By - <a href="http://deeniinfotech.com/" target="_blank">Deeni Info Tech</a></p>
+                    <p className={styles.credit}>Powered By - <a href="https://deeniinfotech.com/" target="_blank">Deeni Info Tech</a></p>
                 </div>
             </Container>
         </div>
