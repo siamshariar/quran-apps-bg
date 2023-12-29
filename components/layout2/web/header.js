@@ -157,6 +157,7 @@ export default function HeaderWeb({
                       width={122}
                       height={26}
                       loading="eager"
+                      objectFit="contain"
                     />
                   </a>
                 </Link>
@@ -171,6 +172,7 @@ export default function HeaderWeb({
                       width={122}
                       height={26}
                       loading="eager"
+                      objectFit="contain"
                     />
                   </a>
                 </Link>
@@ -185,6 +187,7 @@ export default function HeaderWeb({
                       width={122}
                       height={26}
                       loading="eager"
+                      objectFit="contain"
                     />
                   </a>
                 </Link>

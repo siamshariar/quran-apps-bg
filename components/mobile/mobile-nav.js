@@ -135,6 +135,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
                     width={122}
                     height={26}
                     loading="eager"
+					objectFit="contain"
                   />
 									<span>{config.domain}<br/>v1.0.1</span>
 								</a>
