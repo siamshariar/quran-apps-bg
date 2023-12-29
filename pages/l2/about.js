@@ -10,6 +10,7 @@ import HeaderMobile from '../../components/mobile/header-content'
 import Sidenav from '../../components/sidenav'
 import Container from '../../components/core/container'
 import AboutContent from '../../components/pages/about'
+import { config } from '../../lib/config'
 
 export default function AboutPage({ chapters }) {
     const [searchModalOpen, updateSearchModalOpen] = useState(false)
@@ -21,9 +22,9 @@ export default function AboutPage({ chapters }) {
     return (
         <SettingsContextProvider>
             <Meta
-                title="Kinh Quran - Quran.vn"
-                description="Quran application in Vietnamese"
-                url="http://quran.vn/"
+                title={config?.metaTitle}
+                description={config?.metaDescription}
+                url={`http://www.${config?.domain}`}
                 image="/img/web_image.jpg"
                 type="website"
             />

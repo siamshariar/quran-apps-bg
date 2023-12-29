@@ -1,4 +1,4 @@
-import { server } from "../lib/config";
+import { server, config } from "../lib/config";
 import { getChaptersInfo } from "../lib/fetch";
 import Layout from "../components/layouts/layout-content";
 import Meta from "../components/core/meta";
@@ -8,10 +8,10 @@ export default function ContentPage({ pageTitle }) {
   return (
     <>
       <Meta
-        title={`${pageTitle}`}
-        description=""
+        title={`${pageTitle} | ${config?.metaTitle}`}
+	      description={config?.metaDescription}
         url={`${server}/privacy-policy`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 

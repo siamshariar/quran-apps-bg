@@ -31,6 +31,7 @@ import { useRouter } from 'next/router'
 // import BookmarkBorderIcon from '../icons/BookmarkBorder'
 
 import styles from './mobile-nav.module.scss'
+import { config } from '../../lib/config'
 
 export default function MobileNav({ navOpen, navControl, chapters }) {
 	// go to verse modal
@@ -129,13 +130,13 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 							<Link href="/">
 								<a className={styles.logo}>
                   <Image
-                    src="/img/logo_full_white.png"
+					src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                     alt=""
                     width={122}
                     height={26}
                     loading="eager"
                   />
-									<span>Quran.vn<br/>v1.0.1</span>
+									<span>{config.domain}<br/>v1.0.1</span>
 								</a>
 							</Link>
 						</div>

@@ -8,10 +8,10 @@ export default function DeeniinfotechContent() {
             <div className={css.page_item}>
                 <div className={styles.quran_content}>
                     <p>
-                        <a href="http://deeniinfotech.com" target="_blank">Deeni Info Tech</a>
+                        <a href="https://deeniinfotech.com" target="_blank">Deeni Info Tech</a>
                         : A non-profitable software development organization to spread Dawah all over the world.
                     </p>
-                    <p>Website: <a href="http://deeniinfotech.com" target="_blank">www.DeeniInfoTech.com</a></p>
+                    <p>Website: <a href="https://deeniinfotech.com" target="_blank">www.DeeniInfoTech.com</a></p>
                     <p>Email: deeniinfotech@gmail.com</p>
                 </div>
             </div>

@@ -32,6 +32,7 @@ import Settings from "../../settings";
 import BookmarkList from "../../bookmark/list";
 import PinList from "../../pin/list";
 import LastReadList from "../../last-read/list";
+import { config } from "../../../lib/config";
 
 export default function HeaderWeb({
   page,
@@ -151,7 +152,7 @@ export default function HeaderWeb({
                 <Link href="/">
                   <a className={`${styles.logo} ${styles.logo_normal}`}>
                     <Image
-                      src="/img/logo.png"
+                      src={`/img/logo/${config?.localizationCode}/logo.png`}
                       alt=""
                       width={122}
                       height={26}
@@ -165,7 +166,7 @@ export default function HeaderWeb({
                 <Link href="/">
                   <a className={`${styles.logo} ${styles.logo_white}`}>
                     <Image
-                      src="/img/logo_full_white.png"
+                      src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                       alt=""
                       width={122}
                       height={26}
@@ -179,7 +180,7 @@ export default function HeaderWeb({
                 <Link href="/">
                   <a className={`${styles.logo} ${styles.logo_full_white}`}>
                     <Image
-                      src="/img/logo_full_white.png"
+                      src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                       alt=""
                       width={122}
                       height={26}

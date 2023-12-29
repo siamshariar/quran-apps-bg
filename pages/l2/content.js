@@ -9,6 +9,7 @@ import FooterWeb from '../../components/web/footer'
 //import Sidenav from '../../components/sidenav'
 import Container from '../../components/core/container'
 import SampleContent from '../../components/pages/sample-content'
+import { config } from '../../lib/config'
 
 export default function ContentPage() {
     const [searchModalOpen, updateSearchModalOpen] = useState(false)
@@ -20,8 +21,8 @@ export default function ContentPage() {
     return (
         <SettingsContextProvider>
             <Meta
-                title="Kinh Quran - Quran.vn"
-                description="Quran application in Vietnamese"
+                title={config?.metaTitle}
+                description={config?.metaDescription}
                 url="http://quran.vn/"
                 image="/img/web_image.jpg"
                 type="website"

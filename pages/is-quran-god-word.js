@@ -1,4 +1,4 @@
-import { server } from "../lib/config";
+import { server, config } from "../lib/config";
 import { getChaptersInfo } from "../lib/fetch";
 import Layout from "../components/layouts/layout-content";
 import Meta from "../components/core/meta";
@@ -8,10 +8,10 @@ export default function ContentPage({ pageTitle }) {
   return (
     <>
       <Meta
-        title={`Is the Quran God’s word - ${pageTitle}`}
-        description="Is the Quran God’s word. Quran application in Vietnamese."
+        title={`Is the Quran God’s word - ${pageTitle} | ${config?.metaTitle}`}
+        description={`Is the Quran God’s word. | ${config?.metaDescription}`}
         url={`${server}/is-quran-god-word`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 

@@ -1,4 +1,4 @@
-import { server } from "../lib/config";
+import { server, config } from "../lib/config";
 import { getChaptersInfo } from "../lib/fetch";
 import Layout from "../components/layouts/layout-content";
 import Meta from "../components/core/meta";
@@ -8,10 +8,10 @@ export default function ContentPage({ pageTitle }) {
   return (
     <>
       <Meta
-        title={`${pageTitle}`}
+        title={`${pageTitle} | ${config?.metaTitle}`}
         description="Please mail us if you want to support. Any kind of support is highly appreciable. Email: deeniinfotech@gmail.com"
         url={`${server}/support`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 

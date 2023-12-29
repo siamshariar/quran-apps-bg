@@ -1,4 +1,4 @@
-import { server } from "../../../lib/config";
+import { server, config } from "../../../lib/config";
 import { getChaptersInfo, getChapterDetails } from "../../../lib/fetch";
 import Layout from "../../../components/layouts/layout-chapter";
 import Meta from "../../../components/core/meta";
@@ -17,10 +17,10 @@ export default function Chapter({
   return (
     <>
       <Meta
-        title={`Chapter ${chapterName}`}
-        description={`Chapter ${chapterName}. Quran application in Vietnamese.`}
+        title={`Chapter ${chapterName} | ${config?.metaTitle}`}
+        description={`Chapter ${chapterName}. ${config?.metaDescription}`}
         url={`${server}/chapters/${chapterSlug}`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 

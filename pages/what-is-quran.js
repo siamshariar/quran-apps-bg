@@ -1,4 +1,4 @@
-import { server } from "../lib/config";
+import { server, config } from "../lib/config";
 import { getChaptersInfo } from "../lib/fetch";
 import Layout from "../components/layouts/layout-content";
 import Meta from "../components/core/meta";
@@ -8,10 +8,10 @@ export default function WhatIsQuranPage({ pageTitle }) {
   return (
     <>
       <Meta
-        title={`What is Quran - ${pageTitle}`}
-        description="What is Quran. Quran application in Vietnamese."
+        title={`What is Quran - ${pageTitle} | ${config?.metaTitle}`}
+        description={`What is Quran. ${config?.metaDescription}`}
         url={`${server}/what-is-quran`}
-        image={`${server}/img/s_logo.png`}
+        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
 
