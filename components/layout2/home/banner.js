@@ -61,7 +61,7 @@ const GridItem = ({ title, text, url }) => {
                 <p className={styles.text}>{text}</p>
                 <Link href={url}>
                     <a className={styles.link}>
-                        <span className={styles.link_text}>Rad more</span>
+                        <span className={styles.link_text}>Read more</span>
                         <span className={styles.link_icon}><EastIcon /></span>
                     </a>
                 </Link>

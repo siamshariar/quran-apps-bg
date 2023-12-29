@@ -37,7 +37,7 @@ const GridItem = ({ title, text, url }) => {
                 <p>{text}</p>
                 <Link href={url}>
                     <a>
-                        <span>Rad more</span>
+                        <span>Read more</span>
                         <span><EastIcon /></span>
                     </a>
                 </Link>
