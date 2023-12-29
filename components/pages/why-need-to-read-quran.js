@@ -50,12 +50,12 @@ export default function WNTRQContent({ page_title }) {
                         <h2>Miracles of Quran By Dr Zakir Naik</h2>
                     </div>
 
-                    <div className={styles.video_block}>
+                    {/* <div className={styles.video_block}>
                         <div className={styles.video}>
                             <iframe src={`https://www.youtube.com/embed/ocCdBbfSk8Q?autoplay=0&mute=0`}></iframe>
                         </div>
                         <h2>Quran : The Path Of Happiness - Dr Zakir Naik</h2>
-                    </div>
+                    </div> */}
 
                     <div className={styles.video_block}>
                         <div className={styles.video}>
