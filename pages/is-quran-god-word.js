@@ -8,8 +8,8 @@ export default function ContentPage({ pageTitle }) {
   return (
     <>
       <Meta
-        title={`Is the Quran God’s word - ${pageTitle} | ${config?.metaTitle}`}
-        description={`Is the Quran God’s word. | ${config?.metaDescription}`}
+        title={`${config.content.is_quran_god_word.title} - ${pageTitle} | ${config?.metaTitle}`}
+        description={`${config.content.is_quran_god_word.title} ${config?.metaDescription}`}
         url={`${server}/is-quran-god-word`}
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"

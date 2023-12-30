@@ -1,5 +1,6 @@
 import css from './style.module.scss'
 import styles from './about.module.scss'
+import {config} from "../../lib/config";
 
 export default function WNTRQContent({ page_title }) {
     return (
@@ -8,7 +9,7 @@ export default function WNTRQContent({ page_title }) {
 
             <div className={css.page_item}>
                 <div className={styles.quran_content}>
-                    <h2>Why should read the Quran?</h2>
+                    <h2>{config.content.why_should_read_quran.title}</h2>
                     <p>
                         The first revelation of the Holy Qur’an that was revealed to Prophet Muhammad (PBUH) was ‘Read’ ‘اقرا’ from (Al Quran - 96 : 01) which shows the importance of acquiring knowledge by reading.
                     </p>

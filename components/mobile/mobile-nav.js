@@ -126,7 +126,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 			>
 				<div className={styles.wrapper}>
 					<div className={styles.menu_ctn}>
-						<div className={styles.menu_top}>
+						<div style={{background: config.bannerBackground}} className={styles.menu_top}>
 							<Link href="/">
 								<a className={styles.logo}>
                   <Image

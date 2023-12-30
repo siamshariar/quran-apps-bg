@@ -8,8 +8,8 @@ export default function ContentPage({ pageTitle }) {
   return (
     <>
       <Meta
-        title={`Why should read Quran - ${pageTitle} | ${config?.metaTitle}`}
-        description={`Why should read Quran. ${config?.metaDescription}`}
+        title={`${config.content.why_should_read_quran.title} - ${pageTitle} | ${config?.metaTitle}`}
+        description={`${config.content.why_should_read_quran.title} ${config?.metaDescription}`}
         url={`${server}/why-should-read-the-quran`}
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"

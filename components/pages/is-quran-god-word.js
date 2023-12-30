@@ -1,5 +1,6 @@
 import css from './style.module.scss'
 import styles from './about.module.scss'
+import {config} from "../../lib/config";
 
 export default function IQGWContent({ page_title }) {
     return (
@@ -8,7 +9,7 @@ export default function IQGWContent({ page_title }) {
 
             <div className={css.page_item}>
                 <div className={styles.quran_content}>
-                    <h2>Is the Quran God’s word?</h2>
+                    <h2>{config.content.is_quran_god_word.title}</h2>
                     <p>
                         The Noble Quran is the eternal miracle of Prophet Muhammad (PUBH), because all the miracles of the prophets (PUBH) ended with their death, except our Prophet (PUBH), whose miracle is still preserved. This everlasting miracle is the Book of Allah and His revealed speech that
                         “It cannot be proven false from any angle. ˹It is˺ a revelation from the ˹One Who is˺ All-Wise, Praiseworthy.” [Al Quran - 41 : 42]
