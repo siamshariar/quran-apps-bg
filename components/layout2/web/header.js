@@ -93,11 +93,12 @@ export default function HeaderWeb({
     window.onscroll = () => {
       setOffset(window.pageYOffset);
     };
-    if (offset > 5) {
-      header.current.classList.add(styles.scrolled);
-    } else {
-      header.current.classList.remove(styles.scrolled);
-    }
+    header.current.classList.add(styles.scrolled);
+    // if (offset > 5) {
+    //   header.current.classList.add(styles.scrolled);
+    // } else {
+    //   header.current.classList.remove(styles.scrolled);
+    // }
 
     return () => setDidMount(false);
   }, [offset]);
