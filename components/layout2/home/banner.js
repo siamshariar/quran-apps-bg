@@ -5,11 +5,18 @@ import Grid from '@material-ui/core/Grid'
 import EastIcon from '../../icons/East'
 import styles from './banner.module.scss'
 import {config} from "../../../lib/config";
+import {useContext} from "react";
+import {SettingsContext} from "../../../contexts/SettingsContext";
 
 export default function Banner() {
+    const { theme } = useContext(SettingsContext);
+    const backgroundColor = theme === "light"
+        ? config.bannerBackground
+        : "linear-gradient(90deg,#2b395d 0,#909090 50%,#909090 50%,#2b395d 100%)"
+
     return (
         <>
-            <div style={{background: config.bannerBackground}} className={styles.banner}>
+            <div style={{background: backgroundColor}} className={styles.banner}>
                 <Container>
                     {/*<div className={styles.calligraphy}>*/}
                     {/*    <Image*/}

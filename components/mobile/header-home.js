@@ -52,7 +52,7 @@ export default function HeaderMobile({ chapters }) {
                                         <Image
                                             src={`/img/logo/${config?.localizationCode}/logo.png`}
                                             alt=""
-                                            width={122}
+                                            width={142}
                                             height={26}
                                             loading="eager"
                                             objectFit='contain'
@@ -67,7 +67,7 @@ export default function HeaderMobile({ chapters }) {
                                         <Image
                                             src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                                             alt=""
-                                            width={122}
+                                            width={142}
                                             height={26}
                                             loading="eager"
                                             objectFit='contain'

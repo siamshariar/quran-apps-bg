@@ -155,8 +155,8 @@ export default function HeaderWeb({
                     <Image
                       src={`/img/logo/${config?.localizationCode}/logo.png`}
                       alt=""
-                      width={122}
-                      height={26}
+                      width={162}
+                      height={36}
                       loading="eager"
                       objectFit="contain"
                     />
@@ -170,8 +170,8 @@ export default function HeaderWeb({
                     <Image
                       src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                       alt=""
-                      width={122}
-                      height={26}
+                      width={162}
+                      height={36}
                       loading="eager"
                       objectFit="contain"
                     />
@@ -185,8 +185,8 @@ export default function HeaderWeb({
                     <Image
                       src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                       alt=""
-                      width={122}
-                      height={26}
+                      width={162}
+                      height={36}
                       loading="eager"
                       objectFit="contain"
                     />
