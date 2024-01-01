@@ -93,11 +93,12 @@ export default function HeaderWeb({
     window.onscroll = () => {
       setOffset(window.pageYOffset);
     };
-    if (offset > 5) {
-      header.current.classList.add(styles.scrolled);
-    } else {
-      header.current.classList.remove(styles.scrolled);
-    }
+    header.current.classList.add(styles.scrolled);
+    // if (offset > 5) {
+    //   header.current.classList.add(styles.scrolled);
+    // } else {
+    //   header.current.classList.remove(styles.scrolled);
+    // }
 
     return () => setDidMount(false);
   }, [offset]);
@@ -154,9 +155,10 @@ export default function HeaderWeb({
                     <Image
                       src={`/img/logo/${config?.localizationCode}/logo.png`}
                       alt=""
-                      width={122}
-                      height={26}
+                      width={162}
+                      height={36}
                       loading="eager"
+                      objectFit="contain"
                     />
                   </a>
                 </Link>
@@ -168,9 +170,10 @@ export default function HeaderWeb({
                     <Image
                       src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                       alt=""
-                      width={122}
-                      height={26}
+                      width={162}
+                      height={36}
                       loading="eager"
+                      objectFit="contain"
                     />
                   </a>
                 </Link>
@@ -182,9 +185,10 @@ export default function HeaderWeb({
                     <Image
                       src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                       alt=""
-                      width={122}
-                      height={26}
+                      width={162}
+                      height={36}
                       loading="eager"
+                      objectFit="contain"
                     />
                   </a>
                 </Link>

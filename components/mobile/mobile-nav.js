@@ -32,12 +32,17 @@ import { useRouter } from 'next/router'
 
 import styles from './mobile-nav.module.scss'
 import { config } from '../../lib/config'
+import {SettingsContext} from "../../contexts/SettingsContext";
 
 export default function MobileNav({ navOpen, navControl, chapters }) {
 	// go to verse modal
 	const [goToVerseOpen, setGoToVerseOpen] = useState(false)
 	// const [goToVerseInit, setGoToVerseInit] = useState(false)
 	// const [goToVerseData, setGoToVerseData] = useState([])
+	const { theme } = useContext(SettingsContext);
+	const backgroundColor = theme === "light"
+		? config.bannerBackground
+		: "linear-gradient(90deg,#2b395d 0,#909090 50%,#909090 50%,#2b395d 100%)"
 
 	const handleGoToVerseModal = open => event => {
 		event.preventDefault()
@@ -126,15 +131,16 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 			>
 				<div className={styles.wrapper}>
 					<div className={styles.menu_ctn}>
-						<div className={styles.menu_top}>
+						<div style={{background: backgroundColor}} className={styles.menu_top}>
 							<Link href="/">
 								<a className={styles.logo}>
                   <Image
 					src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                     alt=""
-                    width={122}
+                    width={142}
                     height={26}
                     loading="eager"
+					objectFit="contain"
                   />
 									<span>{config.domain}<br/>v1.0.1</span>
 								</a>

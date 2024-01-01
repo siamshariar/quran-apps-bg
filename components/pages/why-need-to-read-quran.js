@@ -1,5 +1,6 @@
 import css from './style.module.scss'
 import styles from './about.module.scss'
+import {config} from "../../lib/config";
 
 export default function WNTRQContent({ page_title }) {
     return (
@@ -8,7 +9,7 @@ export default function WNTRQContent({ page_title }) {
 
             <div className={css.page_item}>
                 <div className={styles.quran_content}>
-                    <h2>Why should read the Quran?</h2>
+                    <h2>{config.content.why_should_read_quran.title}</h2>
                     <p>
                         The first revelation of the Holy Qur’an that was revealed to Prophet Muhammad (PBUH) was ‘Read’ ‘اقرا’ from (Al Quran - 96 : 01) which shows the importance of acquiring knowledge by reading.
                     </p>
@@ -50,12 +51,12 @@ export default function WNTRQContent({ page_title }) {
                         <h2>Miracles of Quran By Dr Zakir Naik</h2>
                     </div>
 
-                    <div className={styles.video_block}>
+                    {/* <div className={styles.video_block}>
                         <div className={styles.video}>
                             <iframe src={`https://www.youtube.com/embed/ocCdBbfSk8Q?autoplay=0&mute=0`}></iframe>
                         </div>
                         <h2>Quran : The Path Of Happiness - Dr Zakir Naik</h2>
-                    </div>
+                    </div> */}
 
                     <div className={styles.video_block}>
                         <div className={styles.video}>

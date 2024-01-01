@@ -31,6 +31,7 @@ export default function HeaderWeb({ page, searchModalController }) {
                                         width={122}
                                         height={26}
                                         loading="eager"
+                                        objectFit="contain"
                                     />
                                 </a>
                             </Link>
@@ -45,6 +46,7 @@ export default function HeaderWeb({ page, searchModalController }) {
                                         width={122}
                                         height={26}
                                         loading="eager"
+                                        objectFit="contain"
                                     />
                                 </a>
                             </Link>

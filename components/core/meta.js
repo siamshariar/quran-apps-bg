@@ -89,7 +89,7 @@ export default function Meta(props) {
             />
             <meta
                 property="og:site_name"
-                content="QuranVn"
+                content={config.domain}
                 key="ogsitename"
             />
 
@@ -101,7 +101,7 @@ export default function Meta(props) {
             />
             <meta
                 name="twitter:site"
-                content="@quranvn"
+                content={`@${config.domain}`}
                 key="twsite"
             />
             <meta

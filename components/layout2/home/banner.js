@@ -4,11 +4,19 @@ import Container from '../../core/container'
 import Grid from '@material-ui/core/Grid'
 import EastIcon from '../../icons/East'
 import styles from './banner.module.scss'
+import {config} from "../../../lib/config";
+import {useContext} from "react";
+import {SettingsContext} from "../../../contexts/SettingsContext";
 
 export default function Banner() {
+    const { theme } = useContext(SettingsContext);
+    const backgroundColor = theme === "light"
+        ? config.bannerBackground
+        : "linear-gradient(90deg,#2b395d 0,#909090 50%,#909090 50%,#2b395d 100%)"
+
     return (
         <>
-            <div className={styles.banner}>
+            <div style={{background: backgroundColor}} className={styles.banner}>
                 <Container>
                     {/*<div className={styles.calligraphy}>*/}
                     {/*    <Image*/}
@@ -22,17 +30,17 @@ export default function Banner() {
                     <div className={styles.grid}>
                         <Grid container spacing={4}>
                             <GridItem
-                                title="What is Quran?"
+                                title={config.content.what_is_quran.title}
                                 text="The Holy Quran is the Holy Book or the Scripture(holy book) of mankind. The Quran is a complete code of life for the human being."
                                 url="/what-is-quran"
                             />
                             <GridItem
-                                title="Is the Quran God’s word?"
+                                title={config.content.is_quran_god_word.title}
                                 text="The Noble Quran is the eternal miracle of Prophet Muhammad (PBUH), because all the miracles of the prophets (PBUH) ended with their death, except our Prophet (PBUH), whose miracle is still preserved."
                                 url="/is-quran-god-word"
                             />
                             <GridItem
-                                title="Why should read Quran?"
+                                title={config.content.why_should_read_quran.title}
                                 text="The first revelation of the Holy Qur’an that was revealed to Prophet Muhammad (PBUH) was ‘Read’ ‘اقرا’ from (Al Quran - 96 : 01) which shows the importance of acquiring knowledge by reading."
                                 url="/why-should-read-the-quran"
                             />
@@ -61,7 +69,7 @@ const GridItem = ({ title, text, url }) => {
                 <p className={styles.text}>{text}</p>
                 <Link href={url}>
                     <a className={styles.link}>
-                        <span className={styles.link_text}>Rad more</span>
+                        <span className={styles.link_text}>Read more</span>
                         <span className={styles.link_icon}><EastIcon /></span>
                     </a>
                 </Link>

@@ -17,8 +17,6 @@
   font-size: 16px;
 }
 
-
-
 @media only screen and (min-width: 1024px) {
   .banner_mobile {
     display: none;
@@ -29,7 +27,7 @@
     padding-top: 70px;
     background: #3134DE;
     //background: linear-gradient(90deg, #BE7AF8 0%, #3134DE 33%, #3134DE 66%, #BE7AF8 100%);
-    background: linear-gradient(90deg, var(--hbnc1) 0%, var(--hbnc2) 50%, var(--hbnc2) 50%, var(--hbnc1) 100%);
+    //background: linear-gradient(90deg, var(--hbnc1) 0%, var(--hbnc2) 50%, var(--hbnc2) 50%, var(--hbnc1) 100%);
   }
 
   .calligraphy {

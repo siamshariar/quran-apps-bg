@@ -3,24 +3,25 @@ import Grid from '@material-ui/core/Grid'
 import EastIcon from '../icons/East'
 import css from './style.module.scss'
 import styles from './about-quran.module.scss'
+import { config } from "../../lib/config"
 
 export default function AboutQuranContent() {
     return (
         <div className={css.wrapper}>
             <Grid container spacing={2}>
                 <GridItem
-                    title="Kinh Quran là gì?"
-                    text="Quran đó là kinh sách được dành cho nhân loại. Nó là một quy tắc hoàn chỉnh của cuộc sống để cho con người áp dụng."
+                    title={config.content.what_is_quran.title}
+                    text="The Holy Quran is the Holy Book or the Scripture(holy book) of mankind. The Quran is a complete code of life for the human being."
                     url="/what-is-quran"
                 />
                 <GridItem
-                    title="Is the Quran God’s word?"
-                    text="Không một điều giả dối nào có thể xâm nhập Nó (Qur'an) từ đằng trước hay đằng sau."
+                    title={config.content.is_quran_god_word.title}
+                    text="The Noble Quran is the eternal miracle of Prophet Muhammad (PBUH), because all the miracles of the prophets (PBUH) ended with their death, except our Prophet (PBUH), whose miracle is still preserved."
                     url="/is-quran-god-word"
                 />
                 <GridItem
-                    title="Why should read the Quran?"
-                    text="Tháng Ramadan là tháng trong đó (Kinh) Qur’an được ban xuống làm Chỉ Đạo cho nhân loại và mang bằng chứng rõ..."
+                    title={config.content.why_should_read_quran.title}
+                    text="The first revelation of the Holy Qur’an that was revealed to Prophet Muhammad (PBUH) was ‘Read’ ‘اقرا’ from (Al Quran - 96 : 01) which shows the importance of acquiring knowledge by reading."
                     url="/why-should-read-the-quran"
                 />
             </Grid>
@@ -37,7 +38,7 @@ const GridItem = ({ title, text, url }) => {
                 <p>{text}</p>
                 <Link href={url}>
                     <a>
-                        <span>Rad more</span>
+                        <span>Read more</span>
                         <span><EastIcon /></span>
                     </a>
                 </Link>

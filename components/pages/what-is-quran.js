@@ -1,5 +1,6 @@
 import css from './style.module.scss'
 import styles from './about.module.scss'
+import {config} from "../../lib/config";
 
 export default function WIQContent({ page_title }) {
     return (
@@ -8,7 +9,7 @@ export default function WIQContent({ page_title }) {
 
             <div className={css.page_item}>
                 <div className={styles.quran_content}>
-                    <h2>What is Quran?</h2>
+                    <h2>{config.content.what_is_quran.title}</h2>
                     <p>
                         The Holy Quran is the Holy Book or the Scripture(holy book) of mankind. The Quran is a complete code of life for the human being. It prescribes us what to do and what not to do.
                     </p>
