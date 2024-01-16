@@ -93,7 +93,7 @@ export default function HeaderMobile({ contentTitle, chapterNo, chapters }) {
                     <div className={styles.wrapper}>
                         <div className={styles.left}>
                             <Link href="/">
-                                <a className={styles.icon}>
+                                <a className={styles.back_icon}>
                                     <BackIcon />
                                 </a>
                             </Link>

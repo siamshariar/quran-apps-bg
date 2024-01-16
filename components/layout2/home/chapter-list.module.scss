@@ -4,9 +4,33 @@
   padding-bottom: 10px;
 }
 
+.offline_wrapper {
+  width: 100%;
+  padding: 15px;
+  position: relative;
+  background: var(--bg11);
+  border-radius: 0;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  -moz-box-pack: justify;
+  justify-content: space-between;
+  -moz-box-align: center;
+  align-items: center;
+}
+
+.offline_title {
+  font-weight: bold;
+}
+
 @media only screen and (min-width: 1024px) {
   .wrap {
     padding-top: 50px;
     padding-bottom: 50px;
+  }
+
+  .offline_wrapper {
+    padding: 20px;
+    margin-top: 45px;
   }
 }

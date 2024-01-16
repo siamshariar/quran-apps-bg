@@ -18,8 +18,10 @@ import NearMeIcon from "../../icons/NearMeOutlined";
 import SubtitlesIcon from "../../icons/SubtitlesOutlined";
 import FavoriteBorderIcon from "../../icons/FavoriteBorder";
 import BookmarkBorderIcon from "../../icons/BookmarkBorder";
+import DonateIcon from "../../icons/Donate";
 import DownloadIcon from "../../icons/FileDownload";
 import InfoIcon from "../../icons/Info";
+import InstallAppIcon from "../../icons/InstallApp";
 import PinOutlineIcon from "../../icons/PinOutline";
 import AutoStoriesIcon from "../../icons/AutoStories";
 import FormatListBulletedIcon from "../../icons/FormatListBulleted";
@@ -226,46 +228,26 @@ export default function HeaderWeb({
                     </span>
                     <span className={styles.text}>Go To Verse</span>
                   </MenuItem>
-                  <Link href="/names-of-allah">
-                    <MenuItem onClick={handleClose}>
-                      <a className={styles.link}>
-                        <span className={styles.icon}>
-                          <Names99Icon />
-                        </span>
-                        <span className={styles.text}>Names of Allah</span>
-                      </a>
-                    </MenuItem>
-                  </Link>
-                  <Link href="/subjective">
-                    <MenuItem onClick={handleClose}>
-                      <a className={styles.link}>
-                        <span className={styles.icon}>
-                          <SubtitlesIcon />
-                        </span>
-                        <span className={styles.text}>Subjective</span>
-                      </a>
-                    </MenuItem>
-                  </Link>
 
-                  {!hasSidenav && (
-                    <MenuItem
-                      onClick={(e) =>
-                        handleItem(
-                          e,
-                          <ChapterList
-                            chapterList={chapters}
-                            controller={handleModalClose}
-                          />,
-                          "Chapters"
-                        )
-                      }
-                    >
-                      <span className={styles.icon}>
-                        <FormatListBulletedIcon />
-                      </span>
-                      <span className={styles.text}>Chapters</span>
-                    </MenuItem>
-                  )}
+                  {/*{!hasSidenav && (*/}
+                  {/*  <MenuItem*/}
+                  {/*    onClick={(e) =>*/}
+                  {/*      handleItem(*/}
+                  {/*        e,*/}
+                  {/*        <ChapterList*/}
+                  {/*          chapterList={chapters}*/}
+                  {/*          controller={handleModalClose}*/}
+                  {/*        />,*/}
+                  {/*        "Chapters"*/}
+                  {/*      )*/}
+                  {/*    }*/}
+                  {/*  >*/}
+                  {/*    <span className={styles.icon}>*/}
+                  {/*      <FormatListBulletedIcon />*/}
+                  {/*    </span>*/}
+                  {/*    <span className={styles.text}>Chapters</span>*/}
+                  {/*  </MenuItem>*/}
+                  {/*)}*/}
 
                   {hasSidenav ? (
                     <MenuItem onClick={(e) => handleSidenav(e, 1)}>
@@ -345,7 +327,16 @@ export default function HeaderWeb({
                     </MenuItem>
                   )}
 
-                  {/* <Link href="/bookmark"></Link> */}
+                  <Link href="/subjective">
+                    <MenuItem onClick={handleClose}>
+                      <a className={styles.link}>
+                        <span className={styles.icon}>
+                          <SubtitlesIcon />
+                        </span>
+                        <span className={styles.text}>Subjective</span>
+                      </a>
+                    </MenuItem>
+                  </Link>
 
                   <Link href="/download">
                     <MenuItem onClick={handleClose}>
@@ -357,6 +348,43 @@ export default function HeaderWeb({
                       </a>
                     </MenuItem>
                   </Link>
+
+                  <Link href="/names-of-allah">
+                    <MenuItem onClick={handleClose}>
+                      <a className={styles.link}>
+                        <span className={styles.icon}>
+                          <Names99Icon />
+                        </span>
+                        <span className={styles.text}>Names of Allah</span>
+                      </a>
+                    </MenuItem>
+                  </Link>
+
+                  {/*TODO: Add Setting for all other pages as well*/}
+                  {!hasSidenav && (
+                      <MenuItem
+                          onClick={(e) => handleItem(e, <Settings />, "Settings")}
+                      >
+                      <span className={styles.icon}>
+                        <SettingsIcon />
+                      </span>
+                        <span className={styles.text}>Settings</span>
+                      </MenuItem>
+                  )}
+
+                  <hr className={styles.menu_item_separator} />
+
+                  <Link href="/install-app">
+                    <MenuItem onClick={handleClose}>
+                      <a className={styles.link}>
+                        <span className={styles.icon}>
+                          <InstallAppIcon />
+                        </span>
+                        <span className={styles.text}>Install App</span>
+                      </a>
+                    </MenuItem>
+                  </Link>
+
                   <Link href="/about">
                     <MenuItem onClick={handleClose}>
                       <a className={styles.link}>
@@ -367,16 +395,17 @@ export default function HeaderWeb({
                       </a>
                     </MenuItem>
                   </Link>
-                  {!hasSidenav && (
-                    <MenuItem
-                      onClick={(e) => handleItem(e, <Settings />, "Settings")}
-                    >
-                      <span className={styles.icon}>
-                        <SettingsIcon />
-                      </span>
-                      <span className={styles.text}>Settings</span>
+
+                  <a href="https://www.deeniinfotech.com/donate#donation-form" target="_blank">
+                    <MenuItem onClick={handleClose}>
+                      <a className={styles.link}>
+                        <span className={styles.icon}>
+                          <DonateIcon />
+                        </span>
+                        <span className={styles.text}>Donate</span>
+                      </a>
                     </MenuItem>
-                  )}
+                  </a>
                 </MenuList>
               </Popover>
             </div>

@@ -38,6 +38,21 @@ const App = ({ Component, pageProps }) => {
       }
     });
 
+    // DISABLED RIGHT CLICK/TAP ON MOBILE
+    const x = window.matchMedia("(min-width: 1024px)");
+    if (!x.matches) {
+      // document.addEventListener('contextmenu', (event) => {
+      //   event.preventDefault();
+      // });
+
+      // TODO: Commented out to check performance issue
+      // window.addEventListener('contextmenu', function (e) {
+      //   // do something here...
+      //   e.preventDefault();
+      // }, false);
+    }
+    // DISABLED RIGHT CLICK/TAP ON MOBILE
+
     // document.addEventListener('contextmenu', (e) => {
     //   e.preventDefault()
     // })

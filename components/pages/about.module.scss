@@ -49,6 +49,35 @@
   margin-bottom: 20px;
 }
 
+.mobile_app_link {
+  color: #1377FD;
+}
+
+.mobile_app_title {
+  font-weight: bold;
+}
+
+.mobile_app_des {
+  //margin-bottom: 2rem;
+  //list-style-position: outside;
+  //list-style-image: none;
+  margin-left: 1rem;
+}
+
+//.mobile_app_des li {
+//  margin: 0;
+//  list-style-type: auto!important;
+//  margin-top: 1rem;
+//}
+
+.mobile_app_des p {
+  margin-bottom: .3rem;
+}
+
+.mobile_app_des div {
+  margin-bottom: .3rem;
+}
+
 @media only screen and (min-width: 1024px) {
   .video {
     margin-bottom: 20px;

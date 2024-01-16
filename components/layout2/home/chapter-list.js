@@ -9,7 +9,7 @@ export default function ChapterList({ chapters }) {
             <Container>
                 <Grid container spacing={2}>
                     {chapters && chapters.map(chapter =>
-                        <Grid key={chapter.chapterNo} item xs={12} md={6} lg={4}>
+                        <Grid key={chapter.chapterNo} item xs={12} sm={6} md={6} lg={4}>
                             <ChapterCard chapter={chapter} />
                         </Grid>
                     )}

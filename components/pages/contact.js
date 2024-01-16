@@ -8,7 +8,7 @@ export default function ContactContent() {
 
             <div className={css.page_item}>
                 <div className={styles.quran_content}>
-                    <p>For all inquiries, please email us. We'll get back to you as soon as we can In Sha Allah.</p>
+                    <p>For any inquiries, please email us. We'll get back to you as soon as we can In'Sha Allah.</p>
                     <p>Email: info@deeniinfotech.com</p>
                 </div>
             </div>

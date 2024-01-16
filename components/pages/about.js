@@ -9,7 +9,7 @@ export default function AboutContent() {
             <div className={css.page_item}>
                 <div className={styles.quran_content}>
                     <p>Quran application in {config?.language}.</p>
-                    <p>Powered by - <a href="https://deeniinfotech.com" target="_blank">Deeni Info Tech</a></p>
+                    <p>Developed and maintain by <a href="https://deeniinfotech.com" target="_blank">Deeni Info Tech.</a></p>
                     <p>
                         Deeni Info Tech is a non-profit Software Development organization to spread the message of Islam worldwide.
                     </p>
@@ -29,9 +29,13 @@ export default function AboutContent() {
                         </ol>
                     </p>
                     <p>
+                        The primary goal of Deeni Info Tech is to create more promising Islamic applications. All our applications is/will be free of charge and entirely ad-free.
+                    </p>
+                    <p>
                         Website: <a href="https://deeniinfotech.com" target="_blank">www.DeeniInfoTech.com</a>
                     </p>
                     <p>Email: <a href="mailto:info@deeniinfotech.com">info@deeniinfotech.com</a></p>
+                    <p>Please mail us if you want to support. Any kind of support is highly appreciable.</p>
                 </div>
             </div>
         </div>

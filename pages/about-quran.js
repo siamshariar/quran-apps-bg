@@ -17,6 +17,7 @@ export default function AboutQuran() {
         type="website"
       />
 
+      {/*TODO: Add mobile header*/}
       <div className="view_on_mobile">
         <div className="content">
           <Container>

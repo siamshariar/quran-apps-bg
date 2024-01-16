@@ -7,6 +7,7 @@ import SettingsModal from './settings-modal'
 import MenuBookIcon from '../icons/MenuBook'
 import NearMeIcon from '../icons/NearMeOutlined'
 import SubtitlesIcon from '../icons/SubtitlesOutlined'
+import DonateIcon from "../icons/Donate";
 import DownloadIcon from '../icons/FileDownload'
 import SettingsIcon from '../icons/SettingsOutlined'
 import FeedbackIcon from '../icons/Feedback'
@@ -15,6 +16,7 @@ import CreateIcon from '../icons/Create'
 import AttachMoneyIcon from '../icons/AttachMoney'
 import FavoriteBorderIcon from '../icons/FavoriteBorder'
 import InfoIcon from '../icons/Info'
+import InstallAppIcon from "../icons/InstallApp";
 import ContactIcon from '../icons/ContactSupport'
 import SecurityIcon from '../icons/Security'
 import AdminIcon from '../icons/AdminPanelSettings'
@@ -31,8 +33,9 @@ import { useRouter } from 'next/router'
 // import BookmarkBorderIcon from '../icons/BookmarkBorder'
 
 import styles from './mobile-nav.module.scss'
-import { config } from '../../lib/config'
+import {config, server} from '../../lib/config'
 import {SettingsContext} from "../../contexts/SettingsContext";
+import Share from "../core/share";
 
 export default function MobileNav({ navOpen, navControl, chapters }) {
 	// go to verse modal
@@ -118,6 +121,46 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
     return
   }
 
+  	// TODO: Make common share component
+	// share option
+	const [shareOpen, setShareOpen] = useState(false);
+	const [shareUrl, setShareUrl] = useState("");
+	const [shareTitle, setShareTitle] = useState("");
+
+	const handleShareClose = (open) => (event) => {
+		if (
+			event.type === "keydown" &&
+			(event.key === "Tab" || event.key === "Shift")
+		) {
+			return;
+		}
+		setShareOpen(open);
+	};
+
+	const handleMobileShare = () => {
+		// handlePopoverClose();
+
+		const url = server;
+		const title = `${config?.metaTitle} | ${config?.metaDescription}`;
+
+		if (navigator.share) {
+			navigator.share({
+				title: title,
+				url: url,
+			});
+			// .then(() => {
+			//     console.log('thanks for sharing')
+			// })
+			// .catch(console.error)
+		} else {
+			//console.log('not supported')
+			setShareUrl(url);
+			setShareTitle(title);
+			setShareOpen(true);
+		}
+	};
+	// TODO: Make common share component
+
 	return (
 		<>
 			<Drawer
@@ -165,13 +208,14 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								</Link>
 							</li>
 							<li>
-								<Link href="/names-of-allah">
-									<a>
-										<span className={styles.icon}><Names99Icon /></span>
-										<span className={styles.text}>Names of Allah</span>
+								<Link href="/settings">
+									<a onClick={handleSettingsModal(true)}>
+										<span className={styles.icon}><SettingsIcon /></span>
+										<span className={styles.text}>Settings</span>
 									</a>
 								</Link>
 							</li>
+
 							<li>
 								<Link href="/bookmarks">
 									<a onClick={e => handleBookmarkPage(e, 2)}>
@@ -196,15 +240,16 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 									</a>
 								</Link>
 							</li>
-
 							<li>
-								<Link href="/settings">
-									<a onClick={handleSettingsModal(true)}>
-										<span className={styles.icon}><SettingsIcon /></span>
-										<span className={styles.text}>Settings</span>
+								<Link href="/names-of-allah">
+									<a>
+										<span className={styles.icon}><Names99Icon /></span>
+										<span className={styles.text}>Names of Allah</span>
 									</a>
 								</Link>
 							</li>
+
+
               {/* <li>
 								<Link href="/pin">
 									<a onClick={handlePinModal(true)}>
@@ -234,14 +279,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 							{/*		</a>*/}
 							{/*	</Link>*/}
 							{/*</li>*/}
-							{/*<li>*/}
-							{/*	<Link href="/">*/}
-							{/*		<a>*/}
-							{/*			<span className={styles.icon}><ShareIcon /></span>*/}
-							{/*			<span className={styles.text}>Share</span>*/}
-							{/*		</a>*/}
-							{/*	</Link>*/}
-							{/*</li>*/}
+
 							{/*<li>*/}
 							{/*	<Link href="/">*/}
 							{/*		<a>*/}
@@ -251,21 +289,29 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 							{/*	</Link>*/}
 							{/*</li>*/}
 							<li>
-								<Link href="/support">
+								<Link href="/install-app">
 									<a>
-										<span className={styles.icon}><ContactIcon /></span>
-										<span className={styles.text}>Support</span>
+										<span className={styles.icon}><InstallAppIcon /></span>
+										<span className={styles.text}>Install App</span>
 									</a>
 								</Link>
 							</li>
 							<li>
-								<Link href="/grateful">
+								<a onClick={() => handleMobileShare()} style={{cursor: `pointer`}}>
 									<a>
-										<span className={styles.icon}><FavoriteBorderIcon /></span>
-										<span className={styles.text}>Grateful</span>
+										<span className={styles.icon}><ShareIcon /></span>
+										<span className={styles.text}>Share</span>
 									</a>
-								</Link>
+								</a>
 							</li>
+							{/*<li>*/}
+							{/*	<Link href="/grateful">*/}
+							{/*		<a>*/}
+							{/*			<span className={styles.icon}><FavoriteBorderIcon /></span>*/}
+							{/*			<span className={styles.text}>Grateful</span>*/}
+							{/*		</a>*/}
+							{/*	</Link>*/}
+							{/*</li>*/}
 						</ul>
 
 						<hr className={styles.menu_hr} />
@@ -288,30 +334,45 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								</Link>
 							</li>
 							<li>
-								<Link href="/deeniinfotech">
+								<a href="https://www.deeniinfotech.com/donate#donation-form" target="_blank">
 									<a>
-										<span className={styles.icon}><InfoIcon /></span>
-										<span className={styles.text}>Deeni Info Tech</span>
+										<span className={styles.icon}><DonateIcon /></span>
+										<span className={styles.text}>Donate</span>
 									</a>
-								</Link>
+								</a>
 							</li>
-							<li>
-								<Link href="/privacy-policy">
-									<a>
-										<span className={styles.icon}><SecurityIcon /></span>
-										<span className={styles.text}>Privacy Policy</span>
-									</a>
-								</Link>
-							</li>
+							{/*<li>*/}
+							{/*	<Link href="/deeniinfotech">*/}
+							{/*		<a>*/}
+							{/*			<span className={styles.icon}><InfoIcon /></span>*/}
+							{/*			<span className={styles.text}>Deeni Info Tech</span>*/}
+							{/*		</a>*/}
+							{/*	</Link>*/}
+							{/*</li>*/}
+							{/*<li>*/}
+							{/*	<Link href="/privacy-policy">*/}
+							{/*		<a>*/}
+							{/*			<span className={styles.icon}><SecurityIcon /></span>*/}
+							{/*			<span className={styles.text}>Privacy Policy</span>*/}
+							{/*		</a>*/}
+							{/*	</Link>*/}
+							{/*</li>*/}
 						</ul>
 					</div>
 				</div>
 			</Drawer>
 
+			<Share
+				open={shareOpen}
+				closer={handleShareClose}
+				url={shareUrl}
+				title={shareTitle}
+			/>
+
 			<GoToVerse
 				open={goToVerseOpen}
 				controller={handleGoToVerseModal}
-        chapters={chapters}
+        		chapters={chapters}
 			/>
 
 			<SettingsModal

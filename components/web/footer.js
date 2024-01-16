@@ -83,8 +83,8 @@ export default function FooterWeb() {
 
                     <ul className={styles.menu}>
                         <li>
-                            <Link href="/support">
-                                <a>Support</a>
+                            <Link href="/install-app">
+                                <a>Install App</a>
                             </Link>
                         </li>
                         <li>

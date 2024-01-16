@@ -11,6 +11,7 @@ body {
   line-height: 1.5;
   color: var(--txt11);
   background: var(--bg12);
+  min-height: -webkit-fill-available;
 }
 
 @media print {
@@ -146,4 +147,13 @@ body {
 .highlight {
   background-color: rgba(160, 232, 175, 0.1) !important;
   transition: background-color 250ms ease-in-out;
+}
+
+// PWA App - Handle iPhone 10+ bottom
+@supports (margin-bottom: env(safe-area-inset-bottom)) {
+  .ion-footer {
+    //margin-bottom: calc(env(safe-area-inset-bottom) + 25px);
+    margin-bottom: env(safe-area-inset-bottom);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  }
 }

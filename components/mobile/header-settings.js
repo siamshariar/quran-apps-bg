@@ -21,7 +21,7 @@ export default function HeaderMobile() {
                 <div className={styles.wrapper}>
                     <div className={styles.left}>
                         <span
-                            className={styles.icon}
+                            className={styles.back_icon}
                             onClick={historyLength > 2 ? () => router.back() : () => router.push('/')}
                         >
                             <BackIcon />
