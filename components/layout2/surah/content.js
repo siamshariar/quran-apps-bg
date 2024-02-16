@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { Virtuoso } from 'react-virtuoso';
 import { AudioPlayerContext } from "../../../contexts/AudioPlayerContext";
 import VerseCard from "../../surah/verse-card";
 import Pagination from "../../surah/pagination";
@@ -157,6 +158,28 @@ export default function ChapterContent({
     }
   }, [isTouchEnd]);
 
+  const virtuoso = useRef(null);
+
+  const scrollToIndex = (index) => {
+    virtuoso.current.scrollToIndex({
+      index: index,
+      align: "start",
+      behavior: "auto"
+    });
+  };
+
+  const getIndexFromHash = () => {
+    const hashIndex = parseInt(window.location.hash.replace("#verse-", ""), 10);
+    return isNaN(hashIndex) ? null : hashIndex - 1;
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const indexFromHash = getIndexFromHash();
+      scrollToIndex(indexFromHash);
+    }
+  }, [router]);
+
   return (
     <div className={styles.chapter}>
       <div className={styles.chapter_tab} ref={printRef}>
@@ -190,19 +213,24 @@ export default function ChapterContent({
         )}
 
         <div className={styles.verses}>
-          {verses &&
-            verses.map((verse, index) => (
-              <VerseCard
-                key={verse.verseNo}
-                chapterName={chapterName}
-                index={index}
-                chapterNo={chapterNo}
-                chapterSlug={chapterSlug}
-                verse={verse}
-                ayaArabic={verses[index].arabic}
-                printRef={printRef.current}
-              />
-            ))}
+        <Virtuoso
+          ref={virtuoso}
+          useWindowScroll
+          // style={{ height: 300 }} // Adjust height according to your requirement
+          totalCount={verses.length} // Total number of items
+          itemContent={(index) => (
+            <VerseCard
+              key={verses[index].verseNo}
+              chapterName={chapterName}
+              index={index}
+              chapterNo={chapterNo}
+              chapterSlug={chapterSlug}
+              verse={verses[index]}
+              ayaArabic={verses[index].arabic}
+              printRef={printRef.current}
+            />
+          )}
+        />
 
           {/* {suraTranslation.result &&
             suraTranslation.result.map((verse, index) => (

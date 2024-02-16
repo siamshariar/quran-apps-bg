@@ -40,20 +40,23 @@ body {
 .viewport {
   display: block;
   padding-top: 54px;
-  padding-bottom: 0;
-  padding-right: 24px;
-  margin-right: -24px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 54px;
-  overflow-y: scroll;
+  padding-bottom: 54px;
+  // padding-bottom: 0;
+  // padding-right: 24px;
+  // margin-right: -24px;
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+  // right: 0;
+  // bottom: 54px;
+  // overflow-y: scroll;
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
 .viewport_no_footer {
-  bottom: 0;
+  // bottom: 0;
+  padding-bottom: 0;
 }
 
 .viewport_surah {
