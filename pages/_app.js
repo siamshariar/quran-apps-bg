@@ -20,7 +20,7 @@ import "../styles/global.scss";
 
 const App = ({ Component, pageProps }) => {
   const router = useRouter();
-  const { loading, loaded } = useLoader();
+  const loading = useLoader();
 
   useEffect(() => {
     const handleRouteChange = (url) => {
@@ -66,7 +66,7 @@ const App = ({ Component, pageProps }) => {
 
   return (
     <>
-      {loading && <Loader loaded={loaded} />}
+      {loading && <Loader />}
       {getLayout(<Component {...pageProps} />)}
     </>
   );

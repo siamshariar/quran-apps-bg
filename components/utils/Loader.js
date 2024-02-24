@@ -1,9 +1,9 @@
 import { Oval } from "react-loader-spinner";
 import styles from "./Loader.module.scss";
 
-const Loader = ({ loaded }) => {
+const Loader = () => {
   return (
-    <div className={`${styles.root} ${loaded ? styles.loaded : ""}`}>
+    <div className={styles.root}>
       <Oval
         visible={true}
         height="80"
