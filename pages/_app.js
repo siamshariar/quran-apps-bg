@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import * as gtag from "../lib/gtag";
 // import NProgress from 'nprogress'
 // import 'nprogress/nprogress.css'
-import useLoader from "../hooks/useLoader";
-import Loader from "../components/utils/Loader";
+// import useLoader from "../hooks/useLoader";
+// import Loader from "../components/utils/Loader";
 
 import "../styles/global.scss";
 
@@ -20,7 +20,7 @@ import "../styles/global.scss";
 
 const App = ({ Component, pageProps }) => {
   const router = useRouter();
-  const loading = useLoader();
+  // const loading = useLoader();
 
   useEffect(() => {
     const handleRouteChange = (url) => {
@@ -66,7 +66,7 @@ const App = ({ Component, pageProps }) => {
 
   return (
     <>
-      {loading && <Loader />}
+      {/* {loading && <Loader />} */}
       {getLayout(<Component {...pageProps} />)}
     </>
   );

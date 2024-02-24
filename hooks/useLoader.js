@@ -18,15 +18,22 @@ const useLoader = () => {
       }
     };
 
-    const handleComplete = () => setLoading(false);
+    const handleComplete = () => {
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
+    };
 
-    setLoading(false);
+    const startLoading = setTimeout(() => {
+      setLoading(false);
+    }, 500);
 
     router.events.on("routeChangeStart", handleStart);
     router.events.on("routeChangeComplete", handleComplete);
     router.events.on("routeChangeError", handleComplete);
 
     return () => {
+      clearTimeout(startLoading);
       router.events.off("routeChangeStart", handleStart);
       router.events.off("routeChangeComplete", handleComplete);
       router.events.off("routeChangeError", handleComplete);
