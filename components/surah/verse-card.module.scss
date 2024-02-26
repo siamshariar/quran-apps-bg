@@ -17,7 +17,7 @@
   z-index: -1;
 }
 
-.wrapper:last-child {
+.wrapper:not(.virtualized):last-child, .wrapper.last_child {
   margin-bottom: 0;
   border-bottom: none;
   padding-bottom: 0;

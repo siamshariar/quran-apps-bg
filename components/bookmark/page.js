@@ -60,7 +60,7 @@ export default function BookmarkContent({
         <div className={styles.chapter_tab}>
           <div className={styles.title}>
             {name && <span className={styles.title_text}>{name}</span>}
-            {name === null && <Skeleton height={29} width={`100%`} />}
+            {name === null && <Skeleton height={29} width={`100%`} className="skeleton" />}
           </div>
 
           {data && (
@@ -92,7 +92,7 @@ export default function BookmarkContent({
             <div className={styles.no_record}>No records found!</div>
           )}
 
-          {!data && exist && <Skeleton height={150} width={`100%`} count={2} />}
+          {!data && exist && <Skeleton height={150} width={`100%`} count={2} className="skeleton" />}
         </div>
       </div>
     </div>

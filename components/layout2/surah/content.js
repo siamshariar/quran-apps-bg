@@ -177,11 +177,11 @@ export default function ChapterContent({
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hash) {
+    if (typeof window !== 'undefined' && window.location.hash && virtuoso.current && !loading) {
       const indexFromHash = getIndexFromHash();
       scrollToIndex(indexFromHash);
     }
-  }, [router]);
+  }, [router, loading]);
 
   return (
     <div className={styles.chapter}>
@@ -192,6 +192,7 @@ export default function ChapterContent({
             count={1}
             height={49}
             width={`100%`}
+            className="skeleton"
           />
         )}
 
@@ -228,7 +229,7 @@ export default function ChapterContent({
         </>
         )}
 
-        {loading && <Skeleton count={7} height={150} width={`100%`} />}
+        {loading && <Skeleton count={7} height={150} width={`100%`} className="skeleton" />}
 
         {!loading && (
         <>
@@ -248,6 +249,8 @@ export default function ChapterContent({
               verse={verses[index]}
               ayaArabic={verses[index].arabic}
               printRef={printRef.current}
+              isVirtualized={true}
+              isLastVerse={index === verses.length - 1}
             />
           )}
         />
@@ -283,7 +286,7 @@ export default function ChapterContent({
       />
       )}
 
-      {loading && <Skeleton style={{marginTop: "32px"}} count={1} height={64} width={`100%`} />}
+      {loading && <Skeleton style={{marginTop: "32px"}} count={1} height={64} width={`100%`} className="skeleton" />}
     </div>
   );
 }
