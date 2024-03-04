@@ -11,7 +11,7 @@ import UpIcon from '../icons/ChevronUp'
 import DownIcon from '../icons/ChevronDown'
 import styles from './verse-card.module.scss'
 
-export default function VerseCard({ index, chapterNo, chapterName, chapterSlug, verse, ayaArabic, printRef, updateBookmarksData, isBookmarkPage }) {
+export default function VerseCard({ index, chapterNo, chapterName, chapterSlug, verse, ayaArabic, printRef, updateBookmarksData, isBookmarkPage, isVirtualized, isLastVerse }) {
     const { view, changeActiveVerse } = useContext(SettingsContext)
     const [expanded, setExpanded] = useState(true)
 
@@ -33,7 +33,7 @@ export default function VerseCard({ index, chapterNo, chapterName, chapterSlug, 
     }, [isTargetVisible]);
 
     return (
-        <div id={`verse-${index + 1}`} className={styles.wrapper}>
+        <div id={`verse-${index + 1}`} className={`${styles.wrapper} ${isVirtualized ? styles.virtualized : ""} ${isLastVerse ? styles.last_child : ""}`}>
           <div className={styles.target} ref={refTarget}></div>
             <VerseOptions
                 index={index}

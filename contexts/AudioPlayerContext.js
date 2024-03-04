@@ -29,7 +29,7 @@ const AudioPlayerContextProvider = ({ children }) => {
             })
         }
         else {
-            document.querySelector('#viewport').scrollTo({
+            window.scrollTo({
                 top: top,
                 left: 0,
                 behavior: 'smooth'

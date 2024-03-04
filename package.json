@@ -26,9 +26,11 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-icons": "^4.2.0",
+    "react-loader-spinner": "^6.1.6",
     "react-loading-skeleton": "^2.2.0",
     "react-share": "^4.4.0",
     "react-to-print": "^2.13.0",
+    "react-virtuoso": "^4.6.3",
     "swr": "^0.3.9"
   },
   "devDependencies": {

@@ -67,7 +67,7 @@ export default function Audio({ names }) {
         behavior: "smooth",
       });
     } else {
-      document.querySelector("#viewport").scrollTo({
+      window.scrollTo({
         top: top - 70,
         left: 0,
         behavior: "smooth",

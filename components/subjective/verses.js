@@ -1,13 +1,16 @@
 import { useContext, useEffect, useRef, useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import { AudioPlayerContext } from "../../contexts/AudioPlayerContext";
 import Sidenav from "../layout2/sidenav";
 import VerseCard from "../surah/verse-card";
 // import Pagination from "../surah/pagination";
 // import QuranIcon from "../icons/Quran";
 // import Bismillah from "../icons/Bismillah";
+import useLoader from "../../hooks/useLoader";
 import styles from "../layout2/surah/content.module.scss";
 
 export default function SubjectiveVerses({ contentTitle, chapters, verses }) {
+  const loading = useLoader();
   const printRef = useRef();
 
   const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } =
@@ -69,6 +72,26 @@ export default function SubjectiveVerses({ contentTitle, chapters, verses }) {
   return (
     <div className={styles.chapter}>
       <div className={styles.chapter_tab} ref={printRef}>
+        {loading && (
+          <>
+            <Skeleton
+              style={{marginBottom: "24px"}} //
+              count={1}
+              height={49}
+              width={`100%`}
+              className="skeleton"
+            />
+            <Skeleton
+              count={7}
+              height={150}
+              width={`100%`}
+              className="skeleton"
+            />
+          </>
+        )}
+
+        {!loading && (
+        <>
         <div className={styles.title}>
           {/*<span className={styles.title_icon}><QuranIcon /></span>*/}
           <span className={styles.title_text}>{contentTitle}</span>
@@ -93,6 +116,8 @@ export default function SubjectiveVerses({ contentTitle, chapters, verses }) {
               />
             ))}
         </div>
+        </>
+        )}
       </div>
 
       {/* <Pagination prev={prev} next={next} /> */}

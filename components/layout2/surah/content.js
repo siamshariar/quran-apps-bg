@@ -1,5 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { Virtuoso } from 'react-virtuoso';
+import Skeleton from "react-loading-skeleton";
 import { AudioPlayerContext } from "../../../contexts/AudioPlayerContext";
 import VerseCard from "../../surah/verse-card";
 import Pagination from "../../surah/pagination";
@@ -10,6 +12,7 @@ import PauseIcon from "../../icons/Pause";
 import Bismillah from "../../icons/Bismillah";
 import styles from "./content.module.scss";
 import { config } from "../../../lib/config";
+import useLoader from "../../../hooks/useLoader";
 
 export default function ChapterContent({
   contentType,
@@ -21,6 +24,7 @@ export default function ChapterContent({
   chapterMp3Url,
   verses,
 }) {
+  const loading = useLoader();
   const printRef = useRef(null);
 
   const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } =
@@ -157,9 +161,43 @@ export default function ChapterContent({
     }
   }, [isTouchEnd]);
 
+  const virtuoso = useRef(null);
+
+  const scrollToIndex = (index) => {
+    virtuoso.current.scrollToIndex({
+      index: index,
+      align: "start",
+      behavior: "auto"
+    });
+  };
+
+  const getIndexFromHash = () => {
+    const hashIndex = parseInt(window.location.hash.replace("#verse-", ""), 10);
+    return isNaN(hashIndex) ? null : hashIndex - 1;
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash && virtuoso.current && !loading) {
+      const indexFromHash = getIndexFromHash();
+      scrollToIndex(indexFromHash);
+    }
+  }, [router, loading]);
+
   return (
     <div className={styles.chapter}>
       <div className={styles.chapter_tab} ref={printRef}>
+        {loading && (
+          <Skeleton
+            style={{marginBottom: "24px"}} //
+            count={1}
+            height={49}
+            width={`100%`}
+            className="skeleton"
+          />
+        )}
+
+        {!loading && (
+        <>
         <div className={styles.title}>
           {/*<span className={styles.title_icon}><QuranIcon /></span>*/}
           <span className={styles.title_text}>{contentTitle}</span>
@@ -188,21 +226,34 @@ export default function ChapterContent({
             <Bismillah />
           </div>
         )}
+        </>
+        )}
 
+        {loading && <Skeleton count={7} height={150} width={`100%`} className="skeleton" />}
+
+        {!loading && (
+        <>
         <div className={styles.verses}>
-          {verses &&
-            verses.map((verse, index) => (
-              <VerseCard
-                key={verse.verseNo}
-                chapterName={chapterName}
-                index={index}
-                chapterNo={chapterNo}
-                chapterSlug={chapterSlug}
-                verse={verse}
-                ayaArabic={verses[index].arabic}
-                printRef={printRef.current}
-              />
-            ))}
+        <Virtuoso
+          ref={virtuoso}
+          useWindowScroll
+          // style={{ height: 300 }} // Adjust height according to your requirement
+          totalCount={verses.length} // Total number of items
+          itemContent={(index) => (
+            <VerseCard
+              key={verses[index].verseNo}
+              chapterName={chapterName}
+              index={index}
+              chapterNo={chapterNo}
+              chapterSlug={chapterSlug}
+              verse={verses[index]}
+              ayaArabic={verses[index].arabic}
+              printRef={printRef.current}
+              isVirtualized={true}
+              isLastVerse={index === verses.length - 1}
+            />
+          )}
+        />
 
           {/* {suraTranslation.result &&
             suraTranslation.result.map((verse, index) => (
@@ -221,8 +272,11 @@ export default function ChapterContent({
           {/* todo <span>Vietnamese Hassan</span> */}
           <span>www.{config.domain}</span>
         </div>
+        </>
+        )}
       </div>
 
+      {!loading && (
       <Pagination
         prev={prev}
         next={next}
@@ -230,6 +284,9 @@ export default function ChapterContent({
         chapterSlug={chapterSlug}
         verseNo={verses[0].verseNo}
       />
+      )}
+
+      {loading && <Skeleton style={{marginTop: "32px"}} count={1} height={64} width={`100%`} className="skeleton" />}
     </div>
   );
 }

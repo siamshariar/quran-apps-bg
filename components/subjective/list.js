@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
+import Skeleton from "react-loading-skeleton";
+import useLoader from "../../hooks/useLoader";
 import Sidenav from "../layout2/sidenav";
 import styles from "./list.module.scss";
 
@@ -8,6 +10,7 @@ export default function SubjectiveContent({
   subjectives,
   contentTitle,
 }) {
+  const loading = useLoader();
   const [subjectiveList, setSubjectiveList] = useState(subjectives);
 
   const filterSubjectives = (search) => {
@@ -19,6 +22,26 @@ export default function SubjectiveContent({
 
   return (
     <div className={styles.content}>
+      {loading && (
+        <>
+          <Skeleton
+            style={{marginBottom: "24px"}} //
+            count={1}
+            height={49}
+            width={`100%`}
+            className="skeleton"
+          />
+          <Skeleton
+            count={16}
+            height={49}
+            width={`100%`}
+            className="skeleton"
+          />
+        </>
+      )}
+
+      {!loading && (
+      <>
       <div className={styles.title}>
         <h2>{contentTitle}</h2>
       </div>
@@ -57,6 +80,8 @@ export default function SubjectiveContent({
 
       {(!subjectiveList || !subjectiveList.length) && (
         <h2 className={styles.empty}>No records found!</h2>
+      )}
+      </>
       )}
     </div>
   );
