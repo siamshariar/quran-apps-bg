@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
-import useLoader from "../../hooks/useLoader";
+// import useLoader from "../../hooks/useLoader";
 import Sidenav from "../layout2/sidenav";
 import styles from "./list.module.scss";
 
@@ -9,8 +9,9 @@ export default function SubjectiveContent({
   chapters,
   subjectives,
   contentTitle,
+  loading
 }) {
-  const loading = useLoader();
+  // const loading = useLoader();
   const [subjectiveList, setSubjectiveList] = useState(subjectives);
 
   const filterSubjectives = (search) => {

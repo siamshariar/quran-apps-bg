@@ -4,7 +4,7 @@ import Layout from "../../components/layouts/layout-subjective";
 import Meta from "../../components/core/meta";
 import SubjectiveList from "../../components/subjective/list";
 
-export default function Subjective({ chapters, subjectives }) {
+export default function Subjective({ chapters, subjectives, loading }) {
   return (
     <>
       <Meta
@@ -19,6 +19,7 @@ export default function Subjective({ chapters, subjectives }) {
         chapters={chapters}
         subjectives={subjectives}
         contentTitle="Subjective"
+        loading={loading}
       />
     </>
   );

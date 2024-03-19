@@ -6,11 +6,11 @@ import VerseCard from "../surah/verse-card";
 // import Pagination from "../surah/pagination";
 // import QuranIcon from "../icons/Quran";
 // import Bismillah from "../icons/Bismillah";
-import useLoader from "../../hooks/useLoader";
+// import useLoader from "../../hooks/useLoader";
 import styles from "../layout2/surah/content.module.scss";
 
-export default function SubjectiveVerses({ contentTitle, chapters, verses }) {
-  const loading = useLoader();
+export default function SubjectiveVerses({ contentTitle, chapters, verses, loading }) {
+  // const loading = useLoader();
   const printRef = useRef();
 
   const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } =

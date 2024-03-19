@@ -8,14 +8,14 @@ import Layout from "../../../../components/layouts/layout-subjective";
 import Meta from "../../../../components/core/meta";
 import SubjectiveVerses from "../../../../components/subjective/verses";
 
-export default function Subjective({ slug, chapters, subjective }) {
+export default function Subjective({ slug, chapters, subjective, loading }) {
   const name = subjective.title;
 
   return (
     <>
       <Meta
         title={`Subjective ${name} | ${config?.metaTitle}`}
-        description={`Subjective ${name} | ${config?.metaDescription}`}        
+        description={`Subjective ${name} | ${config?.metaDescription}`}
         url={`${server}/subjective/${slug}/verses`}
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
@@ -25,6 +25,7 @@ export default function Subjective({ slug, chapters, subjective }) {
         contentTitle={name}
         verses={subjective.verses}
         chapters={chapters}
+        loading={loading}
       />
     </>
   );

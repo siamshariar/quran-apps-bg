@@ -13,6 +13,7 @@ export default function Verse({
   verses,
   contentTitle,
   mode,
+  loading
 }) {
   return (
     <>
@@ -35,6 +36,7 @@ export default function Verse({
         // prevChapter={prevChapter}
         // nextChapter={nextChapter}
         chapters={chapters}
+        loading={loading}
       />
     </>
   );
