@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
+import { Virtuoso } from 'react-virtuoso';
 import Skeleton from "react-loading-skeleton";
 import { AudioPlayerContext } from "../../contexts/AudioPlayerContext";
 import Sidenav from "../layout2/sidenav";
@@ -102,19 +103,38 @@ export default function SubjectiveVerses({ contentTitle, chapters, verses, loadi
           </div> */}
 
         <div className={styles.verses}>
-          {verses &&
-            verses.map((verse, index) => (
-              <VerseCard
-                key={uniqueKey(verse.chapter.chapterNo, verse.verseNo)}
-                chapterName={verse.chapter.name}
-                index={index}
-                chapterNo={verse.chapter.chapterNo}
-                chapterSlug={verse.chapter.slug}
-                verse={verse}
-                ayaArabic={verse.arabic}
-                printRef={printRef.current}
-              />
-            ))}
+          <Virtuoso
+              useWindowScroll
+              totalCount={verses.length} // Total number of items
+              itemContent={(index) => (
+                  <VerseCard
+                      key={verses[index].verseNo}
+                      chapterName={verses[index].chapter.name}
+                      index={index}
+                      chapterNo={verses[index].chapter.chapterNo}
+                      chapterSlug={verses[index].chapter.slug}
+                      verse={verses[index]}
+                      ayaArabic={verses[index].arabic}
+                      printRef={printRef.current}
+                      isVirtualized={true}
+                      isLastVerse={index === verses.length - 1}
+                  />
+              )}
+          />
+
+          {/*{verses &&*/}
+          {/*  verses.map((verse, index) => (*/}
+          {/*    <VerseCard*/}
+          {/*      key={uniqueKey(verse.chapter.chapterNo, verse.verseNo)}*/}
+          {/*      chapterName={verse.chapter.name}*/}
+          {/*      index={index}*/}
+          {/*      chapterNo={verse.chapter.chapterNo}*/}
+          {/*      chapterSlug={verse.chapter.slug}*/}
+          {/*      verse={verse}*/}
+          {/*      ayaArabic={verse.arabic}*/}
+          {/*      printRef={printRef.current}*/}
+          {/*    />*/}
+          {/*  ))}*/}
         </div>
         </>
         )}
