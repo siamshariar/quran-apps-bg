@@ -49,17 +49,11 @@ const App = ({ Component, pageProps }) => {
       //   event.preventDefault();
       // });
 
-      // TODO: Commented out to check performance issue
-      // window.addEventListener('contextmenu', function (e) {
-      //   // do something here...
-      //   e.preventDefault();
-      // }, false);
+      window.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+      }, false);
     }
     // DISABLED RIGHT CLICK/TAP ON MOBILE
-
-    // document.addEventListener('contextmenu', (e) => {
-    //   e.preventDefault()
-    // })
   }, []);
 
   const getLayout = Component.getLayout || ((page) => page);
