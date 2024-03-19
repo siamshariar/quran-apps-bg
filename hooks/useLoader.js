@@ -10,6 +10,10 @@ const useLoader = () => {
   );
 
   useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
     const handleStart = (url) => {
       if (loadingPaths.some((path) => url.startsWith(path))) {
         setLoading(true);
@@ -29,7 +33,7 @@ const useLoader = () => {
     // }, 500);
 
     const handleComplete = () => setLoading(false);
-    setLoading(false);
+    // setLoading(false);
 
     router.events.on("routeChangeStart", handleStart);
     router.events.on("routeChangeComplete", handleComplete);

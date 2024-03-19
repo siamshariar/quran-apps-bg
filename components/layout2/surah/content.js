@@ -12,7 +12,7 @@ import PauseIcon from "../../icons/Pause";
 import Bismillah from "../../icons/Bismillah";
 import styles from "./content.module.scss";
 import { config } from "../../../lib/config";
-import useLoader from "../../../hooks/useLoader";
+// import useLoader from "../../../hooks/useLoader";
 
 export default function ChapterContent({
   contentType,
@@ -23,8 +23,9 @@ export default function ChapterContent({
   chapterSlug,
   chapterMp3Url,
   verses,
+  loading,
 }) {
-  const loading = useLoader();
+  // const loading = useLoader();
   const printRef = useRef(null);
 
   const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } =

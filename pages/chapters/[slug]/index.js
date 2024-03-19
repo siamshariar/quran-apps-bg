@@ -13,6 +13,7 @@ export default function Chapter({
   verses,
   contentTitle,
   mode,
+  loading
 }) {
   return (
     <>
@@ -36,6 +37,7 @@ export default function Chapter({
         // prevChapter={prevChapter}
         // nextChapter={nextChapter}
         chapters={chapters}
+        loading={loading}
       />
     </>
   );

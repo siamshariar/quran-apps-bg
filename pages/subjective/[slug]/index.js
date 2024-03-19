@@ -8,7 +8,7 @@ import Layout from "../../../components/layouts/layout-subjective";
 import Meta from "../../../components/core/meta";
 import SubjectiveList from "../../../components/subjective/list";
 
-export default function Subjective({ slug, chapters, subjective }) {
+export default function Subjective({ slug, chapters, subjective, loading }) {
   const name = subjective.title;
 
   return (
@@ -25,6 +25,7 @@ export default function Subjective({ slug, chapters, subjective }) {
         chapters={chapters}
         subjectives={subjective.children}
         contentTitle={subjective.title}
+        loading={loading}
       />
     </>
   );
