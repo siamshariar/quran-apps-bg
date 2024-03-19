@@ -23,6 +23,7 @@ export default function ChapterContent({
   chapterSlug,
   chapterMp3Url,
   verses,
+  filteredPlaylist,
   loading,
 }) {
   // const loading = useLoader();
@@ -32,11 +33,11 @@ export default function ChapterContent({
     useContext(AudioPlayerContext);
 
   useEffect(() => {
-    let filtered = [];
-    verses.forEach((verse) => {
-      filtered.push(verse.mp3Url);
-    });
-    setPlaylist(filtered);
+    // let filtered = [];
+    // verses.forEach((verse) => {
+    //   filtered.push(verse.mp3Url);
+    // });
+    setPlaylist(filteredPlaylist);
 
     setChapterMp3Url(chapterMp3Url);
   }, []);

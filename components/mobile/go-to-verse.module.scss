@@ -3,9 +3,9 @@
 }
 
 .modal {
-	background: var(--bg11);
+  background: var(--bg11);
   width: 248px;
-  height: 344px;
+  //height: 344px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -83,10 +83,11 @@
 
 .btn {
   text-transform: capitalize !important;
-  width: 50%;
+  width: 100%;
   padding: 6px 10px !important;
   background-color: var(--bg12) !important;
   color: var(--txt11) !important;
+  margin-bottom: 5px;
 }
 
 .btn svg {
