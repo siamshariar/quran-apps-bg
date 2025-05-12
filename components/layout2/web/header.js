@@ -157,8 +157,8 @@ export default function HeaderWeb({
                     <Image
                       src={`/img/logo/${config?.localizationCode}/logo.png`}
                       alt=""
-                      width={162}
-                      height={36}
+                      width={config.logoWidthWeb}
+                      height={26}
                       loading="eager"
                       objectFit="contain"
                     />

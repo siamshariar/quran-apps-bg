@@ -32,12 +32,12 @@ export default function SubjectiveContent({
     });
   };
 
-  useEffect(() => {
-    if (virtuoso.current && !loading) {
-      // TODO: Save click index and scroll to index on browser back. Fix mobile height
-      scrollToIndex(50);
-    }
-  }, []);
+  // TODO: Save click index and scroll to index on browser back. Fix mobile height
+  // useEffect(() => {
+  //   if (virtuoso.current && !loading) {
+  //     scrollToIndex(50);
+  //   }
+  // }, []);
 
   return (
     <div className={styles.content}>
@@ -74,53 +74,53 @@ export default function SubjectiveContent({
       />
 
       <div className={styles.list}>
-        <Virtuoso
-            // ref={virtuoso}
-            useWindowScroll
-            totalCount={subjectiveList.length} // Total number of items
-            itemContent={(index) => (
-                <Link
-                    href={
-                      subjectiveList[index].totalChildVerse
-                          ? `/subjective/${subjectiveList[index].slug}`
-                          : `/subjective/${subjectiveList[index].slug}/verses`
-                    }
-                    key={index}
-                >
-                  <a className={styles.item}>
-                    <span className={styles.left}>{subjectiveList[index].title}</span>
-                    <span className={styles.right}>
-                      {subjectiveList[index].totalChildVerse
-                          ? subjectiveList[index].totalChildVerse
-                          : subjectiveList[index].totalVerse}{" "}
-                          Ayahs
-                    </span>
-                  </a>
-                </Link>
-            )}
-        />
+        {/*<Virtuoso*/}
+        {/*    // ref={virtuoso}*/}
+        {/*    useWindowScroll*/}
+        {/*    totalCount={subjectiveList.length} // Total number of items*/}
+        {/*    itemContent={(index) => (*/}
+        {/*        <Link*/}
+        {/*            href={*/}
+        {/*              subjectiveList[index].totalChildVerse*/}
+        {/*                  ? `/subjective/${subjectiveList[index].slug}`*/}
+        {/*                  : `/subjective/${subjectiveList[index].slug}/verses`*/}
+        {/*            }*/}
+        {/*            key={index}*/}
+        {/*        >*/}
+        {/*          <a className={styles.item}>*/}
+        {/*            <span className={styles.left}>{subjectiveList[index].title}</span>*/}
+        {/*            <span className={styles.right}>*/}
+        {/*              {subjectiveList[index].totalChildVerse*/}
+        {/*                  ? subjectiveList[index].totalChildVerse*/}
+        {/*                  : subjectiveList[index].totalVerse}{" "}*/}
+        {/*                  Ayahs*/}
+        {/*            </span>*/}
+        {/*          </a>*/}
+        {/*        </Link>*/}
+        {/*    )}*/}
+        {/*/>*/}
 
-        {/*{subjectiveList &&*/}
-        {/*  subjectiveList.map((item, index) => (*/}
-        {/*    <Link*/}
-        {/*      href={*/}
-        {/*        item.totalChildVerse*/}
-        {/*          ? `/subjective/${item.slug}`*/}
-        {/*          : `/subjective/${item.slug}/verses`*/}
-        {/*      }*/}
-        {/*      key={index}*/}
-        {/*    >*/}
-        {/*      <a className={styles.item}>*/}
-        {/*        <span className={styles.left}>{item.title}</span>*/}
-        {/*        <span className={styles.right}>*/}
-        {/*          {item.totalChildVerse*/}
-        {/*            ? item.totalChildVerse*/}
-        {/*            : item.totalVerse}{" "}*/}
-        {/*          Ayahs*/}
-        {/*        </span>*/}
-        {/*      </a>*/}
-        {/*    </Link>*/}
-        {/*  ))}*/}
+        {subjectiveList &&
+          subjectiveList.map((item, index) => (
+            <Link
+              href={
+                item.totalChildVerse
+                  ? `/subjective/${item.slug}`
+                  : `/subjective/${item.slug}/verses`
+              }
+              key={index}
+            >
+              <a className={styles.item}>
+                <span className={styles.left}>{item.title}</span>
+                <span className={styles.right}>
+                  {item.totalChildVerse
+                    ? item.totalChildVerse
+                    : item.totalVerse}{" "}
+                  Ayahs
+                </span>
+              </a>
+            </Link>
+          ))}
       </div>
 
       {(!subjectiveList || !subjectiveList.length) && (

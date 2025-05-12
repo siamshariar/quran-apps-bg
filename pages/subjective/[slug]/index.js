@@ -61,14 +61,14 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
-  // const subjectives = await getParentSubjectives();
+  const subjectives = await getParentSubjectives();
   let paths = [];
 
-  // subjectives.map((subjective) => {
-  //   let slug = encodeURI(subjective.slug);
-  //   let obj = { params: { slug: slug } };
-  //   paths.push(obj);
-  // });
+  subjectives.map((subjective) => {
+    let slug = encodeURI(subjective.slug);
+    let obj = { params: { slug: slug } };
+    paths.push(obj);
+  });
 
   return {
     paths: paths,

@@ -12,6 +12,7 @@ body {
   color: var(--txt11);
   background: var(--bg12);
   min-height: -webkit-fill-available;
+  overscroll-behavior: none;
 }
 
 @media print {
