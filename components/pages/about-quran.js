@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Grid from '@material-ui/core/Grid'
+import Grid from '@mui/material/Grid'
 import EastIcon from '../icons/East'
 import css from './style.module.scss'
 import styles from './about-quran.module.scss'
@@ -36,7 +36,7 @@ const GridItem = ({ title, text, url }) => {
             <div className={styles.item}>
                 <h2>{title}</h2>
                 <p>{text}</p>
-                <Link href={url}>
+                <Link href={url} legacyBehavior>
                     <a>
                         <span>Read more</span>
                         <span><EastIcon /></span>

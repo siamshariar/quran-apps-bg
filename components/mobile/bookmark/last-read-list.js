@@ -51,7 +51,7 @@ export default function LastReadList() {
                 //     : `/chapters/${item.slug}#verse-${item.verse}`
                 // }
                 href={`/chapters/${item.slug}#verse-${item.verse}`}
-              >
+              legacyBehavior>
                 <a className={styles.link}>
                   <span className={styles.left}>
                     <span className={styles.icon}>

@@ -92,7 +92,7 @@ export default function HeaderMobile({ contentTitle, chapterNo, chapters }) {
                 <Container>
                     <div className={styles.wrapper}>
                         <div className={styles.left}>
-                            <Link href="/">
+                            <Link href="/" legacyBehavior>
                                 <a className={styles.back_icon}>
                                     <BackIcon />
                                 </a>
@@ -128,7 +128,7 @@ export default function HeaderMobile({ contentTitle, chapterNo, chapters }) {
                         </div>
 
                         <div className={styles.right}>
-                            <Link href="/settings">
+                            <Link href="/settings" legacyBehavior>
                                 <a className={styles.icon} onClick={handleSettingsModal(true)}>
                                     <TuneIcon />
                                 </a>

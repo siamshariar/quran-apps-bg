@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect, useRef } from 'react'
 import { AudioPlayerContext } from '../../contexts/AudioPlayerContext'
 import { SettingsContext } from "../../contexts/SettingsContext";
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton';
 import PlayIcon from '../icons/PlayArrow'
 import PauseIcon from '../icons/Pause'
 import SkipNextIcon from '../icons/SkipNext'

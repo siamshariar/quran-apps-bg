@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import Drawer from '@material-ui/core/Drawer'
+import Drawer from '@mui/material/Drawer'
 import GoToVerse from './go-to-verse'
 import SettingsModal from './settings-modal'
 import MenuBookIcon from '../icons/MenuBook'
@@ -175,7 +175,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 				<div className={styles.wrapper}>
 					<div className={styles.menu_ctn}>
 						<div style={{background: backgroundColor}} className={styles.menu_top}>
-							<Link href="/">
+							<Link href="/" legacyBehavior>
 								<a className={styles.logo}>
                   <Image
 					src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
@@ -200,7 +200,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 							{/*	</Link>*/}
 							{/*</li>*/}
 							<li>
-								<Link href="/">
+								<Link href="/" legacyBehavior>
 									<a onClick={handleGoToVerseModal(true)}>
 										<span className={styles.icon}><NearMeIcon /></span>
 										<span className={styles.text}>Go to verse</span>
@@ -208,7 +208,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								</Link>
 							</li>
 							<li>
-								<Link href="/settings">
+								<Link href="/settings" legacyBehavior>
 									<a onClick={handleSettingsModal(true)}>
 										<span className={styles.icon}><SettingsIcon /></span>
 										<span className={styles.text}>Settings</span>
@@ -217,7 +217,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 							</li>
 
 							<li>
-								<Link href="/bookmarks">
+								<Link href="/bookmarks" legacyBehavior>
 									<a onClick={e => handleBookmarkPage(e, 2)}>
 										<span className={styles.icon}><PinIcon /></span>
 										<span className={styles.text}>Pin</span>
@@ -225,7 +225,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								</Link>
 							</li>
               				<li>
-								<Link href="/bookmarks">
+								<Link href="/bookmarks" legacyBehavior>
 									<a onClick={e => handleBookmarkPage(e, 3)}>
 										<span className={styles.icon}><AutoStoriesIcon /></span>
 										<span className={styles.text}>Last Read</span>
@@ -233,7 +233,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								</Link>
 							</li>
 							<li>
-								<Link href="/download">
+								<Link href="/download" legacyBehavior>
 									<a>
 										<span className={styles.icon}><DownloadIcon /></span>
 										<span className={styles.text}>Download</span>
@@ -241,7 +241,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								</Link>
 							</li>
 							<li>
-								<Link href="/names-of-allah">
+								<Link href="/names-of-allah" legacyBehavior>
 									<a>
 										<span className={styles.icon}><Names99Icon /></span>
 										<span className={styles.text}>Names of Allah</span>
@@ -289,7 +289,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 							{/*	</Link>*/}
 							{/*</li>*/}
 							<li>
-								<Link href="/install-app">
+								<Link href="/install-app" legacyBehavior>
 									<a>
 										<span className={styles.icon}><InstallAppIcon /></span>
 										<span className={styles.text}>Install App</span>
@@ -318,7 +318,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 
 						<ul className={styles.menu}>
 							<li>
-								<Link href="/about">
+								<Link href="/about" legacyBehavior>
 									<a>
 										<span className={styles.icon}><InfoIcon /></span>
 										<span className={styles.text}>About</span>
@@ -326,7 +326,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								</Link>
 							</li>
 							<li>
-								<Link href="/contact">
+								<Link href="/contact" legacyBehavior>
 									<a>
 										<span className={styles.icon}><ContactIcon /></span>
 										<span className={styles.text}>Contact</span>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { SidenavContext } from "../../../contexts/SidenavContext";
 import Link from "next/link";
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 import ChapterList from "./chapter-list";
 import Save from "./save";
 import Settings from "./settings";
@@ -138,7 +138,7 @@ export default function Sidenav({ chapters }) {
             disableFocusListener={true}
           >
             <span className={styles.icon}>
-              <Link href="/subjective">
+              <Link href="/subjective" legacyBehavior>
                 <a>
                   <SubjectIcon />
                 </a>

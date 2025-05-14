@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import Grid from '@material-ui/core/Grid'
+import Grid from '@mui/material/Grid'
 import Container from '../core/container'
 import FacebookIcon from '../icons/Facebook'
 import TwitterIcon from '../icons/Twitter'
@@ -75,7 +75,7 @@ export default function FooterWeb() {
                 <div className={styles.bottom}>
                     <p className={styles.copyright}>
                         <span>&copy; { new Date().getFullYear() } </span>
-                        <Link href="/about">
+                        <Link href="/about" legacyBehavior>
                             <a>{config.domain}</a>
                         </Link>
                         <span> All Rights Reserved</span>
@@ -83,17 +83,17 @@ export default function FooterWeb() {
 
                     <ul className={styles.menu}>
                         <li>
-                            <Link href="/install-app">
+                            <Link href="/install-app" legacyBehavior>
                                 <a>Install App</a>
                             </Link>
                         </li>
                         <li>
-                            <Link href="/grateful">
+                            <Link href="/grateful" legacyBehavior>
                                 <a>Grateful</a>
                             </Link>
                         </li>
                         <li>
-                            <Link href="/contact">
+                            <Link href="/contact" legacyBehavior>
                                 <a>Contact</a>
                             </Link>
                         </li>

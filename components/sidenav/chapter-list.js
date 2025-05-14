@@ -1,15 +1,17 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import Link from 'next/link'
-import Drawer from '@material-ui/core/Drawer'
+import Drawer from '@mui/material/Drawer'
 import Scrollbar from '../core/scrollbar'
 import Close from '../icons/Close'
 import Search from '../icons/Search'
+import SettingsContextProvider from '../../contexts/SettingsContext'
 
 import styles from './chapter-list.module.scss'
 import css from './style.module.scss'
 
 export default function ChapterList({ chapterList, open, controller }) {
 	const [chapters, setChapters] = useState(chapterList)
+  const { translation } = useContext(SettingsContextProvider)
 
 	const filterChapters = search => {
 		const filtered = chapterList.filter(chapter => {
@@ -17,6 +19,8 @@ export default function ChapterList({ chapterList, open, controller }) {
 		})
 		setChapters(filtered)
 	}
+
+  const translationPrefix = translation !== "vietnamese_hassan" ? `/${translation}` : ""
 
 	return (
 		<Drawer
@@ -47,13 +51,19 @@ export default function ChapterList({ chapterList, open, controller }) {
 				</form>
 
 				<Scrollbar className={styles.lists}>
-				{chapters.map(chapter =>
+				{chapters.map((chapter) => (
 					<div
 						key={chapter.chapterNo}
 						className={styles.list}
 					>
             {/* To Do: update link with verse mode */}
-						<Link href={"/chapters/" + chapter.slug}>
+						<Link
+                href={
+                  translation === "vietnamese_hassan"
+                    ? `/chapters/${chapter.slug}`
+                    : `/${translation}/chapters/${chapter.slug}`
+                }
+              legacyBehavior>
 							<a onClick={controller(false)}>
 								<span className={styles.number}>{chapter.chapterNo}</span>
 
@@ -64,7 +74,7 @@ export default function ChapterList({ chapterList, open, controller }) {
 							</a>
 						</Link>
 					</div>
-				)}
+				))}
 				</Scrollbar>
 			</div>
 		</Drawer>

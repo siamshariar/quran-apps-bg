@@ -109,7 +109,7 @@ export default function SubjectiveContent({
                   : `/subjective/${item.slug}/verses`
               }
               key={index}
-            >
+            legacyBehavior>
               <a className={styles.item}>
                 <span className={styles.left}>{item.title}</span>
                 <span className={styles.right}>

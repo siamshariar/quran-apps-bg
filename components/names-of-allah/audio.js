@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
 import PlayIcon from "../icons/PlayArrow";
 import PauseIcon from "../icons/Pause";
 import styles from "./audio.module.scss";

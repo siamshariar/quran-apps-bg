@@ -1,8 +1,8 @@
 import { useState, useContext } from 'react'
 import { SidenavContext } from '../../contexts/SidenavContext'
 import { useRouter } from 'next/router'
-import BottomNavigation from '@material-ui/core/BottomNavigation'
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Container from '../core/container'
 // import GoToVerse from './go-to-verse'
 import MenuBookIcon from '../icons/MenuBook'
@@ -14,7 +14,7 @@ import InfoIcon from '../icons/Info'
 import BookmarkIcon from '../icons/BookmarkBorder'
 import styles from './footer.module.scss'
 
-import SubjectIcon from '@material-ui/icons/Subject';
+import SubjectIcon from '@mui/icons-material/Subject';
 
 export default function FooterMobile() {
     const { changeBookmarkOpen } = useContext(SidenavContext);

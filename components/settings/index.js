@@ -1,24 +1,27 @@
 import { fonts, themes } from '../../lib/settings'
 import { useState, useContext } from 'react'
 import { SettingsContext } from '../../contexts/SettingsContext'
-import Accordion from '@material-ui/core/Accordion'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
-import AccordionDetails from '@material-ui/core/AccordionDetails'
-import Radio from '@material-ui/core/Radio'
-import RadioGroup from '@material-ui/core/RadioGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
+import Accordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import Radio from '@mui/material/Radio'
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import Switcher from '../core/switcher'
 import UpIcon from '../icons/ChevronUp'
 import DownIcon from '../icons/ChevronDown'
 import PlusIcon from '../icons/Plus'
 import MinusIcon from '../icons/Minus'
+import { config } from '../../lib/config'
 import styles from './index.module.scss'
 
 export default function SettingsContent() {
     return (
         <div className={styles.wrapper}>
+            <Translation />
+            <hr className={styles.divider} />
             <View />
             {/*<hr className={styles.divider} />*/}
             {/*<VerseMode />*/}
@@ -39,6 +42,75 @@ export default function SettingsContent() {
     )
 }
 
+
+const Translation = () => {
+    const { translation, changeTranslation } = useContext(SettingsContext)
+    const [expanded, setExpanded] = useState(false)
+    
+    const controlAccordion = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false)
+    }
+
+    const handleTranslationChange = (newTranslation) => {
+        changeTranslation(newTranslation)
+    }
+
+    const availableTranslations = config?.availableTranslations || [
+        {
+            code: 'vietnamese_hassan',
+            name: 'Hasan Abdul-Karim'
+        },
+        {
+            code: 'vietnamese_rwwad',
+            name: 'Ruwwad Translation Center'
+        }
+    ]
+
+    return (
+        <div className={`${styles.block} ${styles.translation}`}>
+            <div className={styles.title}>Translation</div>
+            <div className={styles.list}>
+                <div className={styles.item}>
+                    <Accordion
+                        className={styles.accordion}
+                        expanded={expanded === 'translation'}
+                        onChange={controlAccordion('translation')}
+                    >
+                        <AccordionSummary className={styles.accordion_summary}>
+                            <IconButton className={styles.btn}>
+                                <span className={expanded !== 'translation' ? styles.none : styles.icon}>
+                                    <UpIcon />
+                                </span>
+                                <span className={expanded === 'translation' ? styles.none : styles.icon}>
+                                    <DownIcon />
+                                </span>
+                            </IconButton>
+                            <div className={styles.label}>Choose Translation</div>
+                        </AccordionSummary>
+
+                        <AccordionDetails className={styles.accordion_details}>
+                            <RadioGroup
+                                name="translation"
+                                value={translation || 'vietnamese_hassan'}
+                                onChange={(e) => handleTranslationChange(e.target.value)}
+                            >
+                                {availableTranslations.map(t => (
+                                    <FormControlLabel
+                                        key={t.code}
+                                        className="settings_radio"
+                                        value={t.code}
+                                        control={<Radio />}
+                                        label={t.name}
+                                    />
+                                ))}
+                            </RadioGroup>
+                        </AccordionDetails>
+                    </Accordion>
+                </div>
+            </div>
+        </div>
+    )
+}
 
 const View = () => {
     const { view, changeView } = useContext(SettingsContext)

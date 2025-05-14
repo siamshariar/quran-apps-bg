@@ -1,11 +1,11 @@
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { AudioPlayerContext } from "../../contexts/AudioPlayerContext";
 import { useState, useEffect, useContext } from "react";
-import Popover from "@material-ui/core/Popover";
-import MenuList from "@material-ui/core/MenuList";
-import MenuItem from "@material-ui/core/MenuItem";
-import IconButton from "@material-ui/core/IconButton";
-import Button from "@material-ui/core/Button";
+import Popover from "@mui/material/Popover";
+import MenuList from "@mui/material/MenuList";
+import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 import CloseIcon from "../icons/Close";
 import MoreIcon from "../icons/MoreVert";
 import TickIcon from "../icons/Tick";

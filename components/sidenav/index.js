@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
-import Tooltip from '@material-ui/core/Tooltip'
-import Button from '@material-ui/core/Button'
+import Tooltip from '@mui/material/Tooltip'
+import Button from '@mui/material/Button'
 
 import MenuBookIcon from '../icons/MenuBook'
 import NearMeIcon from '../icons/NearMe'
@@ -150,7 +150,7 @@ export default function Sidenav({ chapters }) {
                             <Button
                                 focusRipple={false}
                             >
-                                <Link href="/subjective">
+                                <Link href="/subjective" legacyBehavior>
                                     <a><SubtitlesIcon /></a>
                                 </Link>
                             </Button>
@@ -166,7 +166,7 @@ export default function Sidenav({ chapters }) {
                             <Button
                                 focusRipple={false}
                             >
-                                <Link href="/download">
+                                <Link href="/download" legacyBehavior>
                                     <a><DownloadIcon /></a>
                                 </Link>
                             </Button>

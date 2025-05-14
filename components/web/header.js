@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { SettingsContext } from '../../contexts/SettingsContext'
 import Link from 'next/link'
 import Image from 'next/image'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import Container from '../core/container'
 import SearchIcon from '../icons/Search'
 import Brightness4Icon from '../icons/Brightness4'
@@ -23,7 +23,7 @@ export default function HeaderWeb({ page, searchModalController }) {
                 <div className={styles.inner}>
                     <div className={styles.left}>
                         {theme === 'light' && (
-                            <Link href="/">
+                            <Link href="/" legacyBehavior>
                                 <a className={styles.logo}>
                                     <Image
                                         src={`/img/logo/${config?.localizationCode}/logo.png`}
@@ -38,7 +38,7 @@ export default function HeaderWeb({ page, searchModalController }) {
                         )}
 
                         {theme !== 'light' && (
-                            <Link href="/">
+                            <Link href="/" legacyBehavior>
                                 <a className={styles.logo}>
                                     <Image
                                         src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}

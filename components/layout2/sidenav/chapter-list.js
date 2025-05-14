@@ -79,7 +79,7 @@ export default function ChapterList({ chapterList, open, controller }) {
                         key={chapter.chapterNo}
                         // href={verseMode === "scroll" ? `/chapters/${chapter.slug}` : verseMode === "slide" ? `/chapters/${chapter.slug}/verses/1` : `/chapters/${chapter.slug}`}
                         href={`/chapters/${chapter.slug}`}
-                    >
+                    legacyBehavior>
                         <a
                             className={styles.list}
                             onClick={controller(false)}

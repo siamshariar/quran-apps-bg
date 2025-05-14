@@ -7,14 +7,16 @@ export const SettingsContext = createContext()
 const SettingsContextProvider = ({ children }) => {
     // state declare
     const [settings, setSettings] = useState(defaultSettings)
+    const [isReady, setIsReady] = useState(false)
     const router = useRouter()
 
     // first render
     useEffect(() => {
         const savedSettings = localStorage.getItem('settings')
-        const newSettings = (savedSettings === null) ? defaultSettings : JSON.parse(savedSettings)
+        const newSettings = savedSettings === null ? defaultSettings : JSON.parse(savedSettings)
         initSettings(newSettings)
         setSettings(newSettings)
+        setIsReady(true)
     }, [])
 
     // helper functions
@@ -37,6 +39,26 @@ const SettingsContextProvider = ({ children }) => {
         for (const elem of elemsTrans) {
             elem.style.fontSize = settings.fontSize.translation + 'px'
             elem.style.fontFamily = settings.fontFamily.translation
+        }
+    }
+
+    const changeTranslation = (translation) => {
+        const newSettings = { ...settings, translation }
+        saveToLocalStorage(newSettings)
+        setSettings(newSettings)
+
+        const path = window.location.pathname
+        if (translation === 'vietnamese_hassan') {
+            const newPath = path.replace(/^\/vietnamese_[^/]+\//, '/')
+            router.push(newPath)
+        } else {
+            const parts = path.split('/')
+            if (!path.startsWith('/vietnamese_')) {
+                parts.splice(1, 0, translation)
+            } else {
+                parts[1] = translation
+            }
+            router.push(parts.join('/'))
         }
     }
 
@@ -173,6 +195,9 @@ const SettingsContextProvider = ({ children }) => {
     return (
         <SettingsContext.Provider
             value={{
+                isReady,
+                translation: settings.translation,
+                changeTranslation,
                 view: settings.view,
                 changeView,
                 theme: settings.theme,

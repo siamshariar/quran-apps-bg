@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import Container from '../core/container'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import MobileNav from './mobile-nav'
 import MenuIcon from '../icons/Menu'
 //import SearchIcon from '../icons/Search'
@@ -47,7 +47,7 @@ export default function HeaderMobile({ chapters }) {
 
                         <div className={styles.center}>
                             {theme === 'light' && (
-                                <Link href="/">
+                                <Link href="/" legacyBehavior>
                                     <a className={styles.logo}>
                                         <Image
                                             src={`/img/logo/${config?.localizationCode}/logo.png`}
@@ -62,7 +62,7 @@ export default function HeaderMobile({ chapters }) {
                             )}
 
                             {theme !== 'light' && (
-                                <Link href="/">
+                                <Link href="/" legacyBehavior>
                                     <a className={styles.logo}>
                                         <Image
                                             src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}

@@ -1,4 +1,4 @@
-import Grid from '@material-ui/core/Grid'
+import Grid from '@mui/material/Grid';
 import Container from '../../core/container'
 import ChapterCard from './chapter-card'
 import styles from './chapter-list.module.scss'

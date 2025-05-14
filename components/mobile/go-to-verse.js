@@ -2,11 +2,11 @@ import { useState, useContext } from 'react'
 import { SettingsContext } from '../../contexts/SettingsContext'
 import { useRouter } from 'next/router'
 // import Link from 'next/link'
-import Modal from '@material-ui/core/Modal'
-import Backdrop from '@material-ui/core/Backdrop'
-import Select from '@material-ui/core/Select'
-import Button from '@material-ui/core/Button'
-import Fade from '@material-ui/core/Fade'
+import Modal from '@mui/material/Modal';
+import Backdrop from '@mui/material/Backdrop';
+import Select from '@mui/material/Select';
+import Button from '@mui/material/Button';
+import Fade from '@mui/material/Fade'
 // import Loader from '../core/loader'
 import SendIcon from '../icons/Send'
 import styles from './go-to-verse.module.scss'
@@ -56,7 +56,7 @@ export default function GoToVerse({ open, controller, chapters }) {
     return (
         <Modal
             open={open}
-            onClose={controller(false)}
+            onClose={() => controller(false)}
             className={styles.root}
             closeAfterTransition
             BackdropComponent={Backdrop}

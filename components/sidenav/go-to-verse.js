@@ -1,9 +1,9 @@
 import { useState, useContext } from 'react'
 import { SettingsContext } from '../../contexts/SettingsContext'
 import Link from 'next/link'
-import Drawer from '@material-ui/core/Drawer'
-import Select from '@material-ui/core/Select'
-import Button from '@material-ui/core/Button'
+import Drawer from '@mui/material/Drawer'
+import Select from '@mui/material/Select'
+import Button from '@mui/material/Button'
 // import Loader from '../core/loader'
 import CloseIcon from '../icons/Close'
 import SendIcon from '../icons/Send'
@@ -93,7 +93,7 @@ export default function GoToVerse({ open, controller, chapters }) {
                         </div>
 
                         {/* To Do: update link */}
-                        <Link href={"/chapters/" + chapters[chapterNumber - 1].slug + "#verse-" + verseNumber}>
+                        <Link href={"/chapters/" + chapters[chapterNumber - 1].slug + "#verse-" + verseNumber} legacyBehavior>
                             <Button
                                 className={styles.btn}
                                 variant="contained"

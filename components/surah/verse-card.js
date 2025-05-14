@@ -2,10 +2,10 @@ import { useState, useEffect, useContext, useRef } from 'react'
 import { SettingsContext } from '../../contexts/SettingsContext'
 import { PinContext } from "../../contexts/PinContext";
 import useOnScreen from "../../hooks/useOnScreen";
-import Accordion from '@material-ui/core/Accordion'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
-import AccordionDetails from '@material-ui/core/AccordionDetails'
-import IconButton from '@material-ui/core/IconButton'
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import IconButton from '@mui/material/IconButton';
 import VerseOptions from './verse-options'
 import UpIcon from '../icons/ChevronUp'
 import DownIcon from '../icons/ChevronDown'

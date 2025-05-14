@@ -12,6 +12,7 @@ import PauseIcon from "../../icons/Pause";
 import Bismillah from "../../icons/Bismillah";
 import styles from "./content.module.scss";
 import { config } from "../../../lib/config";
+import { SettingsContext } from '../../../contexts/SettingsContext'
 // import useLoader from "../../../hooks/useLoader";
 
 export default function ChapterContent({
@@ -27,6 +28,9 @@ export default function ChapterContent({
 }) {
   // const loading = useLoader();
   const printRef = useRef(null);
+
+  const { translation } = useContext(SettingsContext)
+  const translationPrefix = translation !== "vietnamese_hassan" ? `/${translation}` : ""
 
   const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } =
     useContext(AudioPlayerContext);
@@ -45,12 +49,12 @@ export default function ChapterContent({
   const [prev, setPrev] = useState(
     contentType === "chapter" && chapters[chapterNo - 2]
       ? {
-          link: `/chapters/${chapters[chapterNo - 2].slug}`,
+          link: `${translationPrefix}/chapters/${chapters[chapterNo - 2].slug}`,
           name: chapters[chapterNo - 2].name,
         }
       : contentType === "verse" && Number(verses[0].verseNo) > 1
       ? {
-          link: `/chapters/${chapters[chapterNo - 1].slug}/verses/${
+          link: `${translationPrefix}/chapters/${chapters[chapterNo - 1].slug}/verses/${
             Number(verses[0].verseNo) - 1
           }`,
           name: "Prev verse",
@@ -59,7 +63,7 @@ export default function ChapterContent({
         Number(verses[0].verseNo) == 1 &&
         chapterNo > 1
       ? {
-          link: `/chapters/${chapters[chapterNo - 2].slug}/verses/1`,
+          link: `${translationPrefix}/chapters/${chapters[chapterNo - 2].slug}/verses/1`,
           name: "Prev chapter",
         }
       : null
@@ -68,13 +72,13 @@ export default function ChapterContent({
   const [next, setNext] = useState(
     contentType === "chapter" && chapters[chapterNo]
       ? {
-          link: `/chapters/${chapters[chapterNo].slug}`,
+          link: `${translationPrefix}/chapters/${chapters[chapterNo].slug}`,
           name: chapters[chapterNo].name,
         }
       : contentType === "verse" &&
         Number(verses[0].verseNo) < chapters[chapterNo - 1].totalVerse
       ? {
-          link: `/chapters/${chapters[chapterNo - 1].slug}/verses/${
+          link: `${translationPrefix}/chapters/${chapters[chapterNo - 1].slug}/verses/${
             Number(verses[0].verseNo) + 1
           }`,
           name: "Next verse",
@@ -83,11 +87,70 @@ export default function ChapterContent({
         Number(verses[0].verseNo) == chapters[chapterNo - 1].totalVerse &&
         chapterNo < chapters.length
       ? {
-          link: `/chapters/${chapters[chapterNo].slug}/verses/1`,
+          link: `${translationPrefix}/chapters/${chapters[chapterNo].slug}/verses/1`,
           name: "Next chapter",
         }
       : null
   );
+
+
+  useEffect(() => {
+    if (contentType === "chapter" && chapters[chapterNo - 2]) {
+      setPrev({
+        link:
+          translation === "vietnamese_hassan"
+            ? `/chapters/${chapters[chapterNo - 2].slug}`
+            : `/${translation}/chapters/${chapters[chapterNo - 2].slug}`,
+        name: chapters[chapterNo - 2].name,
+      })
+    } else if (contentType === "verse" && Number(verses[0]?.verseNo) > 1) {
+      setPrev({
+        link:
+          translation === "vietnamese_hassan"
+            ? `/chapters/${chapters[chapterNo - 1].slug}/verses/${Number(verses[0].verseNo) - 1}`
+            : `/${translation}/chapters/${chapters[chapterNo - 1].slug}/verses/${Number(verses[0].verseNo) - 1}`,
+        name: "Prev verse",
+      })
+    } else if (contentType === "verse" && Number(verses[0]?.verseNo) == 1 && chapterNo > 1) {
+      setPrev({
+        link:
+          translation === "vietnamese_hassan"
+            ? `/chapters/${chapters[chapterNo - 2].slug}/verses/1`
+            : `/${translation}/chapters/${chapters[chapterNo - 2].slug}/verses/1`,
+        name: "Prev chapter",
+      })
+    }
+
+    if (contentType === "chapter" && chapters[chapterNo]) {
+      setNext({
+        link:
+          translation === "vietnamese_hassan"
+            ? `/chapters/${chapters[chapterNo].slug}`
+            : `/${translation}/chapters/${chapters[chapterNo].slug}`,
+        name: chapters[chapterNo].name,
+      })
+    } else if (contentType === "verse" && Number(verses[0]?.verseNo) < chapters[chapterNo - 1]?.totalVerse) {
+      setNext({
+        link:
+          translation === "vietnamese_hassan"
+            ? `/chapters/${chapters[chapterNo - 1].slug}/verses/${Number(verses[0].verseNo) + 1}`
+            : `/${translation}/chapters/${chapters[chapterNo - 1].slug}/verses/${Number(verses[0].verseNo) + 1}`,
+        name: "Next verse",
+      })
+    } else if (
+      contentType === "verse" &&
+      Number(verses[0]?.verseNo) == chapters[chapterNo - 1]?.totalVerse &&
+      chapterNo < chapters.length
+    ) {
+      setNext({
+        link:
+          translation === "vietnamese_hassan"
+            ? `/chapters/${chapters[chapterNo].slug}/verses/1`
+            : `/${translation}/chapters/${chapters[chapterNo].slug}/verses/1`,
+        name: "Next chapter",
+      })
+    }
+  }, [translation, contentType, chapterNo, verses])
 
   const playingThisChapter = playing && audioType === "chapter";
 
@@ -253,6 +316,7 @@ export default function ChapterContent({
               printRef={printRef.current}
               isVirtualized={true}
               isLastVerse={index === verses.length - 1}
+              translation={translation}
             />
           )}
         />
@@ -272,6 +336,7 @@ export default function ChapterContent({
 
         <div className={styles.print_footer}>
           {/* todo <span>Vietnamese Hassan</span> */}
+          <span>{translation === "vietnamese_hassan" ? "Vietnamese Hassan" : "Ruwwad Translation Center"}</span>
           <span>www.{config.domain}</span>
         </div>
         </>
@@ -285,6 +350,7 @@ export default function ChapterContent({
         contentType={contentType}
         chapterSlug={chapterSlug}
         verseNo={verses[0].verseNo}
+        translation={translation}
       />
       )}
 

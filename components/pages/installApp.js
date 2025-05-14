@@ -1,7 +1,7 @@
 import css from './style.module.scss'
 import styles from './about.module.scss'
 import {config} from "../../lib/config";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 
 export default function InstallAppContent() {
     return (

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
 import BookmarkList from "../../bookmark/list";
 import PinList from "../../pin/list";

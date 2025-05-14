@@ -6,10 +6,10 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import IconButton from "@material-ui/core/IconButton";
-import Popover from "@material-ui/core/Popover";
-import MenuList from "@material-ui/core/MenuList";
-import MenuItem from "@material-ui/core/MenuItem";
+import IconButton from '@mui/material/IconButton';
+import Popover from '@mui/material/Popover';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
 import Container from "../../core/container";
 import Brightness4Icon from "../../icons/Brightness4";
 import Brightness7Icon from "../../icons/Brightness7";
@@ -96,11 +96,11 @@ export default function HeaderWeb({
       setOffset(window.pageYOffset);
     };
     header.current.classList.add(styles.scrolled);
-    // if (offset > 5) {
-    //   header.current.classList.add(styles.scrolled);
-    // } else {
-    //   header.current.classList.remove(styles.scrolled);
-    // }
+    if (offset > 5) {
+      header.current.classList.add(styles.scrolled);
+    } else {
+      header.current.classList.remove(styles.scrolled);
+    }
 
     return () => setDidMount(false);
   }, [offset]);
@@ -152,7 +152,7 @@ export default function HeaderWeb({
           <div className={styles.inner}>
             <div className={styles.left}>
               {theme === "light" && (
-                <Link href="/">
+                <Link href="/" legacyBehavior>
                   <a className={`${styles.logo} ${styles.logo_normal}`}>
                     <Image
                       src={`/img/logo/${config?.localizationCode}/logo.png`}
@@ -167,13 +167,13 @@ export default function HeaderWeb({
               )}
 
               {theme === "light" && (
-                <Link href="/">
+                <Link href="/" legacyBehavior>
                   <a className={`${styles.logo} ${styles.logo_white}`}>
                     <Image
                       src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                       alt=""
-                      width={162}
-                      height={36}
+                      width={122}
+                      height={26}
                       loading="eager"
                       objectFit="contain"
                     />
@@ -182,13 +182,13 @@ export default function HeaderWeb({
               )}
 
               {theme !== "light" && (
-                <Link href="/">
+                <Link href="/" legacyBehavior>
                   <a className={`${styles.logo} ${styles.logo_full_white}`}>
                     <Image
                       src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                       alt=""
-                      width={162}
-                      height={36}
+                      width={122}
+                      height={26}
                       loading="eager"
                       objectFit="contain"
                     />
@@ -327,7 +327,7 @@ export default function HeaderWeb({
                     </MenuItem>
                   )}
 
-                  <Link href="/subjective">
+                  <Link href="/subjective" legacyBehavior>
                     <MenuItem onClick={handleClose}>
                       <a className={styles.link}>
                         <span className={styles.icon}>
@@ -338,7 +338,7 @@ export default function HeaderWeb({
                     </MenuItem>
                   </Link>
 
-                  <Link href="/download">
+                  <Link href="/download" legacyBehavior>
                     <MenuItem onClick={handleClose}>
                       <a className={styles.link}>
                         <span className={styles.icon}>
@@ -349,7 +349,7 @@ export default function HeaderWeb({
                     </MenuItem>
                   </Link>
 
-                  <Link href="/names-of-allah">
+                  <Link href="/names-of-allah" legacyBehavior>
                     <MenuItem onClick={handleClose}>
                       <a className={styles.link}>
                         <span className={styles.icon}>
@@ -374,7 +374,7 @@ export default function HeaderWeb({
 
                   <hr className={styles.menu_item_separator} />
 
-                  <Link href="/install-app">
+                  <Link href="/install-app" legacyBehavior>
                     <MenuItem onClick={handleClose}>
                       <a className={styles.link}>
                         <span className={styles.icon}>
@@ -385,7 +385,7 @@ export default function HeaderWeb({
                     </MenuItem>
                   </Link>
 
-                  <Link href="/about">
+                  <Link href="/about" legacyBehavior>
                     <MenuItem onClick={handleClose}>
                       <a className={styles.link}>
                         <span className={styles.icon}>

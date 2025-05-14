@@ -32,6 +32,23 @@ const App = ({ Component, pageProps }) => {
     };
   }, [router.events]);
 
+    useEffect(() => {
+    // Handle translation initialization
+    const initializeTranslation = () => {
+      const path = window.location.pathname;
+      const isTranslationPath = path.startsWith('/vietnamese_');
+      
+      // If directly accessing root translation path, redirect to first chapter
+      if (isTranslationPath && path.split('/').length === 2) {
+        router.push(`${path}/chapters/1-al-fatihah`);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      initializeTranslation();
+    }
+  }, []);
+
   useEffect(() => {
     document.addEventListener("keydown", (e) => {
       if (

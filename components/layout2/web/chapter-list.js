@@ -7,7 +7,7 @@ import SearchIcon from "../../icons/Search";
 import styles from "../sidenav/chapter-list.module.scss";
 
 export default function ChapterList({ chapterList, controller }) {
-  const { verseMode } = useContext(SettingsContext);
+  const { verseMode, translation } = useContext(SettingsContext);
 
   const [chapters, setChapters] = useState(chapterList);
   const filterChapters = (search) => {
@@ -82,8 +82,12 @@ export default function ChapterList({ chapterList, controller }) {
             //     ? `/chapters/${chapter.slug}/verses/1`
             //     : `/chapters/${chapter.slug}`
             // }
-            href={`/chapters/${chapter.slug}`}
-          >
+            href={
+              translation === "vietnamese_hassan"
+                ? `/chapters/${chapter.slug}`
+                : `/${translation}/chapters/${chapter.slug}`
+            }
+          legacyBehavior>
             <a className={styles.list} onClick={controller(false)}>
               <span className={styles.number}>{chapter.chapterNo}</span>
 

@@ -4,7 +4,7 @@ export default function ErrorPage() {
 	return (
 		<div className="wrap">
 			<h1>404! Something Went Wrong.</h1>
-			<Link href="/" prefetch={false}>
+			<Link href="/" prefetch={false} legacyBehavior>
 				<a>Back To Home</a>
 			</Link>
 

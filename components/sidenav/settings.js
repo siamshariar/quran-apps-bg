@@ -1,4 +1,4 @@
-import Drawer from '@material-ui/core/Drawer'
+import Drawer from '@mui/material/Drawer'
 import Scrollbar from '../core/scrollbar'
 import SettingsContent from '../settings'
 import Close from '../icons/Close'

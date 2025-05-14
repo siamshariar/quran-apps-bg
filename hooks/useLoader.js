@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 const useLoader = () => {
-  const loadingPaths = ["/chapters", "/subjective"];
+  const loadingPaths = ["/chapters", "/vietnamese_rwwad/chapters", "/subjective"];
   const router = useRouter();
 
   const [loading, setLoading] = useState(

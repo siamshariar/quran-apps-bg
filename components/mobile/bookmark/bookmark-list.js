@@ -32,7 +32,7 @@ export default function BookmarkList() {
         <div className={styles.lists}>
           {Object.keys(bookmarks).map((key) => (
             <div key={key} className={styles.item}>
-              <Link href={`/bookmarks?key=${key}`}>
+              <Link href={`/bookmarks?key=${key}`} legacyBehavior>
                 <a className={styles.link}>
                   <span className={styles.left}>
                     <span className={styles.icon}>

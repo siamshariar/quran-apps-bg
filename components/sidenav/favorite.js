@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
-import Drawer from '@material-ui/core/Drawer'
+import Drawer from '@mui/material/Drawer'
 import Close from '../icons/Close'
 import Search from '../icons/Search'
 import styles from './favorite.module.scss'
