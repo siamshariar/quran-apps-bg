@@ -43,24 +43,21 @@ const SettingsContextProvider = ({ children }) => {
     }
 
     const changeTranslation = (translation) => {
-        const newSettings = { ...settings, translation }
-        saveToLocalStorage(newSettings)
-        setSettings(newSettings)
-
-        const path = window.location.pathname
-        if (translation === 'vietnamese_hassan') {
-            const newPath = path.replace(/^\/vietnamese_[^/]+\//, '/')
-            router.push(newPath)
-        } else {
-            const parts = path.split('/')
-            if (!path.startsWith('/vietnamese_')) {
-                parts.splice(1, 0, translation)
-            } else {
-                parts[1] = translation
-            }
-            router.push(parts.join('/'))
-        }
-    }
+      const newSettings = { ...settings, translation };
+      saveToLocalStorage(newSettings);
+      setSettings(newSettings);
+    
+      const isHome = window.location.pathname === '/';
+    
+      // Decide target path based on selection
+      if (translation && translation !== 'vietnamese_hassan') {
+        // For translated versions, always go to translated path
+        router.push(`/${translation}/chapters/1-al-fatihah`);
+      } else {
+        // For default translation, go to default path
+        router.push(`/chapters/1-al-fatihah`);
+      }
+    };
 
     const redirectAfterChangeVerseMode = (mode) => {
       if (typeof window !== 'undefined') {
