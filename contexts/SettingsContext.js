@@ -47,17 +47,36 @@ const SettingsContextProvider = ({ children }) => {
       saveToLocalStorage(newSettings);
       setSettings(newSettings);
     
-      const isHome = window.location.pathname === '/';
+      const path = window.location.pathname;
     
-      // Decide target path based on selection
-      if (translation && translation !== 'vietnamese_hassan') {
-        // For translated versions, always go to translated path
-        router.push(`/${translation}/chapters/1-al-fatihah`);
+      // Match dynamic chapter path like /[translation]/chapters/1-al-fatihah or /chapters/1-al-fatihah
+      const chapterMatch = path.match(/(?:\/([^/]+))?\/chapters\/([^/]+)/);
+    
+      if (chapterMatch) {
+        const currentTranslation = chapterMatch[1]; // might be undefined if default
+        const slug = chapterMatch[2];
+    
+        let newPath = '';
+    
+        if (translation === 'vietnamese_hassan') {
+          // Default translation: No prefix
+          newPath = `/chapters/${slug}`;
+        } else {
+          // Translated: Add translation prefix
+          newPath = `/${translation}/chapters/${slug}`;
+        }
+    
+        router.push(newPath);
       } else {
-        // For default translation, go to default path
-        router.push(`/chapters/1-al-fatihah`);
+        // Not on a chapter page, fallback to a default path
+        if (translation === 'vietnamese_hassan') {
+          router.push(`/chapters/1-al-fatihah`);
+        } else {
+          router.push(`/${translation}/chapters/1-al-fatihah`);
+        }
       }
     };
+
 
     const redirectAfterChangeVerseMode = (mode) => {
       if (typeof window !== 'undefined') {
