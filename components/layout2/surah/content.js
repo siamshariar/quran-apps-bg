@@ -10,6 +10,8 @@ import InfoIcon from "../../icons/Info";
 import PlayIcon from "../../icons/PlayArrow";
 import PauseIcon from "../../icons/Pause";
 import Bismillah from "../../icons/Bismillah";
+import Settings from "../../settings";
+import Modal from "../../utils/ModalPrimary";
 import styles from "./content.module.scss";
 import { config } from "../../../lib/config";
 import { SettingsContext } from '../../../contexts/SettingsContext'
@@ -34,6 +36,11 @@ export default function ChapterContent({
 
   const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } =
     useContext(AudioPlayerContext);
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState(null);
+  const [modalContent, setModalContent] = useState(null);
+  const [expandedSetting, setExpandedSetting] = useState(null);
 
   useEffect(() => {
     let filtered = [];
@@ -248,6 +255,22 @@ export default function ChapterContent({
     }
   }, [router, loading]);
 
+  const openSettingsModal = () => {
+    setModalTitle("Settings");
+    setModalContent(
+      <Settings 
+        defaultExpanded="translation"
+        controller={(open) => (event) => {
+          if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+            return;
+          }
+          setModalOpen(open);
+        }}
+      />
+    );
+    setModalOpen(true);
+  };
+
   return (
     <div className={styles.chapter}>
       <div className={styles.chapter_tab} ref={printRef}>
@@ -284,6 +307,15 @@ export default function ChapterContent({
           {/*        <PlayIcon />*/}
           {/*    </span>*/}
           {/*)}*/}
+          <span className={styles.translation_info}>
+              Translation by Hasan Abdul-Karim{' '}
+          <span
+                className={styles.change_link}
+                  onClick={openSettingsModal}
+                >
+                (Change)
+              </span>
+          </span>
         </div>
 
         {contentType !== "verse" && (
@@ -355,6 +387,18 @@ export default function ChapterContent({
       )}
 
       {loading && <Skeleton style={{marginTop: "32px"}} count={1} height={64} width={`100%`} className="skeleton" />}
+
+      <Modal
+        open={modalOpen}
+        closer={(open) => (event) => {
+          if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+            return;
+          }
+          setModalOpen(open);
+        }}
+        title={modalTitle}
+        content={modalContent}
+      />
     </div>
   );
 }

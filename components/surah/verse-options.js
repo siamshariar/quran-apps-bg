@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { AudioPlayerContext } from "../../contexts/AudioPlayerContext";
 import { PinContext } from "../../contexts/PinContext";
 import { BookmarkContext } from "../../contexts/BookmarkContext";
+import { SettingsContext } from "../../contexts/SettingsContext";
 import { config, server } from "../../lib/config";
 import Popover from "@mui/material/Popover";
 import MenuList from "@mui/material/MenuList";
@@ -40,6 +41,7 @@ export default function VerseOptions({
 }) {
   const { playing, currentIndex, play, pause, audioType } =
     useContext(AudioPlayerContext);
+  const { translation: currentTranslation } = useContext(SettingsContext);
 
   const playingThisVerse =
     playing && audioType === "verse" && currentIndex === index;
@@ -76,11 +78,28 @@ export default function VerseOptions({
     setSnackbarOpen(false);
   };
 
+  const buildVerseUrl = () => {
+  if (typeof window === "undefined") return `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
+  
+  let path = window.location.pathname;
+  let parts = path.split("/");
+  let url = `${server}`;
+  
+  const hasTranslation = parts.length > 1 && 
+    parts[1] !== "chapters" && 
+    parts[1] !== "" && 
+    !parts[1].includes(".");
+  
+  if (hasTranslation) {
+    url += `/${parts[1]}`;
+  }
+  
+  url += `/chapters/${chapterSlug}/verses/${verseNumber}`;
+  return url;
+  };
+
   const handleCopyLink = () => {
-    if (typeof window !== "undefined") {
-      let path = window.location.pathname;
-      // let parts = path.split("/");
-      let url = `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
+    const url = buildVerseUrl();
 
       // if (parts.length === 3 && parts[1] === "chapters") {
       //   url = `${server}/chapters/${chapterSlug}#verse-${verseNumber}`;
@@ -97,15 +116,11 @@ export default function VerseOptions({
       navigator.clipboard.writeText(url);
       handlePopoverClose();
       setSnackbarOpen(true);
-    }
   };
 
   const handleCopyFile = () => {
-    if (typeof window !== "undefined") {
-      let path = window.location.pathname;
-      // let parts = path.split("/");
-      let url = `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
-
+    const url = buildVerseUrl();
+      let file = `[Chapter ${chapterName} : Verse ${verseNumber}]\n\n${ayaArabic}\n\n${translation}\n\n${footnotes}\n\n${url}`;
       // if (parts.length === 3 && parts[1] === "chapters") {
       //   url = `${server}/chapters/${chapterSlug}#verse-${verseNumber}`;
       // } else if (
@@ -118,12 +133,10 @@ export default function VerseOptions({
       //   url = `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
       // }
 
-      let file = `[Chapter ${chapterName} : Verse ${verseNumber}]\n\n${ayaArabic}\n\n${translation}\n\n${footnotes}\n\n${url}`;
 
       navigator.clipboard.writeText(file);
       handlePopoverClose();
       setSnackbarOpen(true);
-    }
   };
 
   // share option
@@ -144,8 +157,8 @@ export default function VerseOptions({
   const handleWebShare = () => {
     handlePopoverClose();
 
-    const url = `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
-    const title = "Chapter " + chapterName + " : Verse " + verseNumber + ` | ${config?.quranInLocal} | ${config?.metaDescription} | ${config?.metaTitle}`;
+    const url = buildVerseUrl();
+    const title = `Chapter ${chapterName} : Verse ${verseNumber} | ${config?.quranInLocal} | ${config?.metaDescription} | ${config?.metaTitle}`;
 
     setShareUrl(url);
     setShareTitle(title);
@@ -155,8 +168,8 @@ export default function VerseOptions({
   const handleMobileShare = () => {
     handlePopoverClose();
 
-    const url = `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
-    const title = "Chapter " + chapterName + " : Verse " + verseNumber + ` | ${config?.quranInLocal} | ${config?.metaDescription} | ${config?.metaTitle}`;
+    const url = buildVerseUrl();
+    const title = `Chapter ${chapterName} : Verse ${verseNumber} | ${config?.quranInLocal} | ${config?.metaDescription} | ${config?.metaTitle}`;
 
     if (navigator.share) {
       navigator.share({
@@ -182,7 +195,9 @@ export default function VerseOptions({
 
   const checkVerseBookmarked = (arr, chapter, verse) => {
     return arr.some((el) => {
-      return el.chapter == chapter && el.verse == verse;
+      return el.chapter == chapter && 
+             el.verse == verse &&
+             el.translation === currentTranslation;
     });
   };
 
@@ -190,13 +205,13 @@ export default function VerseOptions({
     for (let [key, value] of Object.entries(bookmarks)) {
       if (checkVerseBookmarked(value.entry, chapterNumber, verseNumber)) {
         setIsBookmarked(true);
-        setBookmarkKey(key)
+        setBookmarkKey(key);
         break;
       } else {
         setIsBookmarked(false);
       }
     }
-  }, [bookmarks, anchorEl]);
+  }, [bookmarks, anchorEl, currentTranslation]);
 
   const [addBookmarkOpen, setAddBookmarkOpen] = useState(false);
   const [removeBookmarkOpen, setRemoveBookmarkOpen] = useState(false);
@@ -434,6 +449,7 @@ export default function VerseOptions({
         closer={handleBookmarkClose}
         chapter={chapterNumber}
         verse={verseNumber}
+        translation={translation}
       />
 
       <RemoveBookmark
@@ -441,6 +457,7 @@ export default function VerseOptions({
         closer={handleBookmarkClose}
         chapter={chapterNumber}
         verse={verseNumber}
+        translation={translation}
         updateBookmarksData={updateBookmarksData}
         bookmarkKey={bookmarkKey}
         isBookmarkPage={isBookmarkPage}

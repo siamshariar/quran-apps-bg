@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { AudioPlayerContext } from "../../contexts/AudioPlayerContext";
 import { BookmarkContext } from "../../contexts/BookmarkContext";
+import { SettingsContext } from "../../contexts/SettingsContext";
 import Sidenav from "../layout2/sidenav";
 import VerseCard from "../surah/verse-card";
 // import QuranIcon from "../icons/Quran";
@@ -20,7 +21,7 @@ export default function BookmarkContent({
   updateBookmarksData,
 }) {
   const { bookmarks } = useContext(BookmarkContext);
-
+  const { translation: currentTranslation } = useContext(SettingsContext);
   const {
     setPlaylist, //
     setChapterMp3Url,

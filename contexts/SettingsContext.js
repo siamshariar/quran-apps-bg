@@ -48,17 +48,28 @@ const SettingsContextProvider = ({ children }) => {
         setSettings(newSettings)
 
         const path = window.location.pathname
-        if (translation === 'vietnamese_hassan') {
-            const newPath = path.replace(/^\/vietnamese_[^/]+\//, '/')
-            router.push(newPath)
+
+        const chapterMatch = path.match(/(?:\/([^/]+))?\/chapters\/([^/]+)/);
+
+        if (chapterMatch) {
+          const currentTranslation = chapterMatch[1];
+          const slug = chapterMatch[2];
+
+          let newPath = '';
+
+          if (translation === 'vietnamese_hassan') {
+            newPath = `/chapters/${slug}`;
+          } else {
+            newPath = `/${translation}/chapters/${slug}`;
+          }
+
+          router.push(newPath);
         } else {
-            const parts = path.split('/')
-            if (!path.startsWith('/vietnamese_')) {
-                parts.splice(1, 0, translation)
-            } else {
-                parts[1] = translation
-            }
-            router.push(parts.join('/'))
+        if (translation === 'vietnamese_hassan') {
+           router.push(`/chapters/1-al-fatihah`)
+        } else {
+        router.push(`/${translation}/chapters/1-al-fatihah`)
+        }
         }
     }
 

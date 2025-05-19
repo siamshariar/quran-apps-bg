@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { BookmarkContext } from "../../contexts/BookmarkContext";
+import { SettingsContext } from "../../contexts/SettingsContext";
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
@@ -8,6 +9,7 @@ import styles from "./modal.module.scss";
 
 export default function AddBookmark({ open, closer, chapter, verse }) {
   const { bookmarks, changeBookmarks } = useContext(BookmarkContext);
+  const { translation } = useContext(SettingsContext);
 
   const [folderKey, setFolderKey] = useState("favorites");
   const [newFolderKey, setNewFolderKey] = useState("");
@@ -52,7 +54,7 @@ export default function AddBookmark({ open, closer, chapter, verse }) {
       } else {
         newBookmarks[newFolderKey] = {
           name: newFolderName,
-          entry: [{ chapter: chapter, verse: verse }],
+          entry: [{ chapter: chapter, verse: verse, translation: translation }],
         };
 
         changeBookmarks(newBookmarks);
@@ -62,7 +64,7 @@ export default function AddBookmark({ open, closer, chapter, verse }) {
     } else {
       if (bookmarks.hasOwnProperty(folderKey)) {
         let entry = bookmarks[folderKey].entry;
-        entry.push({ chapter: chapter, verse: verse });
+        entry.push({ chapter: chapter, verse: verse, translation: translation });
         newBookmarks[folderKey] = {
           name: bookmarks[folderKey].name,
           entry: entry,

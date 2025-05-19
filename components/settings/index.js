@@ -1,5 +1,5 @@
 import { fonts, themes } from '../../lib/settings'
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { SettingsContext } from '../../contexts/SettingsContext'
 import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
@@ -17,10 +17,25 @@ import MinusIcon from '../icons/Minus'
 import { config } from '../../lib/config'
 import styles from './index.module.scss'
 
-export default function SettingsContent() {
+export default function Settings({ defaultExpanded, controller }) {
+    const [expandedPanel, setExpandedPanel] = useState(null)
+
+    useEffect(() => {
+        if (defaultExpanded) {
+            setExpandedPanel(defaultExpanded)
+        }
+    }, [defaultExpanded])
+
+    const handleAccordionChange = (panel) => (event, isExpanded) => {
+        setExpandedPanel(isExpanded ? panel : false)
+    }
+
     return (
         <div className={styles.wrapper}>
-            <Translation />
+            <Translation 
+                expanded={expandedPanel === 'translation'}
+                onAccordionChange={handleAccordionChange}
+            />
             <hr className={styles.divider} />
             <View />
             {/*<hr className={styles.divider} />*/}
@@ -43,13 +58,8 @@ export default function SettingsContent() {
 }
 
 
-const Translation = () => {
+const Translation = ({ expanded, onAccordionChange }) => {
     const { translation, changeTranslation } = useContext(SettingsContext)
-    const [expanded, setExpanded] = useState(false)
-    
-    const controlAccordion = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false)
-    }
 
     const handleTranslationChange = (newTranslation) => {
         changeTranslation(newTranslation)
@@ -73,17 +83,12 @@ const Translation = () => {
                 <div className={styles.item}>
                     <Accordion
                         className={styles.accordion}
-                        expanded={expanded === 'translation'}
-                        onChange={controlAccordion('translation')}
+                        expanded={expanded}
+                        onChange={onAccordionChange('translation')}
                     >
                         <AccordionSummary className={styles.accordion_summary}>
                             <IconButton className={styles.btn}>
-                                <span className={expanded !== 'translation' ? styles.none : styles.icon}>
-                                    <UpIcon />
-                                </span>
-                                <span className={expanded === 'translation' ? styles.none : styles.icon}>
-                                    <DownIcon />
-                                </span>
+                                {expanded ? <UpIcon /> : <DownIcon />}
                             </IconButton>
                             <div className={styles.label}>Choose Translation</div>
                         </AccordionSummary>

@@ -1,5 +1,5 @@
 import { server, config } from "../lib/config";
-import { getChaptersInfo, getVersesByQuery } from "../lib/fetch";
+import { getChaptersInfo, getVersesByQuery, getVerseDetails } from "../lib/fetch";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -33,70 +33,70 @@ export default function Bookmark({ chapters }) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const savedBookmarks = localStorage.getItem("bookmarks");
-    const bookmarks = JSON.parse(savedBookmarks);
-
-    const queryKey = "key";
-    const keyMatcher = router.asPath.match(
-      new RegExp(`[&?]${queryKey}=(.*?)(&|$)`)
-    );
-
+    const checkMobile = () => {
     const x = window.matchMedia("(min-width: 1024px)");
-    if (!x.matches && !keyMatcher && !key) {
+    if (!x.matches && !router.query.key) {
       setIsMobile(true);
-      return;
     } else {
       setIsMobile(false);
     }
+  };
 
-    if (!keyMatcher) {
-      router.push("/404");
-      return <></>;
-    }
-
-    if (!key) {
-      return <></>;
-    }
-
-    if (!bookmarks[key]) {
-      router.push("/404");
-      return <></>;
-    }
-
-    setBookmarkName(bookmarks[key].name);
-
-    let verseStr = "";
-
-    if (bookmarks.hasOwnProperty(key)) {
-      if (bookmarks[key]["entry"].length > 0) {
-        let verseArr = bookmarks[key]["entry"];
-        verseArr.forEach((entry, index) => {
-          verseStr = verseStr + entry.chapter + ":" + entry.verse;
-          if (index < verseArr.length - 1) {
-            verseStr += ",";
-          }
-        });
-      } else {
-        setExists(false);
-      }
-    }
-
-    setBookmarkVersesStr(verseStr);
-  }, [key]);
-
-  const { data } = useSWR(
-    bookmarkVersesStr,
-    (bookmarkVersesStr) => fetcher(bookmarkVersesStr),
-    { revalidateOnMount: true }
-  );
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [router.query.key]);
 
   useEffect(() => {
-    setBookmarksData(data);
-  }, [data]);
+    const loadBookmarks = async () => {
+      const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks") || {});
+      
+      if (!key || !savedBookmarks[key]) {
+        router.push("/404");
+        return;
+      }
 
-  const updateBookmarksData = (chapter, verse) => {
-    let updatedBookmarksData = bookmarksData.filter(
-      (item) => !(item.chapter.chapterNo == chapter && item.verseNo == verse)
+      setBookmarkName(savedBookmarks[key].name);
+      
+      if (savedBookmarks[key].entry.length === 0) {
+        setExists(false);
+        return;
+      }
+
+      const versesData = await Promise.all(
+        savedBookmarks[key].entry.map(async (item) => {
+          const verseDetails = await getVerseDetails(
+            item.chapter, 
+            item.verse,
+            item.translation 
+          );
+          return {
+            ...verseDetails,
+            chapter: {
+              chapterNo: item.chapter,
+              name: chapters[item.chapter - 1]?.name || '',
+              slug: chapters[item.chapter - 1]?.slug || ''
+            },
+            bookmarkKey: key
+          };
+        })
+      );
+
+      setBookmarksData(versesData);
+    };
+
+    if (key) {
+      loadBookmarks();
+    }
+  }, [key, chapters]);
+
+  const updateBookmarksData = (chapter, verse, translation) => {
+    const updatedBookmarksData = bookmarksData.filter(
+      (item) => !(
+        item.chapter.chapterNo == chapter && 
+        item.verseNo == verse &&
+        item.translation === translation
+      )
     );
     setBookmarksData(updatedBookmarksData);
   };
