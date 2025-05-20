@@ -1,7 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { Virtuoso } from 'react-virtuoso';
-import Skeleton from "react-loading-skeleton";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { AudioPlayerContext } from "../../../contexts/AudioPlayerContext";
 import VerseCard from "../../surah/verse-card";
 import Pagination from "../../surah/pagination";
@@ -16,6 +17,14 @@ import styles from "./content.module.scss";
 import { config } from "../../../lib/config";
 import { SettingsContext } from '../../../contexts/SettingsContext'
 // import useLoader from "../../../hooks/useLoader";
+
+const getTranslatorName = (translationCode) => {
+  const translationMap = {
+    vietnamese_hassan: 'Hasan Abdul-Karim',
+    vietnamese_rwwad: 'Ruwwad Translation Center',
+  };
+  return translationMap[translationCode] || translationCode;
+};
 
 export default function ChapterContent({
   contentType,
@@ -308,7 +317,7 @@ export default function ChapterContent({
           {/*    </span>*/}
           {/*)}*/}
           <span className={styles.translation_info}>
-              Translation by Hasan Abdul-Karim{' '}
+            Translation by {getTranslatorName(translation)}{' '}
           <span
                 className={styles.change_link}
                   onClick={openSettingsModal}
@@ -368,7 +377,7 @@ export default function ChapterContent({
 
         <div className={styles.print_footer}>
           {/* todo <span>Vietnamese Hassan</span> */}
-          <span>{translation === "vietnamese_hassan" ? "Vietnamese Hassan" : "Ruwwad Translation Center"}</span>
+          <span>{getTranslatorName(translation)}</span>
           <span>www.{config.domain}</span>
         </div>
         </>

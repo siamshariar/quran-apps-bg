@@ -10,6 +10,7 @@ import VerseCard from "../surah/verse-card";
 // import PauseIcon from "../icons/Pause";
 // import Bismillah from "../icons/Bismillah";
 import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css';
 import styles from "../layout2/surah/content.module.scss";
 
 export default function BookmarkContent({

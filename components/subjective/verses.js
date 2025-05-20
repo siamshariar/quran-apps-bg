@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Virtuoso } from 'react-virtuoso';
 import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css';
 import { AudioPlayerContext } from "../../contexts/AudioPlayerContext";
 import Sidenav from "../layout2/sidenav";
 import VerseCard from "../surah/verse-card";
