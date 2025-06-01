@@ -1,9 +1,10 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Virtuoso } from 'react-virtuoso';
 import Skeleton from "react-loading-skeleton";
-import 'react-loading-skeleton/dist/skeleton.css';
 import { AudioPlayerContext } from "../../contexts/AudioPlayerContext";
 import Sidenav from "../layout2/sidenav";
+import { SettingsContext } from "../../contexts/SettingsContext"
+import { useRouter } from "next/router"
 import VerseCard from "../surah/verse-card";
 // import Pagination from "../surah/pagination";
 // import QuranIcon from "../icons/Quran";
@@ -11,22 +12,53 @@ import VerseCard from "../surah/verse-card";
 // import useLoader from "../../hooks/useLoader";
 import styles from "../layout2/surah/content.module.scss";
 
-export default function SubjectiveVerses({ contentTitle, chapters, verses, loading }) {
+const getTranslatorName = (translationCode) => {
+  const translationMap = {
+    vietnamese_hassan: "Hasan Abdul-Karim",
+    vietnamese_rwwad: "Ruwwad Translation Center",
+  }
+  return translationMap[translationCode] || translationCode
+}
+
+export default function SubjectiveVerses({
+  contentTitle,
+  chapters,
+  verses = [],
+  allTranslations = {},
+  loading,
+  initialTranslation = "vietnamese_hassan",
+}) {
+  const router = useRouter()
   // const loading = useLoader();
   const printRef = useRef();
-
+  const { translation, isReady } = useContext(SettingsContext)
   const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } =
     useContext(AudioPlayerContext);
 
-  useEffect(() => {
-    let filtered = [];
-    verses.forEach((verse) => {
-      filtered.push(verse.mp3Url);
-    });
-    setPlaylist(filtered);
+  const isLoading = loading || router.isFallback || !isReady
+  const currentVerses = allTranslations?.[translation] || verses
 
+  console.log("SubjectiveVerses render:", {
+    isReady,
+    translation,
+    initialTranslation,
+    loading,
+    routerIsFallback: router.isFallback,
+    isLoading,
+    currentPath: typeof window !== "undefined" ? window.location.pathname : "SSR",
+    hasAllTranslations: !!allTranslations,
+    availableTranslations: Object.keys(allTranslations || {}),
+    currentVersesCount: currentVerses?.length,
+  })
+
+  useEffect(() => {
+    if (currentVerses && !isLoading) {
+      const filtered = currentVerses.map((verse) => verse.mp3Url);
+      setPlaylist(filtered)
+      setChapterMp3Url(null)
+    }
     //setChapterMp3Url(chapterMp3Url);
-  }, []);
+  }, [currentVerses, isLoading, setPlaylist, setChapterMp3Url])
 
   // const [prev, setPrev] = useState(
   //   contentType === "chapter" && chapters[chapterNo - 2]
@@ -61,6 +93,33 @@ export default function SubjectiveVerses({ contentTitle, chapters, verses, loadi
   //     : null
   // );
 
+  useEffect(() => {
+    if (router.isReady && isReady && !isLoading) {
+      const currentPath = router.asPath.split("?")[0]
+
+      let expectedPath
+      if (translation === "vietnamese_hassan") {
+        expectedPath = currentPath.replace(/^\/vietnamese_rwwad/, "")
+      } else {
+        if (currentPath.startsWith("/vietnamese_rwwad")) {
+          expectedPath = currentPath 
+        } else {
+          expectedPath = `/${translation}${currentPath}`
+        }
+      }
+      if (expectedPath !== currentPath && router.asPath === router.route) {
+        console.log("Translation changed by user, updating URL from", currentPath, "to", expectedPath)
+        window.history.replaceState({}, "", expectedPath)
+      }
+    }
+  }, [translation, router.isReady, isReady, router.asPath, router.route, isLoading])
+
+  const openSettingsWithTranslation = () => {
+    const settingsEvent = new CustomEvent("openSettings", {
+      detail: { open: true, expandedSetting: "translation" },
+    })
+    document.dispatchEvent(settingsEvent)
+  }
   const uniqueKey = (chapterNo, verseNo) => {
     let s1 = "0000" + chapterNo;
     s1 = s1.substring(s1.length - 3);
@@ -74,7 +133,7 @@ export default function SubjectiveVerses({ contentTitle, chapters, verses, loadi
   return (
     <div className={styles.chapter}>
       <div className={styles.chapter_tab} ref={printRef}>
-        {loading && (
+        {isLoading && (
           <>
             <Skeleton
               style={{marginBottom: "24px"}} //
@@ -92,7 +151,7 @@ export default function SubjectiveVerses({ contentTitle, chapters, verses, loadi
           </>
         )}
 
-        {!loading && (
+        {!isLoading && (
         <>
         <div className={styles.title}>
           {/*<span className={styles.title_icon}><QuranIcon /></span>*/}
@@ -103,22 +162,33 @@ export default function SubjectiveVerses({ contentTitle, chapters, verses, loadi
             <Bismillah />
           </div> */}
 
+        <div className={styles.change_translation}>
+              <span className={styles.translation_info}>
+                Translation by {getTranslatorName(translation)}{" "}
+                <span className={styles.change_link} onClick={openSettingsWithTranslation}>
+                  (Change)
+                </span>
+              </span>
+            </div>
+
+            {currentVerses && currentVerses.length > 0 ? (
         <div className={styles.verses}>
           <Virtuoso
               useWindowScroll
-              totalCount={verses.length} // Total number of items
+              totalCount={currentVerses.length} // Total number of items
               itemContent={(index) => (
                   <VerseCard
-                      key={verses[index].verseNo}
-                      chapterName={verses[index].chapter.name}
+                      key={`${translation}-${currentVerses[index]?.verseNo || index}`}
+                      chapterName={currentVerses[index]?.chapter?.name || ""}
                       index={index}
-                      chapterNo={verses[index].chapter.chapterNo}
-                      chapterSlug={verses[index].chapter.slug}
-                      verse={verses[index]}
-                      ayaArabic={verses[index].arabic}
+                      chapterNo={currentVerses[index]?.chapter?.chapterNo}
+                      chapterSlug={currentVerses[index]?.chapter?.slug}
+                      verse={currentVerses[index]}
+                      ayaArabic={currentVerses[index]?.arabic}
                       printRef={printRef.current}
                       isVirtualized={true}
-                      isLastVerse={index === verses.length - 1}
+                      isLastVerse={index === currentVerses.length - 1}
+                      translation={translation}
                   />
               )}
           />
@@ -137,6 +207,9 @@ export default function SubjectiveVerses({ contentTitle, chapters, verses, loadi
           {/*    />*/}
           {/*  ))}*/}
         </div>
+            ) : (
+              <div className={styles.empty}>No verses found</div>
+            )}
         </>
         )}
       </div>

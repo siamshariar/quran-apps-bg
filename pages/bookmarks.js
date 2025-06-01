@@ -1,8 +1,9 @@
 import { server, config } from "../lib/config";
 import { getChaptersInfo, getVersesByQuery, getVerseDetails } from "../lib/fetch";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import { SettingsContext } from "../contexts/SettingsContext";
 import SettingsContextProvider from "../contexts/SettingsContext";
 import AudioPlayerContextProvider from "../contexts/AudioPlayerContext";
 import PinContextProvider from "../contexts/PinContext";
@@ -31,6 +32,8 @@ export default function Bookmark({ chapters }) {
   const [bookmarksData, setBookmarksData] = useState([]);
 
   const [isMobile, setIsMobile] = useState(false);
+  const settingsContext = useContext(SettingsContext);
+  const translation = settingsContext?.translation || config.translationCode;
 
   useEffect(() => {
     const checkMobile = () => {
@@ -49,7 +52,7 @@ export default function Bookmark({ chapters }) {
 
   useEffect(() => {
     const loadBookmarks = async () => {
-      const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks") || {});
+      const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks") || "{}");
       
       if (!key || !savedBookmarks[key]) {
         router.push("/404");
@@ -65,19 +68,26 @@ export default function Bookmark({ chapters }) {
 
       const versesData = await Promise.all(
         savedBookmarks[key].entry.map(async (item) => {
-          const verseDetails = await getVerseDetails(
-            item.chapter, 
-            item.verse,
-            item.translation 
-          );
+          const [defaultVerse, rwwadVerse] = await Promise.all([
+            getVerseDetails(item.chapter, item.verse, 'vietnamese_hassan'),
+            getVerseDetails(item.chapter, item.verse, 'vietnamese_rwwad')
+          ]);
+          
           return {
-            ...verseDetails,
+            ...defaultVerse,
             chapter: {
               chapterNo: item.chapter,
               name: chapters[item.chapter - 1]?.name || '',
               slug: chapters[item.chapter - 1]?.slug || ''
             },
-            bookmarkKey: key
+            bookmarkKey: key,
+            translations: {
+              vietnamese_hassan: defaultVerse.translation,
+              vietnamese_rwwad: rwwadVerse.translation
+            },
+            translation: translation === 'vietnamese_rwwad' 
+              ? rwwadVerse.translation 
+              : defaultVerse.translation
           };
         })
       );
@@ -88,18 +98,42 @@ export default function Bookmark({ chapters }) {
     if (key) {
       loadBookmarks();
     }
-  }, [key, chapters]);
-
-  const updateBookmarksData = (chapter, verse, translation) => {
+  }, [key, chapters, translation]);
+  const updateBookmarksData = (chapter, verse) => {
     const updatedBookmarksData = bookmarksData.filter(
       (item) => !(
         item.chapter.chapterNo == chapter && 
-        item.verseNo == verse &&
-        item.translation === translation
+        item.verseNo == verse
       )
     );
     setBookmarksData(updatedBookmarksData);
   };
+
+  useEffect(() => {
+    const reloadBookmarkVerses = async () => {
+      if (!key || !bookmarksData.length) return;
+      
+      const newVersesData = await Promise.all(
+        bookmarksData.map(async (verse) => {
+          const verseDetails = await getVerseDetails(
+            verse.chapter.chapterNo,
+            verse.verseNo,
+            translation
+          );
+          return {
+            ...verseDetails,
+            chapter: verse.chapter,
+            bookmarkKey: key
+          };
+        })
+      );
+      
+      setBookmarksData(newVersesData);
+    };
+
+    reloadBookmarkVerses();
+  }, [translation, key]);
+
 
   if (isMobile) {
     return (

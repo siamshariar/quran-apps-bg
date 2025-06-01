@@ -11,6 +11,7 @@ export default function Verse({
   chapterSlug,
   chapterMp3Url,
   verses,
+  allTranslations,
   contentTitle,
   mode,
   loading
@@ -20,7 +21,7 @@ export default function Verse({
       <Meta
         title={`Chapter ${chapterName} : Verse ${verses[0].verseNo} | ${config?.metaTitle}`}
         description={`${verses[0].translation} | ${config?.metaDescription}`}
-        url={`${server}/chapters/${chapterSlug}/verses/${verses[0].verseNo}`}
+        url={`${server}/vietnamese_rwwad/chapters/${chapterSlug}/verses/${verses[0].verseNo}`}
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
@@ -33,6 +34,7 @@ export default function Verse({
         chapterSlug={chapterSlug}
         chapterMp3Url={chapterMp3Url}
         verses={verses}
+        allTranslations={allTranslations}
         // prevChapter={prevChapter}
         // nextChapter={nextChapter}
         chapters={chapters}
@@ -48,22 +50,21 @@ Verse.getLayout = function getLayout(page) {
 
 export async function getStaticProps(context) {
   const slug = encodeURI(context.params.slug);
-  const chapterNo = parseInt(slug);
+  const chapterNo = Number.parseInt(slug);
   const verseNo = context.params.verseNo;
 
-  let verseDetails = [];
-  const details = await getVerseDetails(chapterNo, verseNo);
+  try {
+    const [rwwadVerseDetails, hassanVerseDetails, chaptersInfo] = await Promise.all([
+      getVerseDetails(chapterNo, verseNo, "vietnamese_rwwad"),
+      getVerseDetails(chapterNo, verseNo, "vietnamese_hassan"),
+      getChaptersInfo(),
+    ])
 
-  if (!details) {
-    return {
-      notFound: true,
-    };
-  }
-
-  verseDetails.push(details);
+    if (!rwwadVerseDetails) {
+      return { notFound: true }
+    }
 
   // const chapterNo = details.chapter.chapterNo;
-  const chaptersInfo = await getChaptersInfo();
 
   return {
     props: {
@@ -71,34 +72,39 @@ export async function getStaticProps(context) {
       chapterName: chaptersInfo[chapterNo - 1].name,
       chapterSlug: chaptersInfo[chapterNo - 1].slug,
       chapterMp3Url: chaptersInfo[chapterNo - 1].mp3Url,
-      verses: verseDetails,
+      verses: [rwwadVerseDetails],
+      allTranslations: {
+        vietnamese_hassan: [hassanVerseDetails],
+        vietnamese_rwwad: [rwwadVerseDetails],
+      },
       chapters: chaptersInfo,
-      contentTitle: `${chaptersInfo[chapterNo - 1].name} : Câu ${
-        verseDetails[0].verseNo
-      }`,
+      contentTitle: `${chaptersInfo[chapterNo - 1].name} : Câu ${rwwadVerseDetails.verseNo}`,
       mode: "verse",
       key: uniqueKey(chapterNo, verseNo),
+      loading: false,
     },
     revalidate: 60,
-  };
+  }
+} catch (error) {
+  return { notFound: true }
+}
 }
 
 export async function getStaticPaths() {
   const chapters = await getChaptersInfo();
-  let paths = [];
+  const paths = [];
 
-  chapters.map((chapter) => {
-    let slug = encodeURI(chapter.slug);
-    // let totalVerse = parseInt(chapter.totalVerse);
+  chapters.forEach((chapter) => {
+    const slug = encodeURI(chapter.slug)
 
-    for (let i = 1; i <= 0; i++) {
-      let obj = {
+
+    for (let i = 1; i <= 5; i++) {
+      paths.push({
         params: {
           slug: slug,
           verseNo: String(i),
         },
-      };
-      paths.push(obj);
+      });
     }
   });
 

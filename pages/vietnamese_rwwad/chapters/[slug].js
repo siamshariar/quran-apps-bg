@@ -11,6 +11,7 @@ export default function Chapter({
   chapterSlug,
   chapterMp3Url,
   verses,
+  allTranslations,
   contentTitle,
   mode,
   loading
@@ -33,6 +34,7 @@ export default function Chapter({
         chapterSlug={chapterSlug}
         chapterMp3Url={chapterMp3Url}
         verses={verses}
+        allTranslations={allTranslations}
         chapters={chapters}
         loading={loading}
       />
@@ -47,15 +49,18 @@ Chapter.getLayout = function getLayout(page) {
 export async function getStaticProps(context) {
   const slug = decodeURIComponent(context.params.slug); // use decode, not encode here
   const chaptersInfo = await getChaptersInfo();
-  const chapter = chaptersInfo.find(ch => ch.slug === slug);
-  
+  const chapter = chaptersInfo.find((ch) => ch.slug === slug);
   if (!chapter) {
     return { notFound: true };
   }
 
-  const chapterNo = chapter.id || chapter.chapterNo; // double check actual field
+  const chapterNo = chapter.id || chapter.chapterNo
+
   try {
-    const chapterDetails = await getChapterDetails(chapterNo, 'vietnamese_rwwad');
+    const [chapterDetails, defaultTranslation] = await Promise.all([
+      getChapterDetails(chapterNo, "vietnamese_rwwad"),
+      getChapterDetails(chapterNo, "vietnamese_hassan"),
+    ])
 
     return {
       props: {
@@ -64,6 +69,10 @@ export async function getStaticProps(context) {
         chapterSlug: chapter.slug,
         chapterMp3Url: chapterDetails.mp3Url,
         verses: chapterDetails.verses,
+        allTranslations: {
+          vietnamese_hassan: defaultTranslation.verses,
+          vietnamese_rwwad: chapterDetails.verses,
+        },
         chapters: chaptersInfo,
         contentTitle: chapter.name,
         mode: "chapter",
@@ -81,7 +90,7 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
   const chapters = await getChaptersInfo();
 
-  const paths = chapters.map(chapter => ({
+  const paths = chapters.map((chapter) => ({
     params: { slug: encodeURIComponent(chapter.slug) },
   }));
 

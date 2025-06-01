@@ -1,8 +1,7 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { Virtuoso } from 'react-virtuoso';
 import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
 import { AudioPlayerContext } from "../../../contexts/AudioPlayerContext";
 import VerseCard from "../../surah/verse-card";
 import Pagination from "../../surah/pagination";
@@ -11,20 +10,19 @@ import InfoIcon from "../../icons/Info";
 import PlayIcon from "../../icons/PlayArrow";
 import PauseIcon from "../../icons/Pause";
 import Bismillah from "../../icons/Bismillah";
-import Settings from "../../settings";
-import Modal from "../../utils/ModalPrimary";
+
 import styles from "./content.module.scss";
 import { config } from "../../../lib/config";
 import { SettingsContext } from '../../../contexts/SettingsContext'
 // import useLoader from "../../../hooks/useLoader";
+const MemoizedVerseCard = memo(VerseCard);
+const MemoizedBismillah = memo(Bismillah);
+const MemoizedPagination = memo(Pagination);
 
-const getTranslatorName = (translationCode) => {
-  const translationMap = {
+const getTranslatorName = (translationCode) => ({
     vietnamese_hassan: 'Hasan Abdul-Karim',
     vietnamese_rwwad: 'Ruwwad Translation Center',
-  };
-  return translationMap[translationCode] || translationCode;
-};
+}[translationCode] || translationCode);
 
 export default function ChapterContent({
   contentType,
@@ -35,22 +33,24 @@ export default function ChapterContent({
   chapterSlug,
   chapterMp3Url,
   verses,
+  allTranslations,
   loading,
 }) {
   // const loading = useLoader();
   const printRef = useRef(null);
 
-  const { translation } = useContext(SettingsContext)
-  const translationPrefix = translation !== "vietnamese_hassan" ? `/${translation}` : ""
 
+  const { translation } = useContext(SettingsContext);
   const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } =
     useContext(AudioPlayerContext);
 
+  const currentVerses = allTranslations?.[translation] || verses;
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState(null);
   const [modalContent, setModalContent] = useState(null);
   const [expandedSetting, setExpandedSetting] = useState(null);
 
+  const translationPrefix = translation !== "vietnamese_hassan" ? `/${translation}` : "";
   useEffect(() => {
     let filtered = [];
     verses.forEach((verse) => {
@@ -189,6 +189,10 @@ export default function ChapterContent({
   const [didMount, setDidMount] = useState(false);
 
   useEffect(() => {
+    const filtered = currentVerses?.map(verse => verse.mp3Url) || [];
+    setPlaylist(filtered);
+    setChapterMp3Url(chapterMp3Url);
+
     if (contentType === "verse") {
       document.addEventListener("keydown", (event) => {
         if (event.key == "ArrowRight" && next !== null) {
@@ -280,24 +284,61 @@ export default function ChapterContent({
     setModalOpen(true);
   };
 
+
+  useEffect(() => {
+    const handleScrollPosition = () => {
+      if (typeof window !== 'undefined' && window.location.hash) {
+        const hashIndex = parseInt(window.location.hash.replace("#verse-", ""), 10);
+        if (!isNaN(hashIndex)) {
+          requestAnimationFrame(() => {
+            virtuoso.current?.scrollToIndex({
+              index: hashIndex - 1,
+              align: "start",
+              behavior: "instant"
+            });
+          });
+        }
+      }
+    };
+
+    const timer = setTimeout(handleScrollPosition, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const renderVerse = useCallback((index) => {
+    const verse = currentVerses[index];
+    return (
+      <MemoizedVerseCard
+        key={`${translation}-${verse.verseNo}`}
+        chapterName={chapterName}
+        index={index}
+        chapterNo={chapterNo}
+        chapterSlug={chapterSlug}
+        verse={verse}
+        ayaArabic={verse.arabic}
+        printRef={printRef.current}
+        isVirtualized={true}
+        isLastVerse={index === currentVerses.length - 1}
+        translation={translation}
+      />
+    );
+  }, [chapterName, chapterNo, chapterSlug, currentVerses, translation]);
+
   return (
     <div className={styles.chapter}>
       <div className={styles.chapter_tab} ref={printRef}>
-        {loading && (
-          <Skeleton
-            style={{marginBottom: "24px"}} //
-            count={1}
-            height={49}
-            width={`100%`}
-            className="skeleton"
-          />
-        )}
-
-        {!loading && (
+        {loading ? (
+          <>
+            <Skeleton style={{ marginBottom: "24px" }} count={1} height={49} width={`100%`} className="skeleton" />
+            <Skeleton count={7} height={150} width={`100%`} className="skeleton" />
+            <Skeleton style={{ marginTop: "32px" }} count={1} height={64} width={`100%`} className="skeleton" />
+          </>
+        ) : (
         <>
         <div className={styles.title}>
           {/*<span className={styles.title_icon}><QuranIcon /></span>*/}
           <span className={styles.title_text}>{contentTitle}</span>
+          </div>
           {/* <span className={styles.title_icon}><InfoIcon /></span> */}
 
           {/*{playingThisChapter && (*/}
@@ -316,11 +357,16 @@ export default function ChapterContent({
           {/*        <PlayIcon />*/}
           {/*    </span>*/}
           {/*)}*/}
+            <div className={styles.change_translation}>
           <span className={styles.translation_info}>
             Translation by {getTranslatorName(translation)}{' '}
           <span
                 className={styles.change_link}
-                  onClick={openSettingsModal}
+                  onClick={() => {
+                    document.dispatchEvent(new CustomEvent("openSettings", {
+                      detail: { open: true, expandedSetting: 'translation' },
+                    }));
+                  }}
                 >
                 (Change)
               </span>
@@ -329,37 +375,25 @@ export default function ChapterContent({
 
         {contentType !== "verse" && (
           <div className={styles.bismillah}>
-            <Bismillah />
+            <MemoizedBismillah />
           </div>
         )}
-        </>
-        )}
 
-        {loading && <Skeleton count={7} height={150} width={`100%`} className="skeleton" />}
-
-        {!loading && (
-        <>
         <div className={styles.verses}>
         <Virtuoso
           ref={virtuoso}
           useWindowScroll
           // style={{ height: 300 }} // Adjust height according to your requirement
-          totalCount={verses.length} // Total number of items
-          itemContent={(index) => (
-            <VerseCard
-              key={verses[index].verseNo}
-              chapterName={chapterName}
-              index={index}
-              chapterNo={chapterNo}
-              chapterSlug={chapterSlug}
-              verse={verses[index]}
-              ayaArabic={verses[index].arabic}
-              printRef={printRef.current}
-              isVirtualized={true}
-              isLastVerse={index === verses.length - 1}
-              translation={translation}
-            />
-          )}
+            totalCount={currentVerses?.length || 0}
+            itemContent={renderVerse}
+            overscan={1000}
+            increaseViewportBy={{ top: 500, bottom: 500 }}
+            style={{ 
+              height: '100%',
+              minHeight: 'calc(100vh - 200px)',
+              contain: 'strict',
+              willChange: 'transform'
+            }}
         />
 
           {/* {suraTranslation.result &&
@@ -385,29 +419,15 @@ export default function ChapterContent({
       </div>
 
       {!loading && (
-      <Pagination
+      <MemoizedPagination
         prev={prev}
         next={next}
         contentType={contentType}
         chapterSlug={chapterSlug}
-        verseNo={verses[0].verseNo}
+        verseNo={currentVerses?.[0]?.verseNo}
         translation={translation}
       />
       )}
-
-      {loading && <Skeleton style={{marginTop: "32px"}} count={1} height={64} width={`100%`} className="skeleton" />}
-
-      <Modal
-        open={modalOpen}
-        closer={(open) => (event) => {
-          if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
-            return;
-          }
-          setModalOpen(open);
-        }}
-        title={modalTitle}
-        content={modalContent}
-      />
     </div>
   );
 }

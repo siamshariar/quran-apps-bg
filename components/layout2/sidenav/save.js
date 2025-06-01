@@ -69,36 +69,56 @@ export default function Save({ open, controller }) {
         aria-label="Save tabs"
       >
         <Tab
+          sx={{ textTransform: "capitalize" }}
           classes={{
             root: styles.tab,
             wrapper: styles.tab_wrapper,
-          }}
-          icon={<BookmarkBorderIcon />}
-          label="Bookmarks"
+            selected: styles.tab_selected,
+         }}
+          label={
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <BookmarkBorderIcon style={{ marginRight: "6px" }} />
+              Bookmarks
+            </span>
+          }
           disableRipple
+          iconPosition="start"
           disableFocusRipple
           {...a11yProps(0)}
         />
 
         <Tab
+          sx={{ textTransform: "capitalize" }}
           classes={{
             root: styles.tab,
             wrapper: styles.tab_wrapper,
+            selected: styles.tab_selected,
           }}
-          icon={<PinIcon />}
-          label="Pin"
+          label={
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <PinIcon style={{ marginRight: "6px" }} />
+              Pin
+            </span>
+          }
           disableRipple
+          iconPosition="start"
           disableFocusRipple
           {...a11yProps(1)}
         />
 
         <Tab
+          sx={{ textTransform: "capitalize" }}
           classes={{
             root: styles.tab,
             wrapper: styles.tab_wrapper,
+            selected: styles.tab_selected,
           }}
-          icon={<AutoStoriesIcon />}
-          label="Last Read"
+          label={
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <AutoStoriesIcon style={{ marginRight: "6px" }} />
+              Last Read
+            </span>
+          }
           disableRipple
           disableFocusRipple
           {...a11yProps(2)}

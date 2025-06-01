@@ -168,3 +168,15 @@
 
 	--scrollbar-thumb: #A8A8A8;
 }
+
+:root {
+  --text-primary: #222;
+  --text-secondary: #888;
+  --tab-selected: #222;
+}
+
+.dark {
+  --text-primary: #fff;
+  --text-secondary: #9AA1AD;
+  --tab-selected: #e2e8f0;
+}

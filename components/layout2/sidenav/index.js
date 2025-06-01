@@ -16,6 +16,7 @@ export default function Sidenav({ chapters }) {
 
   const [chapterListOpen, updateChapterListOpen] = useState(false);
   const [settingsOpen, updateSettingsOpen] = useState(false);
+  const [expandedSetting, setExpandedSetting] = useState(null);
   // const [saveOpen, updateSaveOpen] = useState(false);
 
   const refChapters = useRef(null);
@@ -31,6 +32,7 @@ export default function Sidenav({ chapters }) {
       updateChapterListOpen(false);
       updateSettingsOpen(false);
       changeBookmarkOpen(false);
+      setExpandedSetting(null);
     }
   };
 
@@ -39,16 +41,33 @@ export default function Sidenav({ chapters }) {
       updateChapterListOpen(false);
       updateSettingsOpen(false);
       changeBookmarkOpen(false);
+      setExpandedSetting(null);
     }
   };
 
   useEffect(() => {
+    const handleOpenSettings = (event) => {
+      const { open, expandedSetting } = event.detail;
+      if (open) {
+        updateChapterListOpen(false);
+        changeBookmarkOpen(false);
+      }
+      updateSettingsOpen(open);
+      if (expandedSetting) {
+        setExpandedSetting(expandedSetting);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+    document.addEventListener("openSettings", handleOpenSettings);
     document.body.addEventListener("mousedown", handler);
     document.addEventListener("keydown", escapeHandler);
     return () => {
+      document.removeEventListener("openSettings", handleOpenSettings);
       document.body.removeEventListener("mousedown", handler);
       document.removeEventListener("keydown", escapeHandler);
     };
+    }
   }, [refChapters, refSettings, refSave]);
 
   const controlChapterListNav = (open) => (event) => {
@@ -75,8 +94,12 @@ export default function Sidenav({ chapters }) {
     if (open) {
       updateChapterListOpen(false);
       changeBookmarkOpen(false);
+      setExpandedSetting(null);
     }
     updateSettingsOpen(open);
+    if (!open) {
+      setExpandedSetting(null);
+    }
   };
 
   const controlSaveNav = (open) => (event) => {
@@ -110,6 +133,7 @@ export default function Sidenav({ chapters }) {
 
           <ChapterList
             chapterList={chapters}
+            chapter={chapters}
             open={chapterListOpen}
             controller={controlChapterListNav}
           />
@@ -159,7 +183,7 @@ export default function Sidenav({ chapters }) {
             </span>
           </Tooltip>
 
-          <Settings open={settingsOpen} controller={controlSettingsNav} />
+          <Settings open={settingsOpen} controller={controlSettingsNav} expandedSetting={expandedSetting}/>
         </li>
       </ul>
     </div>

@@ -145,6 +145,14 @@ export default function HeaderWeb({
     // }
   };
 
+    const openSettingsWithTranslation = () => {
+      handleClose();
+    const settingsEvent = new CustomEvent("openSettings", {
+      detail: { open: true, expandedSetting: 'translation' },
+    });
+    document.dispatchEvent(settingsEvent);
+  };
+
   return (
     <>
       <div className={`${styles.header} ${styles[page]}`} ref={header}>
@@ -361,9 +369,25 @@ export default function HeaderWeb({
                   </Link>
 
                   {/*TODO: Add Setting for all other pages as well*/}
-                  {!hasSidenav && (
+
+                  {hasSidenav ? (
+                    <MenuItem onClick={openSettingsWithTranslation}>
+                      <a className={styles.link}>
+                        <span className={styles.icon}>
+                          <SettingsIcon />
+                        </span>
+                        <span className={styles.text}>Settings</span>
+                      </a>
+                    </MenuItem>
+                  ) : (
                       <MenuItem
-                          onClick={(e) => handleItem(e, <Settings />, "Settings")}
+                          onClick={(e) =>
+                        handleItem(
+                          e,
+                          <Settings controller={handleModalClose} />,
+                          "Settings"
+                        )
+                      }
                       >
                       <span className={styles.icon}>
                         <SettingsIcon />

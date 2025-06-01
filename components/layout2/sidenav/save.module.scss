@@ -78,17 +78,33 @@
 }
 
 .tab_wrapper {
-  text-transform: capitalize;
-  display: flex !important;
-  flex-direction: row !important;
+  display: flex;
+  align-items: center;
+
+  .MuiTab-iconWrapper {
+    margin-right: 6px;
+  }
 }
 
 .tab span svg {
   width: 24px;
   height: 24px;
   margin-bottom: 0 !important;
-  margin-right: 6px;
+  margin-right: 6px !important;
   fill: var(--txt11);
   left: -2px;
   position: relative;
+  fill: currentColor;
+}
+.tab {
+  color: var(--text-secondary) !important;
+  text-transform: none;
+
+  &.Mui-selected {
+    color: var(--tab-selected) !important;
+  }
+}
+
+.tab_selected {
+  color: var(--tab-selected) !important;
 }

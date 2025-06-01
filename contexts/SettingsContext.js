@@ -1,88 +1,111 @@
-import { useState, useEffect, createContext } from 'react'
-import { useRouter } from 'next/router'
-import { settings as defaultSettings } from '../lib/settings'
+"use client"
+
+import { useState, useEffect, createContext } from "react"
+import { useRouter } from "next/router"
+import { settings as defaultSettings } from "../lib/settings"
 
 export const SettingsContext = createContext()
 
 const SettingsContextProvider = ({ children }) => {
-    // state declare
-    const [settings, setSettings] = useState(defaultSettings)
-    const [isReady, setIsReady] = useState(false)
-    const router = useRouter()
+  const [settings, setSettings] = useState(defaultSettings)
+  const [isReady, setIsReady] = useState(false)
+  const router = useRouter()
 
-    // first render
-    useEffect(() => {
-        const savedSettings = localStorage.getItem('settings')
-        const newSettings = savedSettings === null ? defaultSettings : JSON.parse(savedSettings)
-        initSettings(newSettings)
-        setSettings(newSettings)
-        setIsReady(true)
-    }, [])
+  // Initialize settings on first render
+  useEffect(() => {
+    console.log("Initializing settings...")
+    try {
+      const savedSettings = localStorage.getItem("settings")
+      let newSettings = savedSettings === null ? defaultSettings : JSON.parse(savedSettings)
+
+      // Check if we're on a translation-specific URL and update settings accordingly
+      if (typeof window !== "undefined") {
+        const currentPath = window.location.pathname
+        if (currentPath.startsWith("/vietnamese_rwwad/")) {
+          console.log("Detected vietnamese_rwwad URL, setting translation to vietnamese_rwwad")
+          newSettings = { ...newSettings, translation: "vietnamese_rwwad" }
+          localStorage.setItem("settings", JSON.stringify(newSettings))
+        } else if (currentPath.includes("/subjective/") || currentPath.includes("/chapters/")) {
+          // If we're on a default path, ensure translation is set to default
+          if (newSettings.translation !== "vietnamese_hassan") {
+            console.log("On default URL but settings show non-default translation, keeping settings as is")
+            // Don't change the settings, let the URL update logic handle it
+          }
+        }
+      }
+
+      console.log("Loaded settings:", newSettings)
+      initSettings(newSettings)
+      setSettings(newSettings)
+      setIsReady(true)
+      console.log("Settings initialized with translation:", newSettings.translation)
+    } catch (error) {
+      console.error("Error initializing settings:", error)
+      initSettings(defaultSettings)
+      setSettings(defaultSettings)
+      setIsReady(true)
+    }
+  }, [])
 
     // helper functions
-    const saveToLocalStorage = (settings) => {
-        localStorage.setItem('settings', JSON.stringify(settings))
-    }
+  const saveToLocalStorage = (settings) => {
+    localStorage.setItem("settings", JSON.stringify(settings))
+  }
 
     const initSettings = (settings) => {
         // init theme
         document.body.setAttribute('class', `${process.env.NEXT_PUBLIC_LOCALIZATION_CODE || ''} ${settings.theme}`)
 
-        // init font css
-        const elemsArabic = document.querySelectorAll('.text_arabic')
-        const elemsTrans = document.querySelectorAll('.text_trans')
+    const initFontStyles = () => {
+        const elemsArabic = document.querySelectorAll(".text_arabic")
+        const elemsTrans = document.querySelectorAll(".text_trans")
 
-        for (const elem of elemsArabic) {
-            elem.style.fontSize = settings.fontSize.arabic + 'px'
+      elemsArabic.forEach((elem) => {
+            elem.style.fontSize = settings.fontSize.arabic + "px"
             elem.style.fontFamily = settings.fontFamily.arabic
-        }
-        for (const elem of elemsTrans) {
-            elem.style.fontSize = settings.fontSize.translation + 'px'
+        })
+      elemsTrans.forEach((elem) => {
+            elem.style.fontSize = settings.fontSize.translation + "px"
             elem.style.fontFamily = settings.fontFamily.translation
-        }
+      })
     }
 
-    const changeTranslation = (translation) => {
-        const newSettings = { ...settings, translation }
-        saveToLocalStorage(newSettings)
-        setSettings(newSettings)
+    if (typeof window !== "undefined") {
+      if (document.readyState === "complete") {
+        initFontStyles()
+      } else {
+        window.addEventListener("load", initFontStyles)
+        return () => window.removeEventListener("load", initFontStyles)
+      }
+    }
+  }
 
-        const path = window.location.pathname
+  const changeTranslation = (newTranslation) => {
+    const newSettings = { ...settings, translation: newTranslation }
+    localStorage.setItem("settings", JSON.stringify(newSettings))
+    setSettings(newSettings)
 
-        const chapterMatch = path.match(/(?:\/([^/]+))?\/chapters\/([^/]+)/);
+    if (typeof window !== "undefined") {
+      const path = window.location.pathname
 
-        if (chapterMatch) {
-          const currentTranslation = chapterMatch[1];
-          const slug = chapterMatch[2];
-
-          let newPath = '';
-
-          if (translation === 'vietnamese_hassan') {
-            newPath = `/chapters/${slug}`;
+      if (path.includes("/chapters/")) {
+        const slug = path.split("/chapters/")[1].split("/")[0]
+        const newPath =
+          newTranslation === "vietnamese_hassan" ? `/chapters/${slug}` : `/${newTranslation}/chapters/${slug}`
+        console.log("Updating chapter URL to:", newPath)
+        window.history.replaceState({}, "", newPath)
+      } else if (path.includes("/subjective/") && path.includes("/verses")) {
+        let newPath
+        if (newTranslation === "vietnamese_hassan") {
+          newPath = path.replace(/^\/vietnamese_rwwad/, "")
+        } else {
+          if (path.startsWith("/vietnamese_rwwad")) {
+            newPath = path // Already has prefix
           } else {
-            newPath = `/${translation}/chapters/${slug}`;
+            newPath = `/${newTranslation}${path}`
           }
-
-          router.push(newPath);
-        } else {
-        if (translation === 'vietnamese_hassan') {
-           router.push(`/chapters/1-al-fatihah`)
-        } else {
-        router.push(`/${translation}/chapters/1-al-fatihah`)
         }
-        }
-    }
-
-    const redirectAfterChangeVerseMode = (mode) => {
-      if (typeof window !== 'undefined') {
-        let path = window.location.pathname
-        let parts = path.split("/");
-        let activeVerse = settings.activeVerse;
-        if (parts.length > 3 && parts[1] == "chapters" && mode == "scroll") {
-          router.push(activeVerse == 1 ? `/chapters/${parts[2]}` : `/chapters/${parts[2]}#verse-${activeVerse}`)
-        }
-        else if (parts.length == 3 && parts[1] == "chapters" && mode == "slide") {
-          router.push(`/chapters/${parts[2]}/verses/${activeVerse}`)
+        window.history.replaceState({}, "", newPath)
         }
       }
     }
@@ -203,10 +226,25 @@ const SettingsContextProvider = ({ children }) => {
         redirectAfterChangeVerseMode(defaultSettings.verseMode)
     }
 
+  const redirectAfterChangeVerseMode = (mode) => {
+    if (typeof window !== "undefined") {
+      const path = window.location.pathname
+      const parts = path.split("/")
+      const activeVerse = settings.activeVerse
+
+      if (parts.length > 3 && parts[1] === "chapters" && mode === "scroll") {
+        router.push(activeVerse === 1 ? `/chapters/${parts[2]}` : `/chapters/${parts[2]}#verse-${activeVerse}`)
+      } else if (parts.length === 3 && parts[1] === "chapters" && mode === "slide") {
+        router.push(`/chapters/${parts[2]}/verses/${activeVerse}`)
+      }
+    }
+    }
+
     return (
         <SettingsContext.Provider
             value={{
                 isReady,
+                settings,
                 translation: settings.translation,
                 changeTranslation,
                 view: settings.view,
@@ -231,7 +269,7 @@ const SettingsContextProvider = ({ children }) => {
                 changeNotification,
                 playbackRate: settings.playbackRate || 1,
                 changePlaybackRate,
-                resetSettings
+                resetSettings,
             }}
         >
             { children }

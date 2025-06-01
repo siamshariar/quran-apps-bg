@@ -4,7 +4,7 @@ import Link from 'next/link'
 import styles from './chapter-card.module.scss'
 
 export default function ChapterCard({ chapter, translation }) {
-  const { verseMode } = useContext(SettingsContext)
+  const { verseMode, translation } = useContext(SettingsContext)
 
   // const link = verseMode === "scroll" ? `/chapters/${chapter.slug}` : verseMode === "slide" ? `/chapters/${chapter.slug}/verses/1` : `/chapters/${chapter.slug}`
   const translationPrefix = translation !== "vietnamese_hassan" ? `/${translation}` : ""

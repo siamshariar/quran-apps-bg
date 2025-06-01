@@ -3,7 +3,7 @@ import SettingsContent from '../../settings'
 import CloseIcon from '../../icons/Close'
 import styles from './settings.module.scss'
 
-export default function Settings({ open, controller }) {
+export default function Settings({ open, controller, expandedSetting }) {
 	return (
         <Scrollbar className={open ? `${styles.sidenav} ${styles.open}` : styles.sidenav}>
             <span
@@ -19,7 +19,7 @@ export default function Settings({ open, controller }) {
             </div>
 
             <div className={styles.content}>
-                <SettingsContent />
+                <SettingsContent defaultExpanded={expandedSetting}/>
             </div>
 		</Scrollbar>
 	)

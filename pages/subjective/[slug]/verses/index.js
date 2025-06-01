@@ -3,13 +3,14 @@ import {
   getChaptersInfo,
   getAllSubjectives,
   getSubjectiveVersesBySlug,
+  getSubjectiveVersesByTranslation,
 } from "../../../../lib/fetch";
 import Layout from "../../../../components/layouts/layout-subjective";
 import Meta from "../../../../components/core/meta";
 import SubjectiveVerses from "../../../../components/subjective/verses";
 
-export default function Subjective({ slug, chapters, subjective, loading }) {
-  const name = subjective.title;
+export default function Subjective({ slug, chapters, subjective, allTranslations, loading }) {
+  const name = subjective?.title || "Loading..."
 
   return (
     <>
@@ -23,9 +24,11 @@ export default function Subjective({ slug, chapters, subjective, loading }) {
 
       <SubjectiveVerses
         contentTitle={name}
-        verses={subjective.verses}
+        verses={subjective?.verses || []}
+        allTranslations={allTranslations}
         chapters={chapters}
         loading={loading}
+        initialTranslation="vietnamese_hassan"
       />
     </>
   );
@@ -36,9 +39,10 @@ Subjective.getLayout = function getLayout(page) {
 };
 
 export async function getStaticProps(context) {
-  const slug = encodeURI(context.params.slug);
-  const chaptersInfo = await getChaptersInfo();
-  const subjective = await getSubjectiveVersesBySlug(slug);
+  try {
+  const slug = encodeURI(context.params.slug)
+
+    const [chaptersInfo, subjective] = await Promise.all([getChaptersInfo(), getSubjectiveVersesBySlug(slug)])
 
   if (!subjective) {
     return {
@@ -46,32 +50,59 @@ export async function getStaticProps(context) {
     };
   }
 
+    const verseIds =
+      subjective.verses?.map((verse) => {
+        return `${verse.chapter?.chapterNo || verse.chapterNo}:${verse.verseNo}`
+      }) || []
+
+    const [hassanTranslation, rwwadTranslation] = await Promise.all([
+      verseIds.length > 0 ? getSubjectiveVersesByTranslation(verseIds, "vietnamese_hassan") : [],
+      verseIds.length > 0 ? getSubjectiveVersesByTranslation(verseIds, "vietnamese_rwwad") : [],
+    ])
+
+    const finalHassanTranslation = hassanTranslation?.length > 0 ? hassanTranslation : subjective.verses || []
+    const finalRwwadTranslation = rwwadTranslation?.length > 0 ? rwwadTranslation : subjective.verses || []
+
   return {
     props: {
       slug: slug,
       chapters: chaptersInfo,
       subjective,
+      allTranslations: {
+        vietnamese_hassan: finalHassanTranslation,
+        vietnamese_rwwad: finalRwwadTranslation,
+      },
       title: subjective.title,
       backLink: "/subjective",
       mode: "verse",
       key: slug,
-    },
-    revalidate: 60,
+      loading: false, 
+      },
+      revalidate: 60,
+    }
+  } catch (error) {
+    return {
+      notFound: true,
+    }
   };
 }
 
 export async function getStaticPaths() {
-  const subjectives = await getAllSubjectives();
-  let paths = [];
-
-  subjectives.map((subjective) => {
-    let slug = encodeURI(subjective.slug);
-    let obj = { params: { slug: slug } };
-    paths.push(obj);
-  });
+  try {
+    const subjectives = await getAllSubjectives()
+    const paths =
+  subjectives?.map((subjective) => ({
+    params: { slug: encodeURI(subjective.slug) },
+      })) || []
 
   return {
-    paths: paths,
+      paths,
+      fallback: "blocking", 
+    }
+  } catch (error) {
+    return {
+    paths: [],
     fallback: "blocking",
+    }
   };
 }

@@ -82,6 +82,19 @@
   }
 }
 
+.change_translation{
+  display: flex;
+  width: 100%;
+  margin-bottom: 40px;
+}
+.verse {
+  contain: content;
+  will-change: transform;
+}
+.text_arabic, .text_trans {
+  backface-visibility: hidden;
+}
+
 
 @media only screen and (min-width: 1024px) {
   .content {
@@ -188,4 +201,18 @@
   }
   .print_footer span:nth-child(1) {}
   .print_footer span:nth-child(2) {}
+}
+
+.chapter {
+  contain: content;
+  will-change: transform;
+}
+
+.chapter_tab {
+  transition: opacity 0.2s ease;
+}
+
+.verses {
+  contain: content;
+  will-change: transform;
 }

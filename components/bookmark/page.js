@@ -10,8 +10,15 @@ import VerseCard from "../surah/verse-card";
 // import PauseIcon from "../icons/Pause";
 // import Bismillah from "../icons/Bismillah";
 import Skeleton from "react-loading-skeleton";
-import 'react-loading-skeleton/dist/skeleton.css';
 import styles from "../layout2/surah/content.module.scss";
+
+const getTranslatorName = (translationCode) => {
+  const translationMap = {
+    vietnamese_hassan: "Hasan Abdul-Karim",
+    vietnamese_rwwad: "Ruwwad Translation Center",
+  };
+  return translationMap[translationCode] || translationCode;
+};
 
 export default function BookmarkContent({
   chapters,
@@ -20,17 +27,30 @@ export default function BookmarkContent({
   exist,
   isBookmarkPage,
   updateBookmarksData,
+  loading,
 }) {
   const { bookmarks } = useContext(BookmarkContext);
-  const { translation: currentTranslation } = useContext(SettingsContext);
+  const { translation } = useContext(SettingsContext);
   const {
-    setPlaylist, //
+    setPlaylist,
     setChapterMp3Url,
     playing,
     play,
     pause,
     audioType,
   } = useContext(AudioPlayerContext);
+
+  useEffect(() => {
+    if (!data) return;
+
+    const versesData = data.map((verse) => ({
+      ...verse,
+      translation: verse.translations?.[translation] || verse.translation,
+    }));
+
+    const filtered = versesData.map((verse) => verse.mp3Url);
+    setPlaylist(filtered);
+  }, [data, translation]);
 
   useEffect(() => {
     if (data) {
@@ -54,6 +74,13 @@ export default function BookmarkContent({
     pause();
   };
 
+  const openSettingsWithTranslation = () => {
+    const settingsEvent = new CustomEvent("openSettings", {
+      detail: { open: true, expandedSetting: "translation" },
+    });
+    document.dispatchEvent(settingsEvent);
+  };
+
   return (
     <div className={styles.content}>
       <Sidenav chapters={chapters} />
@@ -62,13 +89,46 @@ export default function BookmarkContent({
         <div className={styles.chapter_tab}>
           <div className={styles.title}>
             {name && <span className={styles.title_text}>{name}</span>}
-            {name === null && <Skeleton height={29} width={`100%`} className="skeleton" />}
           </div>
 
-          {data && (
+          <div className={styles.change_translation}>
+            <span className={styles.translation_info}>
+              Translation by {getTranslatorName(translation)}{" "}
+              <span
+                className={styles.change_link}
+                onClick={openSettingsWithTranslation}
+              >
+                (Change)
+              </span>
+            </span>
+          </div>
+
+          {loading ? (
+            <>
+              <Skeleton
+                style={{ marginBottom: "24px" }}
+                count={1}
+                height={49}
+                width="100%"
+                className="skeleton"
+              />
+              <Skeleton
+                count={7}
+                height={150}
+                width="100%"
+                className="skeleton"
+              />
+              <Skeleton
+                style={{ marginTop: "32px" }}
+                count={1}
+                height={64}
+                width="100%"
+                className="skeleton"
+              />
+            </>
+          ) : data && data.length > 0 ? (
             <div className={styles.verses}>
-              {data.length > 0 &&
-                data.map((verse, index) => (
+              {data.map((verse, index) => (
                   <VerseCard
                     key={index}
                     chapterName={verse.chapter.name}
@@ -78,23 +138,31 @@ export default function BookmarkContent({
                     verse={{
                       verseNo: verse.verseNo,
                       arabic: verse.arabic,
-                      translation: verse.translation,
-                      footnote: verse.footnote,
+                      translation: verse.translations?.[translation] || verse.translation,
+                      footnote:
+                        translation === "vietnamese_hassan"
+                          ? verse.footnote
+                          : undefined,
                       mp3Url: verse.mp3Url,
+                      translations: verse.translations,
                     }}
                     ayaArabic={verse.arabic}
                     updateBookmarksData={updateBookmarksData}
                     isBookmarkPage={isBookmarkPage}
+                    translation={translation}
                   />
                 ))}
             </div>
-          )}
-
-          {!data && !exist && (
+          ) : !data && !exist ? (
             <div className={styles.no_record}>No records found!</div>
+          ) : (
+            <Skeleton
+              height={150}
+              width="100%"
+              count={2}
+              className="skeleton"
+            />
           )}
-
-          {!data && exist && <Skeleton height={150} width={`100%`} count={2} className="skeleton" />}
         </div>
       </div>
     </div>

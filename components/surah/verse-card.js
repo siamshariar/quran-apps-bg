@@ -11,18 +11,66 @@ import UpIcon from '../icons/ChevronUp'
 import DownIcon from '../icons/ChevronDown'
 import styles from './verse-card.module.scss'
 
-export default function VerseCard({ index, chapterNo, chapterName, chapterSlug, verse, ayaArabic, printRef, updateBookmarksData, isBookmarkPage, isVirtualized, isLastVerse }) {
+export default function VerseCard({
+  index,
+  chapterNo,
+  chapterName,
+  chapterSlug,
+  verse,
+  ayaArabic,
+  printRef,
+  updateBookmarksData,
+  isBookmarkPage,
+  isVirtualized,
+  isLastVerse,
+  translation
+}) {
     const { view, changeActiveVerse } = useContext(SettingsContext)
     const [expanded, setExpanded] = useState(true)
+  const [displayTranslation, setDisplayTranslation] = useState(verse.translation)
+  const translationRef = useRef(null)
+  const prevTranslation = useRef(translation)
+  const refTarget = useRef()
+  const isTargetVisible = useOnScreen(refTarget)
+  const { addLastRead } = useContext(PinContext)
+
+  useEffect(() => {
+    if (isTargetVisible) {
+      addLastRead(chapterNo, chapterName, chapterSlug, verse.verseNo)
+      changeActiveVerse(verse.verseNo)
+    }
+  }, [isTargetVisible])
+
+  useEffect(() => {
+    if (prevTranslation.current !== translation) {
+
+      if (translationRef.current) {
+        translationRef.current.style.opacity = '0'
+      }
+      
+      const timer = setTimeout(() => {
+        setDisplayTranslation(verse.translation)
+        if (translationRef.current) {
+          translationRef.current.style.opacity = '1'
+        }
+      }, 150)
+      
+      prevTranslation.current = translation
+      return () => clearTimeout(timer)
+    }
+  }, [translation, verse.translation])
 
     const controlAccordion = () => {
         setExpanded(!expanded)
     }
 
     // last read option
-    const refTarget = useRef();
-    const isTargetVisible = useOnScreen(refTarget);
-    const { addLastRead } = useContext(PinContext);
+    
+  const shouldShowFootnote =
+    translation === "vietnamese_hassan" &&
+    view.tafseer &&
+    verse.footnote &&
+    verse.footnote !== "";
 
     useEffect(() => {
       if (isTargetVisible) {
@@ -61,20 +109,25 @@ export default function VerseCard({ index, chapterNo, chapterName, chapterSlug, 
               <hr className={styles.separator} />
             )}
 
-            <div className={view.translation ? styles.verse_arabic : styles.verse_arabic_display_none}>
+            <div 
+                ref={translationRef}
+                className={view.translation ? styles.verse_arabic : styles.verse_arabic_display_none}
+                style={{ transition: 'opacity 0.15s ease' }}
+              >
                 <div className={`${styles.verse_text} text_trans`}>
-                    {verse.translation}
+                    {displayTranslation}
                 </div>
             </div>
 
-            {(view.arabic || view.translation) && (view.tafseer && verse.footnote !== "") && (
+            {(view.arabic || view.translation) && shouldShowFootnote && (
               <hr className={styles.separator} />
             )}
 
+            {shouldShowFootnote && (
             <Accordion
-                className={view.tafseer && verse.footnote !== "" ? styles.accordion : styles.accordion_display_none}
+                className={styles.accordion}
                 expanded={expanded}
-                onChange={() => controlAccordion()}
+                onChange={controlAccordion}
             >
                 <AccordionSummary className={styles.accordion_summary}>
                     <div className={styles.summary_text}>Footnotes</div>
@@ -91,11 +144,20 @@ export default function VerseCard({ index, chapterNo, chapterName, chapterSlug, 
                 </AccordionSummary>
 
                 <AccordionDetails className={styles.accordion_details}>
+            {Array.isArray(verse.footnote) ? (
+              verse.footnote.map((fn, i) => (
+                <p key={i} className={`${styles.verse_text} text_trans`}>
+                  {fn}
+                </p>
+              ))
+            ) : (
                     <p className={`${styles.verse_text} text_trans`}>
                         {verse.footnote}
                     </p>
+            )}
                 </AccordionDetails>
             </Accordion>
+        )}
         </div>
     )
 }

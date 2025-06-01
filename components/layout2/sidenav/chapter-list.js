@@ -6,16 +6,20 @@ import CloseIcon from '../../icons/Close'
 import SearchIcon from '../../icons/Search'
 import styles from './chapter-list.module.scss'
 
-export default function ChapterList({ chapterList, open, controller }) {
-  const { verseMode } = useContext(SettingsContext)
+export default function ChapterList({ chapterList, open, controller, chapter }) {
+  const { verseMode, translation } = useContext(SettingsContext)
 
-	const [chapters, setChapters] = useState(chapterList)
+  const [chapters, setChapters] = useState(chapterList || [])
+  
 	const filterChapters = search => {
-		const filtered = chapterList.filter(chapter => {
-			return (chapter.name.toLowerCase().includes(search.toLowerCase()) || chapter.chapterNo.toString().includes(search))
-		})
-		setChapters(filtered)
-	}
+
+    if (!chapterList) return;
+    const filtered = chapterList.filter(chapter => {
+      return (chapter.name.toLowerCase().includes(search.toLowerCase()) || 
+             chapter.chapterNo.toString().includes(search))
+    })
+    setChapters(filtered)
+  }
 
     const input = useRef(null)
     const [searchOpen, setSearchOpen] = useState(false)
@@ -28,10 +32,15 @@ export default function ChapterList({ chapterList, open, controller }) {
             input.current.focus()
         }
         else {
-            setChapters(chapterList)
+            setChapters(chapterList || [])
             input.current.value = ''
         }
 		setSearchOpen(open)
+	}
+  const getChapterLink = (chapterSlug) => {
+    return translation === 'vietnamese_rwwad' 
+      ? `/vietnamese_rwwad/chapters/${chapterSlug}`
+      : `/chapters/${chapterSlug}`
 	}
 
 	return (
@@ -78,7 +87,7 @@ export default function ChapterList({ chapterList, open, controller }) {
                     <Link
                         key={chapter.chapterNo}
                         // href={verseMode === "scroll" ? `/chapters/${chapter.slug}` : verseMode === "slide" ? `/chapters/${chapter.slug}/verses/1` : `/chapters/${chapter.slug}`}
-                        href={`/chapters/${chapter.slug}`}
+                        href={getChapterLink(chapter.slug)}
                     legacyBehavior>
                         <a
                             className={styles.list}
