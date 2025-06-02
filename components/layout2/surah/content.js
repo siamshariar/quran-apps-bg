@@ -364,7 +364,7 @@ export default function ChapterContent({
                 className={styles.change_link}
                   onClick={() => {
                     document.dispatchEvent(new CustomEvent("openSettings", {
-                      detail: { open: true, expandedSetting: 'translation' },
+                      detail: { open: true },
                     }));
                   }}
                 >

@@ -108,7 +108,7 @@ export async function getStaticProps(context) {
           vietnamese_rwwad: finalRwwadTranslation,
         },
         title: subjective.title,
-        backLink: "/subjective",
+        backLink: "/vietnamese_rwwad/subjective",
         mode: "verse",
         key: slug,
         loading: false, // Set to false since data is loaded at build time

@@ -148,9 +148,16 @@ export default function HeaderWeb({
     const openSettingsWithTranslation = () => {
       handleClose();
     const settingsEvent = new CustomEvent("openSettings", {
-      detail: { open: true, expandedSetting: 'translation' },
+      detail: { open: true },
     });
     document.dispatchEvent(settingsEvent);
+  };
+
+  const openSettingsWithHomeTranslation = () => {
+    handleClose();
+    setModalTitle("Settings");
+    setModalContent(<Settings controller={handleModalClose} defaultExpanded="translation" />);
+    setModalOpen(true);
   };
 
   return (
@@ -380,15 +387,7 @@ export default function HeaderWeb({
                       </a>
                     </MenuItem>
                   ) : (
-                      <MenuItem
-                          onClick={(e) =>
-                        handleItem(
-                          e,
-                          <Settings controller={handleModalClose} />,
-                          "Settings"
-                        )
-                      }
-                      >
+                      <MenuItem onClick={openSettingsWithHomeTranslation}>
                       <span className={styles.icon}>
                         <SettingsIcon />
                       </span>

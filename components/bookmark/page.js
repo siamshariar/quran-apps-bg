@@ -76,7 +76,7 @@ export default function BookmarkContent({
 
   const openSettingsWithTranslation = () => {
     const settingsEvent = new CustomEvent("openSettings", {
-      detail: { open: true, expandedSetting: "translation" },
+      detail: { open: true },
     });
     document.dispatchEvent(settingsEvent);
   };

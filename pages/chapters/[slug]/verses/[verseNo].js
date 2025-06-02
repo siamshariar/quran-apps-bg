@@ -22,7 +22,7 @@ export default function Verse({
       <Meta
         title={`Chapter ${chapterName} : Verse ${verses[0].verseNo} | ${config?.metaTitle}`}
         description={`${verses[0].translation} | ${config?.metaDescription}`}
-        url={`${server}/${translation}/chapters/${chapterSlug}/verses/${verses[0].verseNo}`}
+        url={`${server}/chapters/${chapterSlug}/verses/${verses[0].verseNo}`}
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />

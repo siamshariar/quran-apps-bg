@@ -21,16 +21,12 @@ const SettingsContextProvider = ({ children }) => {
       // Check if we're on a translation-specific URL and update settings accordingly
       if (typeof window !== "undefined") {
         const currentPath = window.location.pathname
-        if (currentPath.startsWith("/vietnamese_rwwad/")) {
-          console.log("Detected vietnamese_rwwad URL, setting translation to vietnamese_rwwad")
+        if (currentPath.startsWith("/vietnamese_rwwad/subjective/")) {
           newSettings = { ...newSettings, translation: "vietnamese_rwwad" }
           localStorage.setItem("settings", JSON.stringify(newSettings))
-        } else if (currentPath.includes("/subjective/") || currentPath.includes("/chapters/")) {
-          // If we're on a default path, ensure translation is set to default
-          if (newSettings.translation !== "vietnamese_hassan") {
-            console.log("On default URL but settings show non-default translation, keeping settings as is")
-            // Don't change the settings, let the URL update logic handle it
-          }
+        } else if (currentPath.includes("/subjective/")) {
+          newSettings = { ...newSettings, translation: "vietnamese_hassan" }
+          localStorage.setItem("settings", JSON.stringify(newSettings))
         }
       }
 
@@ -46,6 +42,58 @@ const SettingsContextProvider = ({ children }) => {
       setIsReady(true)
     }
   }, [])
+
+  useEffect(() => {
+    if (isReady && typeof window !== "undefined") {
+      const handlePopState = () => {
+        const currentPath = window.location.pathname
+
+        if (currentPath.includes("/subjective/")) {
+          let newTranslation = settings.translation
+
+          if (currentPath.startsWith("/vietnamese_rwwad/subjective/")) {
+            newTranslation = "vietnamese_rwwad"
+          } else if (currentPath.includes("/subjective/")) {
+            newTranslation = "vietnamese_hassan"
+          }
+
+          if (newTranslation !== settings.translation) {
+            console.log("Subjective URL changed, updating translation to:", newTranslation)
+            const newSettings = { ...settings, translation: newTranslation }
+            localStorage.setItem("settings", JSON.stringify(newSettings))
+            setSettings(newSettings)
+          }
+        }
+      }
+
+      window.addEventListener("popstate", handlePopState)
+
+      const checkCurrentPath = () => {
+        const currentPath = window.location.pathname
+
+        if (currentPath.includes("/subjective/")) {
+          let expectedTranslation = "vietnamese_hassan"
+
+          if (currentPath.startsWith("/vietnamese_rwwad/subjective/")) {
+            expectedTranslation = "vietnamese_rwwad"
+          }
+
+          if (expectedTranslation !== settings.translation) {
+            console.log("Subjective path changed, updating translation to:", expectedTranslation)
+            const newSettings = { ...settings, translation: expectedTranslation }
+            localStorage.setItem("settings", JSON.stringify(newSettings))
+            setSettings(newSettings)
+          }
+        }
+      }
+
+      checkCurrentPath()
+
+      return () => {
+        window.removeEventListener("popstate", handlePopState)
+      }
+    }
+  }, [isReady])
 
     // helper functions
   const saveToLocalStorage = (settings) => {
@@ -89,22 +137,33 @@ const SettingsContextProvider = ({ children }) => {
       const path = window.location.pathname
 
       if (path.includes("/chapters/")) {
-        const slug = path.split("/chapters/")[1].split("/")[0]
+        let remainingPath
+        if (path.startsWith("/vietnamese_rwwad/chapters/")) {
+          remainingPath = path.replace("/vietnamese_rwwad/chapters/", "")
+        } else {
+          remainingPath = path.replace("/chapters/", "")
+        }
+
         const newPath =
-          newTranslation === "vietnamese_hassan" ? `/chapters/${slug}` : `/${newTranslation}/chapters/${slug}`
+          newTranslation === "vietnamese_hassan"
+            ? `/chapters/${remainingPath}`
+            : `/vietnamese_rwwad/chapters/${remainingPath}`
+
         console.log("Updating chapter URL to:", newPath)
         window.history.replaceState({}, "", newPath)
-      } else if (path.includes("/subjective/") && path.includes("/verses")) {
-        let newPath
-        if (newTranslation === "vietnamese_hassan") {
-          newPath = path.replace(/^\/vietnamese_rwwad/, "")
+      } else if (path.includes("/subjective/")) {
+        let remainingPath
+        if (path.startsWith("/vietnamese_rwwad/subjective/")) {
+          remainingPath = path.replace("/vietnamese_rwwad/subjective/", "")
         } else {
-          if (path.startsWith("/vietnamese_rwwad")) {
-            newPath = path // Already has prefix
-          } else {
-            newPath = `/${newTranslation}${path}`
-          }
+          remainingPath = path.replace("/subjective/", "")
         }
+
+        const newPath =
+          newTranslation === "vietnamese_hassan"
+            ? `/subjective/${remainingPath}`
+            : `/vietnamese_rwwad/subjective/${remainingPath}`
+
         window.history.replaceState({}, "", newPath)
         }
       }

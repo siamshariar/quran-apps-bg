@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import Modal from '@mui/material/Modal';
 import Backdrop from '@mui/material/Backdrop';
 import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import Fade from '@mui/material/Fade'
 // import Loader from '../core/loader'
@@ -79,7 +80,7 @@ export default function GoToVerse({ open, controller, chapters }) {
                         <div className={styles.content}>
 
                             <div className={styles.item}>
-                              {chapters &&
+                              {chapters && (
                                 <Select
                                     className={styles.inner}
                                     value={chapterNumber}
@@ -91,17 +92,18 @@ export default function GoToVerse({ open, controller, chapters }) {
                                         getContentAnchorEl: null,
                                     }}
                                 >
-                                {chapters && chapters.map(chapter =>
-                                    <li key={chapter.chapterNo} value={chapter.chapterNo}>
+                                {chapters.map(chapter => (
+                                  <MenuItem 
+                                    key={chapter.chapterNo} 
+                                    value={chapter.chapterNo}>
                                         {chapter.chapterNo}. {chapter.name}
-                                    </li>
+                                    </MenuItem>
+                                ))}
+                                  </Select>
                                 )}
-                                </Select>
-                                }
                             </div>
 
                             <div className={styles.item}>
-                            {chapters &&
                                 <Select
                                     className={styles.inner}
                                     value={verseNumber}
@@ -113,10 +115,12 @@ export default function GoToVerse({ open, controller, chapters }) {
                                         getContentAnchorEl: null,
                                     }}
                                 >
-                                {verseNumberList}
-
+                                    {Array.from({ length: numberOfVerses }, (_, i) => (
+                                        <MenuItem key={i + 1} value={i + 1}>
+                                            Verse {i + 1}
+                                        </MenuItem>
+                                    ))}
                                 </Select>
-                            }
                             </div>
 
                             <Button

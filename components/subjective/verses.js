@@ -99,15 +99,15 @@ export default function SubjectiveVerses({
 
       let expectedPath
       if (translation === "vietnamese_hassan") {
-        expectedPath = currentPath.replace(/^\/vietnamese_rwwad/, "")
-      } else {
         if (currentPath.startsWith("/vietnamese_rwwad")) {
-          expectedPath = currentPath 
-        } else {
-          expectedPath = `/${translation}${currentPath}`
+          expectedPath = currentPath.replace(/^\/vietnamese_rwwad/, "")
+        }
+      } else if (translation === "vietnamese_rwwad") {
+        if (!currentPath.startsWith("/vietnamese_rwwad")) {
+          expectedPath = `/vietnamese_rwwad${currentPath}`
         }
       }
-      if (expectedPath !== currentPath && router.asPath === router.route) {
+      if (expectedPath && expectedPath !== currentPath) {
         console.log("Translation changed by user, updating URL from", currentPath, "to", expectedPath)
         window.history.replaceState({}, "", expectedPath)
       }
@@ -116,7 +116,7 @@ export default function SubjectiveVerses({
 
   const openSettingsWithTranslation = () => {
     const settingsEvent = new CustomEvent("openSettings", {
-      detail: { open: true, expandedSetting: "translation" },
+      detail: { open: true },
     })
     document.dispatchEvent(settingsEvent)
   }
