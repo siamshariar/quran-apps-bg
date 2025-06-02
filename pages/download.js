@@ -3,6 +3,7 @@ import { getChaptersInfo } from "../lib/fetch";
 import Layout from "../components/layouts/layout-content";
 import Meta from "../components/core/meta";
 import DownloadContent from "../components/pages/download";
+import { t } from "../lib/config";
 
 export default function DownloadPage({ chapters, pageTitle }) {
   return (
@@ -34,11 +35,11 @@ export async function getStaticProps(context) {
   }
 
   // Pass data to the page via props
-  return {
-    props: {
-      chapters,
-      pageTitle: "Download audio and pdf",
-      bgColor: "secondary",
-    },
-  };
+return {
+  props: {
+    chapters,
+    pageTitle: t('Download audio and pdf'),
+    bgColor: 'secondary',
+  },
+};
 }

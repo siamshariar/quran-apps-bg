@@ -14,6 +14,7 @@ import Bismillah from "../../icons/Bismillah";
 import styles from "./content.module.scss";
 import { config } from "../../../lib/config";
 import { SettingsContext } from '../../../contexts/SettingsContext'
+import { t } from "../../../lib/config";
 // import useLoader from "../../../hooks/useLoader";
 const MemoizedVerseCard = memo(VerseCard);
 const MemoizedBismillah = memo(Bismillah);
@@ -359,7 +360,7 @@ export default function ChapterContent({
           {/*)}*/}
             <div className={styles.change_translation}>
           <span className={styles.translation_info}>
-            Translation by {getTranslatorName(translation)}{' '}
+            {t('Translation by')} {getTranslatorName(translation)}{' '}
           <span
                 className={styles.change_link}
                   onClick={() => {
@@ -368,7 +369,7 @@ export default function ChapterContent({
                     }));
                   }}
                 >
-                (Change)
+                ({t('Change')})
               </span>
           </span>
         </div>

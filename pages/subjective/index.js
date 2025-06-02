@@ -3,12 +3,13 @@ import { getChaptersInfo, getSubjectives } from "../../lib/fetch";
 import Layout from "../../components/layouts/layout-subjective";
 import Meta from "../../components/core/meta";
 import SubjectiveList from "../../components/subjective/list";
+import { t } from "../../lib/config";
 
 export default function Subjective({ chapters, subjectives, loading }) {
   return (
     <>
       <Meta
-        title={`Subjective | ${config?.metaTitle}`}
+        title={`${t('Subjective')} | ${config?.metaTitle}`}
         description={`Subjective form the holy Quran | ${config?.metaDescription}`}
         url={`${server}/subjective`}
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
@@ -18,7 +19,7 @@ export default function Subjective({ chapters, subjectives, loading }) {
       <SubjectiveList
         chapters={chapters}
         subjectives={subjectives}
-        contentTitle="Subjective"
+        contentTitle={t('Subjective')}
         loading={loading}
       />
     </>

@@ -34,7 +34,7 @@ import Settings from "../../settings";
 import BookmarkList from "../../bookmark/list";
 import PinList from "../../pin/list";
 import LastReadList from "../../last-read/list";
-import { config } from "../../../lib/config";
+import { config, t  } from "../../../lib/config";
 
 export default function HeaderWeb({
   page,
@@ -241,7 +241,7 @@ export default function HeaderWeb({
                     <span className={styles.icon}>
                       <NearMeIcon />
                     </span>
-                    <span className={styles.text}>Go To Verse</span>
+                    <span className={styles.text}>{t('Go To Verse')}</span>
                   </MenuItem>
 
                   {/*{!hasSidenav && (*/}
@@ -270,7 +270,7 @@ export default function HeaderWeb({
                         <span className={styles.icon}>
                           <BookmarkBorderIcon />
                         </span>
-                        <span className={styles.text}>Bookmarks</span>
+                        <span className={styles.text}>{t('Bookmarks')}</span>
                       </a>
                     </MenuItem>
                   ) : (
@@ -286,7 +286,7 @@ export default function HeaderWeb({
                       <span className={styles.icon}>
                         <BookmarkBorderIcon />
                       </span>
-                      <span className={styles.text}>Bookmarks</span>
+                      <span className={styles.text}>{t('Bookmarks')}</span>
                     </MenuItem>
                   )}
 
@@ -296,7 +296,7 @@ export default function HeaderWeb({
                         <span className={styles.icon}>
                           <PinOutlineIcon />
                         </span>
-                        <span className={styles.text}>Pin</span>
+                        <span className={styles.text}>{t('Pin')}</span>
                       </a>
                     </MenuItem>
                   ) : (
@@ -312,7 +312,7 @@ export default function HeaderWeb({
                       <span className={styles.icon}>
                         <PinOutlineIcon />
                       </span>
-                      <span className={styles.text}>Pin</span>
+                      <span className={styles.text}>{t('Pin')}</span>
                     </MenuItem>
                   )}
 
@@ -322,7 +322,7 @@ export default function HeaderWeb({
                         <span className={styles.icon}>
                           <AutoStoriesIcon />
                         </span>
-                        <span className={styles.text}>Last Read</span>
+                        <span className={styles.text}>{t('Last Read')}</span>
                       </a>
                     </MenuItem>
                   ) : (
@@ -338,7 +338,7 @@ export default function HeaderWeb({
                       <span className={styles.icon}>
                         <AutoStoriesIcon />
                       </span>
-                      <span className={styles.text}>Last Read</span>
+                      <span className={styles.text}>{t('Last Read')}</span>
                     </MenuItem>
                   )}
 
@@ -348,7 +348,7 @@ export default function HeaderWeb({
                         <span className={styles.icon}>
                           <SubtitlesIcon />
                         </span>
-                        <span className={styles.text}>Subjective</span>
+                        <span className={styles.text}>{t('Subjective')}</span>
                       </a>
                     </MenuItem>
                   </Link>
@@ -359,7 +359,7 @@ export default function HeaderWeb({
                         <span className={styles.icon}>
                           <DownloadIcon />
                         </span>
-                        <span className={styles.text}>Download</span>
+                        <span className={styles.text}>{t('Download')}</span>
                       </a>
                     </MenuItem>
                   </Link>
@@ -370,24 +370,23 @@ export default function HeaderWeb({
                         <span className={styles.icon}>
                           <Names99Icon />
                         </span>
-                        <span className={styles.text}>Names of Allah</span>
+                        <span className={styles.text}>{t('Names of Allah')}</span>
                       </a>
                     </MenuItem>
                   </Link>
 
                   {/*TODO: Add Setting for all other pages as well*/}
-
-                  {hasSidenav ? (
+                 {hasSidenav ? (
                     <MenuItem onClick={openSettingsWithTranslation}>
                       <a className={styles.link}>
                         <span className={styles.icon}>
                           <SettingsIcon />
                         </span>
-                        <span className={styles.text}>Settings</span>
+                        <span className={styles.text}>{t('Settings')}</span>
                       </a>
                     </MenuItem>
                   ) : (
-                      <MenuItem onClick={openSettingsWithHomeTranslation}>
+                     <MenuItem onClick={openSettingsWithHomeTranslation}>
                       <span className={styles.icon}>
                         <SettingsIcon />
                       </span>
@@ -403,7 +402,7 @@ export default function HeaderWeb({
                         <span className={styles.icon}>
                           <InstallAppIcon />
                         </span>
-                        <span className={styles.text}>Install App</span>
+                        <span className={styles.text}>{t('Install App')}</span>
                       </a>
                     </MenuItem>
                   </Link>
@@ -414,7 +413,7 @@ export default function HeaderWeb({
                         <span className={styles.icon}>
                           <InfoIcon />
                         </span>
-                        <span className={styles.text}>About</span>
+                        <span className={styles.text}>{t('About')}</span>
                       </a>
                     </MenuItem>
                   </Link>
@@ -425,7 +424,7 @@ export default function HeaderWeb({
                         <span className={styles.icon}>
                           <DonateIcon />
                         </span>
-                        <span className={styles.text}>Donate</span>
+                        <span className={styles.text}>{t('Donate')}</span>
                       </a>
                     </MenuItem>
                   </a>

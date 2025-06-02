@@ -1,8 +1,9 @@
 import { useState, useEffect, createContext } from "react";
+import { t } from "../lib/config";
 
 var defaultBookmarks = {
   favorites: {
-    name: "Favorites",
+    name: t('Favorites'),
     entry: [],
   },
 };

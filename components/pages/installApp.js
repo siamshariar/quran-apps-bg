@@ -1,17 +1,17 @@
 import css from './style.module.scss'
 import styles from './about.module.scss'
-import {config} from "../../lib/config";
+import {config, t} from "../../lib/config";
 import Grid from "@mui/material/Grid";
 
 export default function InstallAppContent() {
     return (
         <div className={css.wrapper}>
-            <div className={css.page_title}>Install App</div>
+            <div className={css.page_title}>{t('Install App')}</div>
 
             <div className={css.page_item}>
                 <div className={styles.quran_content}>
                     <p>
-                        App installation process for <a className={styles.mobile_app_link} href="#android">Android</a> & <a className={styles.mobile_app_link} href="#iphone">iPhone</a>.
+                        {t('App installation process for')} <a className={styles.mobile_app_link} href="#android">Android</a> & <a className={styles.mobile_app_link} href="#iphone">iPhone</a>.
                     </p>
 
                     <div id="android" className={styles.mobile_app_title}>
@@ -20,8 +20,8 @@ export default function InstallAppContent() {
                     <div className={styles.mobile_app_des}>
                         <div>
                             <p>
-                                1. Open Google Chrome browser and visit <span style={{fontWeight: `bold`}}>www.{config.domain}</span>.
-                                Click on top-right "three dots" icon. (If you see popup "Add {config.domain} to Home Screen" then click on it.)
+                                1. {t('Open Google Chrome browser and visit')} <span style={{fontWeight: `bold`}}>www.{config.domain}. </span>
+                                {t('Click on top-right "three dots" icon. (If you see popup "Add')} {config.domain} {t('to Home Screen" then click on it.')}
                             </p>
                             {/*<Grid container spacing={2}>*/}
                             {/*    <Grid item xs={6} sm={6} md={4} lg={4}>*/}
@@ -32,7 +32,8 @@ export default function InstallAppContent() {
                         </div>
                         <div>
                             <p>
-                                2. Click on "Install app". (If you don't see "Install app" then wait a few seconds and try again.)
+                                2. {t('Click on "Install app". (If you don’t see "Install app" then wait a few seconds and try again.)')}
+
                             </p>
                             {/*<Grid container spacing={2}>*/}
                             {/*    <Grid item xs={6} sm={6} md={4} lg={4}>*/}
@@ -43,7 +44,7 @@ export default function InstallAppContent() {
                         </div>
                         <div>
                             <p>
-                                3. Click on "Install" to confirm.
+                                3. {t('Click on "Install" to confirm.')}
                             </p>
                             {/*<Grid container spacing={2}>*/}
                             {/*    <Grid item xs={6} sm={6} md={4} lg={4}>*/}
@@ -60,8 +61,8 @@ export default function InstallAppContent() {
                     <div className={styles.mobile_app_des}>
                         <div>
                             <p>
-                                1. Open Safari browser and visit <span style={{fontWeight: `bold`}}>www.{config.domain}</span>.
-                                Click on "Share" icon.
+                                1. {t('Open Safari browser and visit')} <span style={{fontWeight: `bold`}}>www.{config.domain}</span>.
+                                {t('Click on "Share" icon.')}
                             </p>
                             {/*<Grid container spacing={2}>*/}
                             {/*    <Grid item xs={6} sm={6} md={4} lg={4}>*/}
@@ -72,7 +73,7 @@ export default function InstallAppContent() {
                         </div>
                         <div>
                             <p>
-                                2. Scroll to bottom and click on "Add to Home Screen".
+                                2. {t('Scroll to bottom and click on "Add to Home Screen".')}
                             </p>
                             {/*<Grid container spacing={2}>*/}
                             {/*    <Grid item xs={6} sm={6} md={4} lg={4}>*/}
@@ -83,7 +84,7 @@ export default function InstallAppContent() {
                         </div>
                         <div>
                             <p>
-                                3. Click on "Add" to confirm.
+                                3. {t('Click on "Add" to confirm.')}
                             </p>
                             {/*<Grid container spacing={2}>*/}
                             {/*    <Grid item xs={6} sm={6} md={4} lg={4}>*/}

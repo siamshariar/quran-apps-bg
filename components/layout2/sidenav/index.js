@@ -10,6 +10,7 @@ import SubjectIcon from "../../icons/Subject";
 import SaveIcon from "../../icons/Save";
 import SettingsIcon from "../../icons/SettingsOutlined";
 import styles from "./index.module.scss";
+import { t } from "../../../lib/config";
 
 export default function Sidenav({ chapters }) {
   const { bookmarkOpen, changeBookmarkOpen } = useContext(SidenavContext);
@@ -121,7 +122,7 @@ export default function Sidenav({ chapters }) {
       <ul className={styles.menu}>
         <li className={chapterListOpen ? styles.open : ""} ref={refChapters}>
           <Tooltip
-            title="Chapter List"
+            title={t('Chapter List')}
             arrow
             placement="right"
             disableFocusListener={true}
@@ -141,7 +142,7 @@ export default function Sidenav({ chapters }) {
 
         <li className={bookmarkOpen ? styles.open : ""} ref={refSave}>
           <Tooltip
-            title="Bookmarks and Pin"
+            title={t('Bookmarks and Pin')}
             arrow
             placement="right"
             disableFocusListener={true}
@@ -156,7 +157,7 @@ export default function Sidenav({ chapters }) {
 
         <li>
           <Tooltip
-            title="Subjective"
+            title={t('Subjective')}
             arrow
             placement="right"
             disableFocusListener={true}
@@ -173,7 +174,7 @@ export default function Sidenav({ chapters }) {
 
         <li className={settingsOpen ? styles.open : ""} ref={refSettings}>
           <Tooltip
-            title="Settings"
+            title={t('Settings')}
             arrow
             placement="right"
             disableFocusListener={true}
@@ -183,7 +184,11 @@ export default function Sidenav({ chapters }) {
             </span>
           </Tooltip>
 
-          <Settings open={settingsOpen} controller={controlSettingsNav} expandedSetting={expandedSetting}/>
+          <Settings 
+            open={settingsOpen} 
+            controller={controlSettingsNav} 
+            expandedSetting={expandedSetting}
+          />
         </li>
       </ul>
     </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Sidenav from "../layout2/sidenav";
 import Audio from "./audio";
 import styles from "./index.module.scss";
+import { t } from "../../lib/config";
 
 export default function AllahName({ chapters, names, contentTitle }) {
   const [namesList, setNamesList] = useState(names);
@@ -26,7 +27,7 @@ export default function AllahName({ chapters, names, contentTitle }) {
           <input
             type="text"
             name="search"
-            placeholder="Search by name..."
+            placeholder={t('Search by name...')}
             onChange={(e) => filterNames(e.target.value)}
           />
         </div>

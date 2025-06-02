@@ -1,4 +1,4 @@
-import { server, config } from "../../../lib/config"
+import { server, config, t } from "../../../lib/config"
 import { getChaptersInfo, getChapterDetails } from "../../../lib/fetch"
 import Layout from "../../../components/layouts/layout-chapter"
 import Meta from "../../../components/core/meta"
@@ -20,7 +20,7 @@ export default function Chapter({
   return (
     <>
       <Meta
-        title={`Chapter ${chapterName} | ${config?.metaTitle}`}
+        title={`${t('Chapter')} ${chapterName} | ${config?.metaTitle}`}
         description={`Chapter ${chapterName}. ${config?.metaDescription}`}
         url={`${server}/${translation}/chapters/${chapterSlug}`}
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}

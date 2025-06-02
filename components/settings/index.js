@@ -14,7 +14,7 @@ import UpIcon from '../icons/ChevronUp'
 import DownIcon from '../icons/ChevronDown'
 import PlusIcon from '../icons/Plus'
 import MinusIcon from '../icons/Minus'
-import { config } from '../../lib/config'
+import { config, t } from '../../lib/config'
 import styles from './index.module.scss'
 
 export default function Settings({ defaultExpanded, controller }) {
@@ -35,6 +35,7 @@ export default function Settings({ defaultExpanded, controller }) {
             <Translation 
                 expanded={expandedPanel === 'translation'}
                 onAccordionChange={handleAccordionChange}
+                t={t}
             />
             <hr className={styles.divider} />
             <View />
@@ -78,7 +79,7 @@ const Translation = ({ expanded, onAccordionChange }) => {
 
     return (
         <div className={`${styles.block} ${styles.translation}`}>
-            <div className={styles.title}>Translation</div>
+            <div className={styles.title}>{t('Translation')}</div>
             <div className={styles.list}>
                 <div className={styles.item}>
                     <Accordion
@@ -90,7 +91,7 @@ const Translation = ({ expanded, onAccordionChange }) => {
                             <IconButton className={styles.btn}>
                                 {expanded ? <UpIcon /> : <DownIcon />}
                             </IconButton>
-                            <div className={styles.label}>Choose Translation</div>
+                            <div className={styles.label}>{t('Choose Translation')}</div>
                         </AccordionSummary>
 
                         <AccordionDetails className={styles.accordion_details}>
@@ -139,13 +140,13 @@ const View = () => {
 
     return (
         <div className={`${styles.block} ${styles.view}`}>
-            <div className={styles.title}>View</div>
+            <div className={styles.title}>{t('View')}</div>
             <div className={styles.list}>
                 <div className={styles.item}>
                     <Switcher
                         control={handleViewChange}
                         checked={view.arabic}
-                        label="Arabic"
+                        label={t('Arabic')}
                         name="arabic"
                     />
                 </div>
@@ -153,7 +154,7 @@ const View = () => {
                     <Switcher
                         control={handleViewChange}
                         checked={view.translation}
-                        label="Translation"
+                        label={t('Translation')}
                         name="translation"
                     />
                 </div>
@@ -161,7 +162,7 @@ const View = () => {
                     <Switcher
                         control={handleViewChange}
                         checked={view.tafseer}
-                        label="Footnotes"
+                        label={t('Footnotes')}
                         name="tafseer"
                     />
                 </div>
@@ -190,10 +191,10 @@ const FontSize = () => {
 
     return (
         <div className={`${styles.block} ${styles.font_size}`}>
-            <div className={styles.title}>Font Size</div>
+            <div className={styles.title}>{t('Font Size')}</div>
             <div className={styles.list}>
                 <div className={styles.item}>
-                    <div className={styles.label}>Arabic</div>
+                    <div className={styles.label}>{t('Arabic')}</div>
                     <div className={styles.sizer}>
                         <IconButton
                             className={styles.sizer_btn}
@@ -213,7 +214,7 @@ const FontSize = () => {
                     </div>
                 </div>
                 <div className={styles.item}>
-                    <div className={styles.label}>Translation</div>
+                    <div className={styles.label}>{t('Translation')}</div>
                     <div className={styles.sizer}>
                         <IconButton
                             className={styles.sizer_btn}
@@ -263,7 +264,7 @@ const FontFamily = () => {
 
     return (
         <div className={`${styles.block} ${styles.font_family}`}>
-            <div className={styles.title}>Font Family</div>
+            <div className={styles.title}>{t('Font Family')}</div>
             <div className={styles.list}>
                 <div className={styles.item}>
                     <Accordion
@@ -280,7 +281,7 @@ const FontFamily = () => {
                                     <DownIcon />
                                 </span>
                             </IconButton>
-                            <div className={styles.label}>Choose Arabic Font</div>
+                            <div className={styles.label}>{t('Choose Arabic Font')}</div>
                         </AccordionSummary>
 
                         <AccordionDetails className={styles.accordion_details}>
@@ -317,7 +318,7 @@ const FontFamily = () => {
                                     <DownIcon />
                                 </span>
                             </IconButton>
-                            <div className={styles.label}>Choose Translation Font</div>
+                            <div className={styles.label}>{t('Choose Translation Font')}</div>
                         </AccordionSummary>
 
                         <AccordionDetails className={styles.accordion_details}>
@@ -357,7 +358,7 @@ const Theme = () => {
 
     return (
         <div className={`${styles.block} ${styles.theme}`}>
-            <div className={styles.title}>Theme</div>
+            <div className={styles.title}>{t('Theme')}</div>
             <div className={styles.list}>
                 <div className={styles.item}>
                     <Accordion
@@ -374,7 +375,7 @@ const Theme = () => {
                                     <DownIcon />
                                 </span>
                             </IconButton>
-                            <div className={styles.label}>Choose theme</div>
+                            <div className={styles.label}>{t('Choose theme')}</div>
                         </AccordionSummary>
 
                         <AccordionDetails className={styles.accordion_details}>
@@ -444,10 +445,10 @@ const AutoScroll = () => {
     }
     return (
         <div className={`${styles.block} ${styles.auto_scroll}`}>
-            <div className={styles.title}>Auto Scroll</div>
+            <div className={styles.title}>{t('Auto Scroll')}</div>
             <div className={styles.list}>
                 <div className={styles.item}>
-                    <div className={styles.label}>Enable</div>
+                    <div className={styles.label}>{t('Enable')}</div>
                     <Switcher
                         control={handleAutoScrollStatusChange}
                         checked={autoScroll}
@@ -465,10 +466,10 @@ const Notification = () => {
     }
     return (
         <div className={`${styles.block} ${styles.notification}`}>
-            <div className={styles.title}>Notification</div>
+            <div className={styles.title}>{t('Notification')}</div>
             <div className={styles.list}>
                 <div className={styles.item}>
-                    <div className={styles.label}>Enable</div>
+                    <div className={styles.label}>{t('Enable')}</div>
                     <Switcher
                         control={handleNotificationStatusChange}
                         checked={notification}
@@ -483,7 +484,8 @@ const Note = () => {
     return (
         <div className={`${styles.block} ${styles.note}`}>
             <p className={styles.note_text}>
-                <span>Note: </span>If you remove storage or cache then your settings will be reset to default.
+                <span>{t('Note')}: </span>
+                {t('If you remove storage or cache then your settings will be reset to default.')}
             </p>
         </div>
     )
@@ -497,7 +499,7 @@ const Reset = () => {
             onClick={resetSettings}
             disableRipple
         >
-            Reset
+            {t('Reset')}
         </Button>
     )
 }

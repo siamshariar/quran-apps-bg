@@ -5,6 +5,7 @@ import Scrollbar from '../../core/scrollbar'
 import CloseIcon from '../../icons/Close'
 import SearchIcon from '../../icons/Search'
 import styles from './chapter-list.module.scss'
+import { t } from '../../../lib/config'
 
 export default function ChapterList({ chapterList, open, controller, chapter }) {
   const { verseMode, translation } = useContext(SettingsContext)
@@ -49,7 +50,7 @@ export default function ChapterList({ chapterList, open, controller, chapter }) 
                 <div className={styles.top}>
                     <div className={styles.left}>
                         <div className={styles.title}>
-                            <h2>Chapters</h2>
+                            <h2>{t('Chapters')}</h2>
                         </div>
                     </div>
 
@@ -72,7 +73,7 @@ export default function ChapterList({ chapterList, open, controller, chapter }) 
                         <input
                             type="text"
                             name="chapter-search"
-                            placeholder="Search Chapter"
+                            placeholder={t('Search Chapter')}
                             onChange={e => filterChapters(e.target.value)}
                             ref={input}
                         />

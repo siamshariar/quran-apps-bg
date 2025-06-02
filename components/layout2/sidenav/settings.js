@@ -1,6 +1,7 @@
 import Scrollbar from '../../core/scrollbar'
 import SettingsContent from '../../settings'
 import CloseIcon from '../../icons/Close'
+import { t } from '../../../lib/config'
 import styles from './settings.module.scss'
 
 export default function Settings({ open, controller, expandedSetting }) {
@@ -14,8 +15,8 @@ export default function Settings({ open, controller, expandedSetting }) {
             </span>
 
             <div className={styles.title}>
-                <h2>Settings</h2>
-                <h4>Change your app setting.</h4>
+                <h2>{t('Settings')}</h2>
+                <h4>{t('Change your app setting.')}</h4>
             </div>
 
             <div className={styles.content}>

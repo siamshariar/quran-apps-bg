@@ -5,7 +5,7 @@ import Scrollbar from '../core/scrollbar'
 import Close from '../icons/Close'
 import Search from '../icons/Search'
 import SettingsContextProvider from '../../contexts/SettingsContext'
-
+import { t } from '../../lib/config'
 import styles from './chapter-list.module.scss'
 import css from './style.module.scss'
 
@@ -44,7 +44,7 @@ export default function ChapterList({ chapterList, open, controller }) {
 					<input
 						type="text"
 						name="chapter-search"
-						placeholder="Search Chapter"
+						placeholder={t('Search Chapter')}
 						onChange={e => filterChapters(e.target.value)}
 					/>
 					<Search />

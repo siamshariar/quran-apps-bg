@@ -11,6 +11,7 @@ import Fade from '@mui/material/Fade'
 // import Loader from '../core/loader'
 import SendIcon from '../icons/Send'
 import styles from './go-to-verse.module.scss'
+import { t } from '../../lib/config';
 
 export default function GoToVerse({ open, controller, chapters }) {
     const { verseMode } = useContext(SettingsContext)
@@ -69,8 +70,8 @@ export default function GoToVerse({ open, controller, chapters }) {
                 <div className={styles.modal}>
 
                     <div className={styles.title}>
-                        <h2>Go To Verse</h2>
-                        <h4>Select chapter and verse</h4>
+                        <h2>{t('Go To Verse')}</h2>
+                        <h4>{t('Select chapter and verse')}</h4>
                     </div>
 
                     <div className={styles.wrapper}>
@@ -131,7 +132,7 @@ export default function GoToVerse({ open, controller, chapters }) {
                                 disableElevation
                                 onClick={(e) => handleClick(e)}
                             >
-                                Go to
+                                {t('Go To')}
                             </Button>
                         </div>
                     </div>

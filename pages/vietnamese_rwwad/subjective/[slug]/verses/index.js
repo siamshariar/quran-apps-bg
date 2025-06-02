@@ -1,4 +1,4 @@
-import { server, config } from "../../../../../lib/config"
+import { server, config, t } from "../../../../../lib/config"
 import {
   getChaptersInfo,
   getAllSubjectives,
@@ -24,7 +24,7 @@ export default function Subjective({ slug, chapters, subjective, allTranslations
   return (
     <>
       <Meta
-        title={`Subjective ${name} | ${config?.metaTitle}`}
+        title={`${t('Subjective')} ${name} | ${config?.metaTitle}`}
         description={`Subjective ${name} | ${config?.metaDescription}`}
         url={`${server}/vietnamese_rwwad/subjective/${slug}/verses`}
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}

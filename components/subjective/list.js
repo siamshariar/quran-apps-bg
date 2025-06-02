@@ -4,6 +4,7 @@ import { Virtuoso } from 'react-virtuoso';
 import Skeleton from "react-loading-skeleton";
 // import useLoader from "../../hooks/useLoader";
 import Sidenav from "../layout2/sidenav";
+import { t } from "../../lib/config";
 import styles from "./list.module.scss";
 
 export default function SubjectiveContent({
@@ -69,7 +70,7 @@ export default function SubjectiveContent({
         className={styles.search}
         type="text"
         name="search"
-        placeholder="Search by title..."
+        placeholder={t('Search by title...')}
         onChange={(e) => filterSubjectives(e.target.value)}
       />
 

@@ -1,4 +1,4 @@
-import { server, config } from "../lib/config";
+import { server, config, t } from "../lib/config";
 import { getChaptersInfo, getVersesByQuery, getVerseDetails } from "../lib/fetch";
 import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
@@ -142,7 +142,7 @@ export default function Bookmark({ chapters }) {
           <BookmarkContextProvider>
             <SidenavContextProvider>
               <Meta
-                title={`Bookmark ${bookmarkName} | ${config?.metaTitle}`}
+                title={`${t('Bookmark')} ${bookmarkName} | ${config?.metaTitle}`}
                 description={`Quran Bookmark | ${config?.metaDescription}`}
                 url={`${server}/bookmarks`}
                 image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
@@ -169,7 +169,7 @@ export default function Bookmark({ chapters }) {
         <BookmarkContextProvider>
           <SidenavContextProvider>
             <Meta
-              title={`Bookmark ${bookmarkName} | ${config?.metaTitle}`}
+              title={`${t('Bookmark')} ${bookmarkName} | ${config?.metaTitle}`}
               description={`Bookmark ${bookmarkName} | ${config?.metaDescription}`}
               url={`${server}/bookmarks`}
               image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}

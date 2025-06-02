@@ -1,4 +1,4 @@
-import { server, config } from "../lib/config";
+import { server, config, t } from "../lib/config";
 import { getChaptersInfo } from "../lib/fetch";
 import Layout from "../components/layouts/layout-content";
 import Meta from "../components/core/meta";
@@ -35,6 +35,6 @@ export async function getStaticProps(context) {
 
   // Pass data to the page via props
   return {
-    props: { chapters, pageTitle: "Install App", bgColor: "primary" },
+    props: { chapters, pageTitle: t('Install App'), bgColor: "primary" },
   };
 }

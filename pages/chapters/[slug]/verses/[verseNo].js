@@ -1,4 +1,4 @@
-import { server, config } from "../../../../lib/config"
+import { server, config, t } from "../../../../lib/config"
 import { getChaptersInfo, getVerseDetails } from "../../../../lib/fetch"
 import Layout from "../../../../components/layouts/layout-chapter"
 import Meta from "../../../../components/core/meta"
@@ -20,7 +20,7 @@ export default function Verse({
   return (
     <>
       <Meta
-        title={`Chapter ${chapterName} : Verse ${verses[0].verseNo} | ${config?.metaTitle}`}
+        title={`${t('Chapter')} ${chapterName} : Verse ${verses[0].verseNo} | ${config?.metaTitle}`}
         description={`${verses[0].translation} | ${config?.metaDescription}`}
         url={`${server}/chapters/${chapterSlug}/verses/${verses[0].verseNo}`}
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}

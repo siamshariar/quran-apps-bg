@@ -1,4 +1,4 @@
-import { server, config } from "../../../../lib/config"
+import { server, config, t } from "../../../../lib/config"
 import { getChaptersInfo, getParentSubjectives, getParentSubjectiveBySlug } from "../../../../lib/fetch"
 import Layout from "../../../../components/layouts/layout-subjective"
 import Meta from "../../../../components/core/meta"
@@ -10,7 +10,7 @@ export default function Subjective({ slug, chapters, subjective, loading }) {
   return (
     <>
       <Meta
-        title={`Subjective ${name} | ${config?.metaTitle}`}
+        title={`${t('Subjective')} ${name} | ${config?.metaTitle}`}
         description={`Subjective form the holy Quran | ${config?.metaDescription}`}
         url={`${server}/vietnamese_rwwad/subjective/${slug}`}
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}

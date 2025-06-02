@@ -1,6 +1,7 @@
 import { server } from '../../lib/config'
 
 import PdfIcon from '../icons/Description'
+import { t } from '../../lib/config'
 import Mp3Icon from '../icons/MusicNote'
 import styles from './download.module.scss'
 
@@ -8,7 +9,7 @@ export default function DownloadContent({ chapters }) {
     return (
         <div className={styles.wrapper}>
 
-            <div className={styles.title}>Download</div>
+            <div className={styles.title}>{t("Download")}</div>
 
             <ul className={styles.lists}>
                 {chapters && chapters.map(chapter =>

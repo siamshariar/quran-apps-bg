@@ -10,6 +10,7 @@ import VerseCard from "../surah/verse-card";
 // import PauseIcon from "../icons/Pause";
 // import Bismillah from "../icons/Bismillah";
 import Skeleton from "react-loading-skeleton";
+import { t } from "../../lib/config";
 import styles from "../layout2/surah/content.module.scss";
 
 const getTranslatorName = (translationCode) => {
@@ -93,12 +94,12 @@ export default function BookmarkContent({
 
           <div className={styles.change_translation}>
             <span className={styles.translation_info}>
-              Translation by {getTranslatorName(translation)}{" "}
+              {t('Translation by')} {getTranslatorName(translation)}{" "}
               <span
                 className={styles.change_link}
                 onClick={openSettingsWithTranslation}
               >
-                (Change)
+                ({t('Change')})
               </span>
             </span>
           </div>

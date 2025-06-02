@@ -6,7 +6,7 @@ import FacebookIcon from '../icons/Facebook'
 import TwitterIcon from '../icons/Twitter'
 import LinkedinIcon from '../icons/Linkedin'
 import styles from './footer.module.scss'
-import { config } from '../../lib/config'
+import { config, t } from '../../lib/config'
 
 export default function FooterWeb() {
     return (
@@ -78,28 +78,28 @@ export default function FooterWeb() {
                         <Link href="/about" legacyBehavior>
                             <a>{config.domain}</a>
                         </Link>
-                        <span> All Rights Reserved</span>
+                        <span> {t('All Rights Reserved')}</span>
                     </p>
 
                     <ul className={styles.menu}>
                         <li>
                             <Link href="/install-app" legacyBehavior>
-                                <a>Install App</a>
+                                <a>{t('Install App')}</a>
                             </Link>
                         </li>
                         <li>
                             <Link href="/grateful" legacyBehavior>
-                                <a>Grateful</a>
+                                <a>{t('Grateful')}</a>
                             </Link>
                         </li>
                         <li>
                             <Link href="/contact" legacyBehavior>
-                                <a>Contact</a>
+                                <a>{t('Contact')}</a>
                             </Link>
                         </li>
                     </ul>
 
-                    <p className={styles.credit}>Powered By - <a href="https://deeniinfotech.com/" target="_blank">Deeni Info Tech</a></p>
+                    <p className={styles.credit}>{t('Powered By')} - <a href="https://deeniinfotech.com/" target="_blank">Deeni Info Tech</a></p>
                 </div>
             </Container>
         </div>

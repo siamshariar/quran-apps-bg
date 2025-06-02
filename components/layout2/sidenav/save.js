@@ -10,6 +10,7 @@ import PinIcon from "../../icons/PinOutline";
 import BookmarkBorderIcon from "../../icons/BookmarkBorder";
 import AutoStoriesIcon from "../../icons/AutoStories";
 import CloseIcon from "../../icons/Close";
+import { t } from "../../../lib/config";
 import styles from "./save.module.scss";
 
 function TabPanel(props) {
@@ -78,7 +79,7 @@ export default function Save({ open, controller }) {
           label={
             <span style={{ display: "flex", alignItems: "center" }}>
               <BookmarkBorderIcon style={{ marginRight: "6px" }} />
-              Bookmarks
+              {t('Bookmarks')}
             </span>
           }
           disableRipple
@@ -97,7 +98,7 @@ export default function Save({ open, controller }) {
           label={
             <span style={{ display: "flex", alignItems: "center" }}>
               <PinIcon style={{ marginRight: "6px" }} />
-              Pin
+              {t('Pin')}
             </span>
           }
           disableRipple
@@ -116,7 +117,7 @@ export default function Save({ open, controller }) {
           label={
             <span style={{ display: "flex", alignItems: "center" }}>
               <AutoStoriesIcon style={{ marginRight: "6px" }} />
-              Last Read
+              {t('Last Read')}
             </span>
           }
           disableRipple

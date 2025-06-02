@@ -1,4 +1,4 @@
-import { server, config } from "../lib/config";
+import { server, config, t } from "../lib/config";
 import { getChaptersInfo, getNamesOfAllah } from "../lib/fetch";
 import SettingsContextProvider from "../contexts/SettingsContext";
 import AudioPlayerContextProvider from "../contexts/AudioPlayerContext";
@@ -27,13 +27,14 @@ export default function AllahName({ chapters, names }) {
         <BookmarkContextProvider>
           <AudioPlayerContextProvider>
             <SidenavContextProvider>
-              <Meta
-                title={`99 Names of Allah | ${config?.metaTitle}`}
-                description={`99 Names of Allah. | ${config?.metaDescription}`}
-                url={`${server}/names-of-allah`}
-                image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
-                type="website"
-              />
+            <Meta
+              title={`${t('99 Names of Allah')} | ${config?.metaTitle}`}
+              description={`${t('99 Names of Allah')}. | ${config?.metaDescription}`}
+              url={`${server}/names-of-allah`}
+              image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
+              type="website"
+            />
+
 
               {/* <SearchModal
                 open={searchModalOpen}
@@ -49,14 +50,14 @@ export default function AllahName({ chapters, names }) {
               />
 
               <HeaderMobile //
-                title="99 Names of Allah"
+                title={t('99 Names of Allah')}
               />
 
               <main id="viewport" className="viewport">
                 <NamesOfAllah
                   chapters={chapters}
                   names={names}
-                  contentTitle="99 Names of Allah"
+                  contentTitle={t('99 Names of Allah')}
                 />
               </main>
 
