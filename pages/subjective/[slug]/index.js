@@ -7,6 +7,7 @@ import {
 import Layout from "../../../components/layouts/layout-subjective";
 import Meta from "../../../components/core/meta";
 import SubjectiveList from "../../../components/subjective/list";
+import { t } from "../../../lib/config";
 
 export default function Subjective({ slug, chapters, subjective, loading }) {
   const name = subjective.title;

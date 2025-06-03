@@ -10,19 +10,25 @@ export default function Verse({
   chapterName,
   chapterSlug,
   chapterMp3Url,
-  verses,
+  verses = [],
   allTranslations,
   contentTitle,
   mode,
   loading,
   translation,
 }) {
+  const verse = verses[0];
+
+  if (!verse) {
+    return <p>Verse not found.</p>;
+  }
+
   return (
     <>
       <Meta
-        title={`${t('Chapter')} ${chapterName} : Verse ${verses[0].verseNo} | ${config?.metaTitle}`}
-        description={`${verses[0].translation} | ${config?.metaDescription}`}
-        url={`${server}/chapters/${chapterSlug}/verses/${verses[0].verseNo}`}
+        title={`${t("Chapter")} ${chapterName} : Verse ${verse.verseNo} | ${config?.metaTitle}`}
+        description={`${verse.translation || ""} | ${config?.metaDescription}`}
+        url={`${server}/chapters/${chapterSlug}/verses/${verse.verseNo}`}
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
@@ -50,12 +56,10 @@ Verse.getLayout = function getLayout(page) {
 };
 
 export async function getStaticProps(context) {
-  const translation = context.params.translation || "vietnamese_hassan"
-  const slug = encodeURI(context.params.slug);
-  const chapterNo = Number.parseInt(slug);
-  const verseNo = context.params.verseNo;
-
-
+  const { slug, verseNo, translation = "vietnamese_hassan"} = context.params;
+  const decodedSlug = decodeURIComponent(slug);
+  const chapterNo = parseInt(decodedSlug.split("-")[0]);
+  try {
   const [verseDetails, defaultTranslation, rwwadTranslation, chaptersInfo] = await Promise.all([
     getVerseDetails(chapterNo, verseNo, translation),
     getVerseDetails(chapterNo, verseNo, "vietnamese_hassan"),
@@ -63,35 +67,38 @@ export async function getStaticProps(context) {
     getChaptersInfo(),
   ])
 
-  if (!verseDetails) {
+  if (!verseDetails || !chaptersInfo[chapterNo - 1]) {
     return {
       notFound: true,
     };
   }
 
-  verseDetails.push(details);
-
+  const chapterData = chaptersInfo[chapterNo - 1];
   // const chapterNo = details.chapter.chapterNo;
 
   return {
     props: {
-      chapterNo: chapterNo,
-      chapterName: chaptersInfo[chapterNo - 1].name,
-      chapterSlug: chaptersInfo[chapterNo - 1].slug,
-      chapterMp3Url: chaptersInfo[chapterNo - 1].mp3Url,
+      chapterNo,
+      chapterName: chapterData.name,
+      chapterSlug: chapterData.slug,
+      chapterMp3Url: chapterData.mp3Url,
       verses: [verseDetails],
       allTranslations: {
         vietnamese_hassan: [defaultTranslation],
         vietnamese_rwwad: [rwwadTranslation],
       },
       chapters: chaptersInfo,
-      contentTitle: `${chaptersInfo[chapterNo - 1].name} : Câu ${verseDetails.verseNo}`,
+      contentTitle: `${chapterData.name} : Câu ${verseDetails.verseNo}`,
       mode: "verse",
       key: uniqueKey(chapterNo, verseNo),
-      translation: translation,
+      translation,
     },
     revalidate: 60,
   };
+} catch (error) {
+  console.error("getStaticProps failed for:", { slug, verseNo, translation }, error);
+  return { notFound: true };
+}
 }
 
 export async function getStaticPaths() {
@@ -101,15 +108,15 @@ export async function getStaticPaths() {
 
   chapters.forEach((chapter) => {
     const slug = encodeURI(chapter.slug);
-    // let totalVerse = parseInt(chapter.totalVerse);
+    const totalVerse = parseInt(chapter.totalVerse || "5");
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= Math.min(totalVerse, 5); i++) {
       translations.forEach((translation) => {
         paths.push({
           params: {
-            slug: slug,
+            slug,
             verseNo: String(i),
-            translation: translation,
+            translation,
         },
       })
       })
@@ -117,17 +124,13 @@ export async function getStaticPaths() {
   });
 
   return {
-    paths: paths,
+    paths,
     fallback: "blocking",
   };
 }
 
 const uniqueKey = (chapterNo, verseNo) => {
-  let s1 = "0000" + chapterNo;
-  s1 = s1.substr(s1.length - 3);
-
-  let s2 = "0000" + verseNo;
-  s2 = s2.substr(s2.length - 3);
-
+  const s1 = String(chapterNo).padStart(3, "0");
+  const s2 = String(verseNo).padStart(3, "0");
   return s1 + s2;
 };
