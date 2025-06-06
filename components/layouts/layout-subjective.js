@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import classNames from "classnames";
 import SettingsContextProvider from "../../contexts/SettingsContext";
 import AudioPlayerContextProvider from "../../contexts/AudioPlayerContext";
@@ -13,13 +14,38 @@ import AudioPlayer from "../../components/surah/audio-player";
 import ArabicDialog from "../../components/core/arabic-dialog";
 import Sidenav from "../layout2/sidenav";
 import styles from "./index.module.scss";
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { useTheme } from '@mui/material/styles';
 
 const Layout = ({ children }) => {
+  const [showScrollButton, setShowScrollButton] = useState(false)
   // const [searchModalOpen, updateSearchModalOpen] = useState(false)
 
   // const searchModalController = open => {
   //     updateSearchModalOpen(open)
   // }
+  const theme = useTheme();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.pageYOffset > 300) {
+        setShowScrollButton(true);
+      } else {
+        setShowScrollButton(false);
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   return (
     <SettingsContextProvider>
@@ -71,6 +97,52 @@ const Layout = ({ children }) => {
                   {children}
                 </div>
               </main>
+
+              {/* Scroll to Top Button - Web */}
+              {showScrollButton && (
+                <IconButton
+                  onClick={scrollToTop}
+                  sx={{
+                    position: 'fixed',
+                    bottom: 50,
+                    right: 32,
+                    backgroundColor: 'var(--bg22)',
+                    color: 'var(--main-color)',
+                    boxShadow: 'var(--bs11)',
+                    transition: 'all 0.5s ease',
+                    display: { xs: 'none', sm: 'flex' },
+                    width: 48,
+                    height: 48,
+                    zIndex: 1000
+                  }}
+                  aria-label="scroll to top"
+                >
+                  <KeyboardArrowUpIcon />
+                </IconButton>
+              )}
+
+              {/* Scroll to Top Button - Mobile */}
+              {showScrollButton && (
+                <IconButton
+                  onClick={scrollToTop}
+                  sx={{
+                    position: 'fixed',
+                    bottom: 20,
+                    right: 16,
+                    backgroundColor: 'var(--bg22)',
+                    color: 'var(--main-color)',
+                    boxShadow: 'var(--bs11)',
+                    transition: 'all 0.5s ease',
+                    display: { xs: 'flex', sm: 'none' },
+                    width: 40,
+                    height: 40,
+                    zIndex: 1000
+                  }}
+                  aria-label="scroll to top"
+                >
+                  <KeyboardArrowUpIcon fontSize="small" />
+                </IconButton>
+              )}
 
               {children.props.mode === "verse" && <AudioPlayer />}
 

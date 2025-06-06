@@ -3,7 +3,7 @@ import { AudioPlayerContext } from "../../contexts/AudioPlayerContext";
 import { PinContext } from "../../contexts/PinContext";
 import { BookmarkContext } from "../../contexts/BookmarkContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
-import { config, server } from "../../lib/config";
+import { config, server, t } from "../../lib/config";
 import Popover from "@mui/material/Popover";
 import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
@@ -333,7 +333,7 @@ export default function VerseOptions({
                     <span className={styles.icon}>
                       <PlayIcon />
                     </span>
-                    <span className={styles.text}>Play</span>
+                    <span className={styles.text}>{t('Play')}</span>
                   </MenuItem>
                 )}
 
@@ -346,7 +346,7 @@ export default function VerseOptions({
                   <span className={styles.icon}>
                     <ShareIcon />
                   </span>
-                  <span className={styles.text}>Share</span>
+                  <span className={styles.text}>{t('Share')}</span>
                 </MenuItem>
 
                 <MenuItem
@@ -358,7 +358,7 @@ export default function VerseOptions({
                   <span className={styles.icon}>
                     <ShareIcon />
                   </span>
-                  <span className={styles.text}>Share</span>
+                  <span className={styles.text}>{t('Share')}</span>
                 </MenuItem>
 
                 {isBookmarked && (
@@ -366,7 +366,7 @@ export default function VerseOptions({
                     <span className={styles.icon}>
                       <BookmarkIcon />
                     </span>
-                    <span className={styles.text}>Remove bookmark</span>
+                    <span className={styles.text}>{t('Remove bookmark')}</span>
                   </MenuItem>
                 )}
 
@@ -375,7 +375,7 @@ export default function VerseOptions({
                     <span className={styles.icon}>
                       <BookmarkBorder />
                     </span>
-                    <span className={styles.text}>Bookmark</span>
+                    <span className={styles.text}>{t('Bookmark')}</span>
                   </MenuItem>
                 )}
 
@@ -384,7 +384,7 @@ export default function VerseOptions({
                     <span className={styles.icon}>
                       <PinIcon />
                     </span>
-                    <span className={styles.text}>Pin</span>
+                    <span className={styles.text}>{t('Pin')}</span>
                   </MenuItem>
                 )}
 
@@ -393,7 +393,7 @@ export default function VerseOptions({
                     <span className={styles.icon}>
                       <UnpinIcon />
                     </span>
-                    <span className={styles.text}>Unpin</span>
+                    <span className={styles.text}>{t('Unpin')}</span>
                   </MenuItem>
                 )}
 
@@ -401,14 +401,14 @@ export default function VerseOptions({
                   <span className={styles.icon}>
                     <FileCopyIcon />
                   </span>
-                  <span className={styles.text}>Copy Verse</span>
+                  <span className={styles.text}>{t('Copy Verse')}</span>
                 </MenuItem>
 
                 <MenuItem onClick={handleCopyLink}>
                   <span className={styles.icon}>
                     <LinkIcon />
                   </span>
-                  <span className={styles.text}>Copy Link</span>
+                  <span className={styles.text}>{t('Copy Link')}</span>
                 </MenuItem>
 
                 {/*<MenuItem onClick={handlePrint}>*/}

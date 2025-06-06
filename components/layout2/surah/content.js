@@ -52,6 +52,31 @@ export default function ChapterContent({
   const [expandedSetting, setExpandedSetting] = useState(null);
 
   const translationPrefix = translation !== "vietnamese_hassan" ? `/${translation}` : "";
+
+  useEffect(() => {
+    const handleScrollToTop = (event) => {
+      if (event.detail?.shouldScrollToTop && virtuosoRef.current) {
+        virtuosoRef.current.scrollToIndex({
+          index: 0,
+          align: "start",
+          behavior: "smooth",
+        })
+
+        setTimeout(() => {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          })
+        }, 100)
+      }
+    }
+
+    document.addEventListener("scrollToTop", handleScrollToTop)
+    return () => {
+      document.removeEventListener("scrollToTop", handleScrollToTop)
+    }
+  }, [])
+
   useEffect(() => {
     let filtered = [];
     verses.forEach((verse) => {
@@ -247,25 +272,27 @@ export default function ChapterContent({
     }
   }, [isTouchEnd]);
 
-  const virtuoso = useRef(null);
+  const virtuosoRef = useRef(null);
 
   const scrollToIndex = (index) => {
-    virtuoso.current.scrollToIndex({
+    virtuosoRef.current?.scrollToIndex({
       index: index,
       align: "start",
-      behavior: "auto"
+      behavior: "smooth",
     });
   };
 
   const getIndexFromHash = () => {
-    const hashIndex = parseInt(window.location.hash.replace("#verse-", ""), 10);
+    const hashIndex = Number.parseInt(window.location.hash.replace("#verse-", ""), 10);
     return isNaN(hashIndex) ? null : hashIndex - 1;
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hash && virtuoso.current && !loading) {
+    if (typeof window !== 'undefined' && window.location.hash && virtuosoRef.current && !loading) {
       const indexFromHash = getIndexFromHash();
+      if (indexFromHash !== null) {
       scrollToIndex(indexFromHash);
+      };
     }
   }, [router, loading]);
 
@@ -289,10 +316,10 @@ export default function ChapterContent({
   useEffect(() => {
     const handleScrollPosition = () => {
       if (typeof window !== 'undefined' && window.location.hash) {
-        const hashIndex = parseInt(window.location.hash.replace("#verse-", ""), 10);
+        const hashIndex = Number.parseInt(window.location.hash.replace("#verse-", ""), 10);
         if (!isNaN(hashIndex)) {
           requestAnimationFrame(() => {
-            virtuoso.current?.scrollToIndex({
+            virtuosoRef.current?.scrollToIndex({
               index: hashIndex - 1,
               align: "start",
               behavior: "instant"
@@ -382,7 +409,7 @@ export default function ChapterContent({
 
         <div className={styles.verses}>
         <Virtuoso
-          ref={virtuoso}
+          ref={virtuosoRef}
           useWindowScroll
           // style={{ height: 300 }} // Adjust height according to your requirement
             totalCount={currentVerses?.length || 0}

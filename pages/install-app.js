@@ -35,6 +35,6 @@ export async function getStaticProps(context) {
 
   // Pass data to the page via props
   return {
-    props: { chapters, pageTitle: t('Install App'), bgColor: "primary" },
+    props: { chapters, pageTitle: "Install App", bgColor: "primary" },
   };
 }

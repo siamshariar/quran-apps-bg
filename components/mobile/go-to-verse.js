@@ -12,34 +12,40 @@ import Fade from '@mui/material/Fade'
 import SendIcon from '../icons/Send'
 import styles from './go-to-verse.module.scss'
 import { t } from '../../lib/config';
+import { useTheme, useMediaQuery } from '@mui/material'
 
 export default function GoToVerse({ open, controller, chapters }) {
-    const { verseMode } = useContext(SettingsContext)
-
+    const { verseMode } = useContext(SettingsContext);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    
     const [chapterNumber, setChapterNumber] = useState(1)
     const [numberOfVerses, setNumberOfVerses] = useState(7)
     const [verseNumber, setVerseNumber] = useState(1)
 
     const getVerseNumberList = (numberOfVerses) => {
         let list = []
-        for (let i = 0; i <numberOfVerses; i++) {
-            list.push(<li key={i} value={i + 1}>Verse {i + 1}</li>)
+        for (let i = 0; i < numberOfVerses; i++) {
+            list.push(
+                <MenuItem key={i} value={i + 1}>
+                    Verse {i + 1}
+                </MenuItem>
+            );
         }
         return list
     }
 
     const [verseNumberList, setVerseNumberList] = useState(getVerseNumberList(numberOfVerses))
 
-    const handleChapterChange = event => {
+    const handleChapterChange = (event) => {
         let totalVerse = chapters[event.target.value - 1].totalVerse
-
         setChapterNumber(event.target.value)
         setNumberOfVerses(totalVerse)
         setVerseNumber(1)
         setVerseNumberList(getVerseNumberList(totalVerse))
     }
 
-    const handleVerseChange = event => {
+    const handleVerseChange = (event) => {
         setVerseNumber(event.target.value)
     }
 
@@ -50,15 +56,36 @@ export default function GoToVerse({ open, controller, chapters }) {
 
         // const href = verseMode === "scroll" ? `/chapters/${chapters[chapterNumber - 1].slug}#verse-${verseNumber}` : verseMode === "slide" ? `/chapters/${chapters[chapterNumber - 1].slug}/verses/${verseNumber}` : `/chapters/${chapters[chapterNumber - 1].slug}#verse-${verseNumber}`
         const href = `/chapters/${chapters[chapterNumber - 1].slug}#verse-${verseNumber}`
-
         controller(false)(e)
         router.push(href)
     }
 
+    const mobileMenuProps = {
+        classes: {
+            paper: styles.custom_select,
+        },
+        anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'center',
+        },
+        transformOrigin: {
+            vertical: 'top',
+            horizontal: 'center',
+        },
+        getContentAnchorEl: null,
+    };
+
+    const desktopMenuProps = {
+        classes: {
+            paper: styles.custom_select,
+        },
+        getContentAnchorEl: null,
+    };
+
     return (
         <Modal
             open={open}
-            onClose={() => controller(false)}
+            onClose={controller(false)}
             className={styles.root}
             closeAfterTransition
             BackdropComponent={Backdrop}
@@ -86,17 +113,10 @@ export default function GoToVerse({ open, controller, chapters }) {
                                     className={styles.inner}
                                     value={chapterNumber}
                                     onChange={handleChapterChange}
-                                    MenuProps={{
-                                        classes: {
-                                            paper: styles.custom_select
-                                        },
-                                        getContentAnchorEl: null,
-                                    }}
+                                    MenuProps={isMobile ? mobileMenuProps : desktopMenuProps}
                                 >
-                                {chapters.map(chapter => (
-                                  <MenuItem 
-                                    key={chapter.chapterNo} 
-                                    value={chapter.chapterNo}>
+                                        {chapters.map((chapter) => (
+                                        <MenuItem key={chapter.chapterNo} value={chapter.chapterNo}>
                                         {chapter.chapterNo}. {chapter.name}
                                     </MenuItem>
                                 ))}
@@ -105,23 +125,16 @@ export default function GoToVerse({ open, controller, chapters }) {
                             </div>
 
                             <div className={styles.item}>
+                                {chapters && (
                                 <Select
                                     className={styles.inner}
                                     value={verseNumber}
                                     onChange={handleVerseChange}
-                                    MenuProps={{
-                                        classes: {
-                                            paper: styles.custom_select
-                                        },
-                                        getContentAnchorEl: null,
-                                    }}
-                                >
-                                    {Array.from({ length: numberOfVerses }, (_, i) => (
-                                        <MenuItem key={i + 1} value={i + 1}>
-                                            Verse {i + 1}
-                                        </MenuItem>
-                                    ))}
+                                      MenuProps={isMobile ? mobileMenuProps : desktopMenuProps}
+                                    >
+                                      {verseNumberList}
                                 </Select>
+                                )}
                             </div>
 
                             <Button

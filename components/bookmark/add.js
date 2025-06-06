@@ -6,6 +6,7 @@ import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
 import CloseIcon from "../icons/Close";
 import styles from "./modal.module.scss";
+import { t } from "../../lib/config";
 
 export default function AddBookmark({ open, closer, chapter, verse }) {
   const { bookmarks, changeBookmarks } = useContext(BookmarkContext);
@@ -92,9 +93,9 @@ export default function AddBookmark({ open, closer, chapter, verse }) {
           <button className={styles.close} onClick={handleClose}>
             <CloseIcon />
           </button>
-          <h2 className={styles.title}>Bookmark verse</h2>
+          <h2 className={styles.title}>{t('Bookmark verse')}</h2>
           <div className={styles.input_area}>
-            <h2 className={styles.sub_title}>Choose Folder</h2>
+            <h2 className={styles.sub_title}>{t('Choose Folder')}</h2>
             <select
               value={folderKey}
               onChange={(e) => changeFolder(e.target.value)}
@@ -104,12 +105,12 @@ export default function AddBookmark({ open, closer, chapter, verse }) {
                   {bookmarks[key].name}
                 </option>
               ))}
-              <option value="create">Create New Folder</option>
+              <option value="create">{t('Create New Folder')}</option>
             </select>
             <input
               type="text"
               name="create"
-              placeholder="Folder name"
+              placeholder={t('Folder name')}
               onChange={(e) => handleCreateNewFolder(e.target.value)}
               className={folderKey === "create" ? styles.open : ""}
             />
@@ -129,7 +130,7 @@ export default function AddBookmark({ open, closer, chapter, verse }) {
                 className={`${styles.btn} ${styles.btn_add}`}
                 onClick={handleAddBookmark}
               >
-                Add
+                {t('Add')}
               </button>
             </div>
           </div>

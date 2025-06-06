@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState, useMemo  } from "react";
 import { AudioPlayerContext } from "../../contexts/AudioPlayerContext";
 import { BookmarkContext } from "../../contexts/BookmarkContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
@@ -29,9 +29,10 @@ export default function BookmarkContent({
   isBookmarkPage,
   updateBookmarksData,
   loading,
+  translation,
 }) {
   const { bookmarks } = useContext(BookmarkContext);
-  const { translation } = useContext(SettingsContext);
+  const settingsContext = useContext(SettingsContext);
   const {
     setPlaylist,
     setChapterMp3Url,
@@ -40,31 +41,40 @@ export default function BookmarkContent({
     pause,
     audioType,
   } = useContext(AudioPlayerContext);
+  const [displayedData, setDisplayedData] = useState(data || [])
+  const [isLoading, setIsLoading] = useState(loading)
+  const [prevData, setPrevData] = useState(data)
 
   useEffect(() => {
-    if (!data) return;
-
-    const versesData = data.map((verse) => ({
-      ...verse,
-      translation: verse.translations?.[translation] || verse.translation,
-    }));
-
-    const filtered = versesData.map((verse) => verse.mp3Url);
-    setPlaylist(filtered);
-  }, [data, translation]);
-
-  useEffect(() => {
-    if (data) {
-      let filtered = [];
-      data.forEach((verse) => {
-        filtered.push(verse.mp3Url);
-      });
-      setPlaylist(filtered);
+    if (data !== prevData) {
+      if (data && data.length > 0) {
+        setDisplayedData(data)
+      } else {
+        setDisplayedData([])
+      }
+      setPrevData(data)
+      setIsLoading(false)
     }
+  }, [data, prevData])
 
-    //setChapterMp3Url(chapterMp3Url);
-  }, [bookmarks, data]);
+  useEffect(() => {
+    if (loading) {
+      setIsLoading(true)
+    }
+  }, [loading])
 
+  const playlist = useMemo(() => {
+    if (displayedData && displayedData.length > 0) {
+      return displayedData.map((verse) => verse.mp3Url);
+    }
+    return []
+  }, [displayedData]);
+
+  useEffect(() => {
+    if (playlist.length > 0) {
+      setPlaylist(playlist)
+    }
+  }, [playlist, setPlaylist]);
   const playingThisChapter = playing && audioType === "chapter";
 
   const controlPlay = () => {
@@ -101,10 +111,13 @@ export default function BookmarkContent({
               >
                 ({t('Change')})
               </span>
+              {(isLoading || loading) && (
+                <span className={styles.translation_loading}></span>
+              )}
             </span>
           </div>
 
-          {loading ? (
+          {isLoading ? (
             <>
               <Skeleton
                 style={{ marginBottom: "24px" }}
@@ -127,11 +140,11 @@ export default function BookmarkContent({
                 className="skeleton"
               />
             </>
-          ) : data && data.length > 0 ? (
+          ) : displayedData && displayedData.length > 0 ? (
             <div className={styles.verses}>
-              {data.map((verse, index) => (
+              {displayedData.map((verse, index) => (
                   <VerseCard
-                    key={index}
+                    key={`${verse.chapter.chapterNo}-${verse.verseNo}-${translation}-${index}`}
                     chapterName={verse.chapter.name}
                     index={index}
                     chapterNo={verse.chapter.chapterNo}
@@ -139,13 +152,12 @@ export default function BookmarkContent({
                     verse={{
                       verseNo: verse.verseNo,
                       arabic: verse.arabic,
-                      translation: verse.translations?.[translation] || verse.translation,
+                      translation: verse.translation,
                       footnote:
                         translation === "vietnamese_hassan"
                           ? verse.footnote
                           : undefined,
                       mp3Url: verse.mp3Url,
-                      translations: verse.translations,
                     }}
                     ayaArabic={verse.arabic}
                     updateBookmarksData={updateBookmarksData}
@@ -153,8 +165,14 @@ export default function BookmarkContent({
                     translation={translation}
                   />
                 ))}
+                {loading && (
+                  <>
+                    <Skeleton height={150} width="100%" className="skeleton" />
+                    <Skeleton height={150} width="100%" className="skeleton" />
+                  </>
+                )}
             </div>
-          ) : !data && !exist ? (
+          ) : !exist ? (
             <div className={styles.no_record}>No records found!</div>
           ) : (
             <Skeleton

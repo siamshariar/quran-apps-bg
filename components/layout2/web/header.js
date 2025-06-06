@@ -155,8 +155,8 @@ export default function HeaderWeb({
 
   const openSettingsWithHomeTranslation = () => {
     handleClose();
-    setModalTitle("Settings");
-    setModalContent(<Settings controller={handleModalClose} defaultExpanded="translation" />);
+    setModalTitle(t('Settings'));
+    setModalContent(<Settings controller={handleModalClose}  />);
     setModalOpen(true);
   };
 
@@ -390,7 +390,7 @@ export default function HeaderWeb({
                       <span className={styles.icon}>
                         <SettingsIcon />
                       </span>
-                        <span className={styles.text}>Settings</span>
+                        <span className={styles.text}>{t('Settings')}</span>
                       </MenuItem>
                   )}
 

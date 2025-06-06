@@ -5,7 +5,7 @@ import { config, t } from '../../lib/config'
 export default function AboutContent() {
     return (
         <div className={css.wrapper}>
-            <div className={css.page_title}>{t('About')}</div>
+            <div className={css.page_title}>About</div>
             <div className={css.page_item}>
                 <div className={styles.quran_content}>
                     <p>{t('Quran application in')} {config?.language}.</p>

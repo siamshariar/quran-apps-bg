@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 export default function InstallAppContent() {
     return (
         <div className={css.wrapper}>
-            <div className={css.page_title}>{t('Install App')}</div>
+            <div className={css.page_title}>Install App</div>
 
             <div className={css.page_item}>
                 <div className={styles.quran_content}>

@@ -5,7 +5,7 @@
 .modal {
   background: var(--bg11);
   width: 248px;
-  //height: 344px;
+  height: 344px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -83,11 +83,10 @@
 
 .btn {
   text-transform: capitalize !important;
-  width: 100%;
+  width: 50%;
   padding: 6px 10px !important;
   background-color: var(--bg12) !important;
   color: var(--txt11) !important;
-  margin-bottom: 5px;
 }
 
 .btn svg {
@@ -112,4 +111,16 @@
 .custom_select li {
   padding: 6px 20px;
   cursor: pointer;
+}
+
+.custom_select {
+    overflow-y: auto !important;
+    
+    @media (max-width: 768px) {
+        position: fixed !important;
+        bottom: 0 !important;
+        top: 70% !important;
+        width: 100% !important;
+        border-radius: 12px 12px 0 0 !important;
+    }
 }

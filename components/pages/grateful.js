@@ -5,7 +5,7 @@ import styles from './about.module.scss'
 export default function GratefulContent() {
     return (
         <div className={css.wrapper}>
-            <div className={css.page_title}>{t('Grateful')}</div>
+            <div className={css.page_title}>Grateful</div>
 
             <div className={css.page_item}>
                 <div className={styles.quran_content}>

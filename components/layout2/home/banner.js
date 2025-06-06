@@ -7,6 +7,7 @@ import styles from './banner.module.scss'
 import { config } from "../../../lib/config"
 import { useContext } from "react"
 import { SettingsContext } from "../../../contexts/SettingsContext"
+import { t } from '../../../lib/config'
 
 export default function Banner() {
     const { theme, isReady } = useContext(SettingsContext)
@@ -65,7 +66,7 @@ const GridItem = ({ title, text, url }) => {
                 <p className={styles.text}>{text}</p>
                 <Link href={url} legacyBehavior>
                     <a className={styles.link}>
-                        <span className={styles.link_text}>Read more</span>
+                        <span className={styles.link_text}>{t('Read more')}</span>
                         <span className={styles.link_icon}><EastIcon /></span>
                     </a>
                 </Link>

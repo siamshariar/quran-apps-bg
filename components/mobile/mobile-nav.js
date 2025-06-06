@@ -25,6 +25,7 @@ import PinIcon from '../icons/PinOutline'
 import AutoStoriesIcon from '../icons/AutoStories'
 import { SidenavContext } from '../../contexts/SidenavContext'
 import { useRouter } from 'next/router'
+import { t } from '../../lib/config'
 
 // import PinModal from './pin-modal'
 // import PinIcon from '../icons/PinOutline'
@@ -180,10 +181,11 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
                   <Image
 					src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                     alt=""
-                    width={142}
+                    width={122}
                     height={26}
                     loading="eager"
 					objectFit="contain"
+          unoptimized
                   />
 									<span>{config.domain}<br/>v1.0.1</span>
 								</a>
@@ -203,7 +205,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								<Link href="/" legacyBehavior>
 									<a onClick={handleGoToVerseModal(true)}>
 										<span className={styles.icon}><NearMeIcon /></span>
-										<span className={styles.text}>Go to verse</span>
+										<span className={styles.text}>{t('Go To Verse')}</span>
 									</a>
 								</Link>
 							</li>
@@ -211,7 +213,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								<Link href="/settings" legacyBehavior>
 									<a onClick={handleSettingsModal(true)}>
 										<span className={styles.icon}><SettingsIcon /></span>
-										<span className={styles.text}>Settings</span>
+										<span className={styles.text}>{t('Settings')}</span>
 									</a>
 								</Link>
 							</li>
@@ -220,7 +222,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								<Link href="/bookmarks" legacyBehavior>
 									<a onClick={e => handleBookmarkPage(e, 2)}>
 										<span className={styles.icon}><PinIcon /></span>
-										<span className={styles.text}>Pin</span>
+										<span className={styles.text}>{t('Pin')}</span>
 									</a>
 								</Link>
 							</li>
@@ -228,7 +230,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								<Link href="/bookmarks" legacyBehavior>
 									<a onClick={e => handleBookmarkPage(e, 3)}>
 										<span className={styles.icon}><AutoStoriesIcon /></span>
-										<span className={styles.text}>Last Read</span>
+										<span className={styles.text}>{t('Last Read')}</span>
 									</a>
 								</Link>
 							</li>
@@ -236,7 +238,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								<Link href="/download" legacyBehavior>
 									<a>
 										<span className={styles.icon}><DownloadIcon /></span>
-										<span className={styles.text}>Download</span>
+										<span className={styles.text}>{t('Download')}</span>
 									</a>
 								</Link>
 							</li>
@@ -244,7 +246,7 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 								<Link href="/names-of-allah" legacyBehavior>
 									<a>
 										<span className={styles.icon}><Names99Icon /></span>
-										<span className={styles.text}>Names of Allah</span>
+										<span className={styles.text}>{t('Names of Allah')}</span>
 									</a>
 								</Link>
 							</li>

@@ -6,6 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { t } from '../../lib/config';
 import styles from './arabic-dialog.module.scss'
 
 export default function ArabicDialog() {
@@ -49,7 +50,7 @@ export default function ArabicDialog() {
                     root: styles.title
                 }}
             >
-                Do you want to display Arabic?
+                {t('Do you want to display Arabic?')}
             </DialogTitle>
 
             <DialogContent>
@@ -59,7 +60,7 @@ export default function ArabicDialog() {
                         root: styles.desc
                     }}
                 >
-                    {"You can change the display in the settings 'Settings -> View'."}
+                    {t("You can change the display in the Settings → View section.")}
                 </DialogContentText>
             </DialogContent>
 
@@ -68,13 +69,13 @@ export default function ArabicDialog() {
                     onClick={handleClickNo}
                     className={styles.btn}
                 >
-                    No
+                    {t('No')}
                 </Button>
                 <Button
                     onClick={handleClickYes}
                     className={styles.btn}
                 >
-                    Yes
+                    {t('Yes')}
                 </Button>
             </DialogActions>
         </Dialog>

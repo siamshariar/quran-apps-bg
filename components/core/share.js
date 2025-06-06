@@ -2,6 +2,7 @@ import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
 import CloseIcon from '../icons/Close'
+import { t } from "../../lib/config";
 
 import {
     EmailShareButton,
@@ -55,7 +56,7 @@ export default function Share({ open, closer, url, title }) {
                         <CloseIcon />
                     </span>
 
-                    <div className={styles.title}>Share verse</div>
+                    <div className={styles.title}>{t("Share verse")}</div>
 
                     <div className={styles.lists}>
                         <div className={styles.item}>

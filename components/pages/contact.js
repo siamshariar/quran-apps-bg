@@ -5,7 +5,7 @@ import styles from './about.module.scss'
 export default function ContactContent() {
     return (
         <div className={css.wrapper}>
-            <div className={css.page_title}>{t('Contact')}</div>
+            <div className={css.page_title}>Contact</div>
 
             <div className={css.page_item}>
                 <div className={styles.quran_content}>
