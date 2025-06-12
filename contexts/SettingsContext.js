@@ -169,6 +169,23 @@ const SettingsContextProvider = ({ children }) => {
       }
     }
 
+  const changeActiveTranslations = (translations) => {
+    const newSettings = {
+      ...settings,
+      activeTranslations: translations,
+      translation: translations.includes(settings.translation) ? settings.translation : translations[0],
+    }
+    localStorage.setItem("settings", JSON.stringify(newSettings))
+    setSettings(newSettings)
+  }
+
+  const selectedTranslations = [settings.translation]
+
+  const changeSelectedTranslations = (translations) => {
+    const singleTranslation = Array.isArray(translations) ? translations[0] : translations
+    changeTranslation(singleTranslation)
+  }
+
     // change settings functions
     const changeView = (view) => {
         const newSettings = { ...settings, ['view']: view }
@@ -306,6 +323,10 @@ const SettingsContextProvider = ({ children }) => {
                 settings,
                 translation: settings.translation,
                 changeTranslation,
+                activeTranslations: settings.activeTranslations || [settings.translation],
+                changeActiveTranslations,
+                selectedTranslations,
+                changeSelectedTranslations,
                 view: settings.view,
                 changeView,
                 theme: settings.theme,

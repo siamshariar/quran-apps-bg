@@ -26,6 +26,9 @@
 .verse_arabic {
   display: block;
   // margin-bottom: 30px;
+  direction: rtl;
+  text-align: right;
+  font-family: 'Amiri', serif;
 }
 
 .verse_arabic_display_none {
@@ -47,6 +50,9 @@
 
 .verse_translated {
   margin-bottom: 14px;
+  direction: ltr;
+  text-align: left;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .verse_translated_display_none {

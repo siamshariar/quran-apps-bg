@@ -28,17 +28,44 @@ const Layout = ({ children }) => {
   const [showScrollButton, setShowScrollButton] = useState(false)
   const [isScrolling, setIsScrolling] = useState(false)
   const scrollToTopRef = useRef(null)
+  const [headerVisible, setHeaderVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const [scrollDirection, setScrollDirection] = useState("up")
 
   useEffect(() => {
     const handleScroll = () => {
+      const currentScrollY = window.pageYOffset
+
       if (!isScrolling) {
-        setShowScrollButton(window.pageYOffset > 300)
+        setShowScrollButton(currentScrollY > 300)
       }
+
+      if (Math.abs(currentScrollY - lastScrollY) < 5) {
+        return
+      }
+
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        if (headerVisible) {
+          setHeaderVisible(false)
+          setScrollDirection("down")
+        }
+      } else if (currentScrollY < lastScrollY) {
+        if (!headerVisible) {
+          setHeaderVisible(true)
+          setScrollDirection("up")
+        }
+      }
+
+      if (currentScrollY <= 80) {
+        setHeaderVisible(true)
+      }
+
+      setLastScrollY(currentScrollY)
     }
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [isScrolling])
+  }, [isScrolling, lastScrollY, headerVisible])
 
   const scrollToTop = () => {
     if (isScrolling) return
@@ -52,6 +79,16 @@ const Layout = ({ children }) => {
     setTimeout(() => {
       setIsScrolling(false)
     }, 1000)
+  }
+
+  const getSidenavMarginTop = () => {
+    if (headerVisible) {
+      return 90 
+    } else if (scrollDirection === "up") {
+      return 100
+    } else {
+      return 24
+    }
   }
 
   return (
@@ -72,6 +109,7 @@ const Layout = ({ children }) => {
               isChapterPage={true}
               // searchModalController={searchModalController}
               hasSidenav={true}
+              headerVisible={headerVisible}
             />
 
             <AudioPlayerContextProvider>
@@ -87,7 +125,12 @@ const Layout = ({ children }) => {
                 className="viewport viewport_surah viewport_no_footer"
               >
                 <div className={styles.content}>
-                  <Sidenav chapters={children.props.chapters} />
+                  <Sidenav
+                    chapters={children.props.chapters}
+                    headerVisible={headerVisible}
+                    scrollDirection={scrollDirection}
+                    marginTop={getSidenavMarginTop()}
+                  />
 
                   {children}
                 </div>

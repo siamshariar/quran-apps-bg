@@ -13,14 +13,19 @@
   .header {
     display: block;
     width: 100%;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     border-bottom: none;
     background: var(--bg11);
     box-shadow: var(--bs21);
     z-index: 999;
-    transition: background 150ms ease-in, box-shadow 150ms ease-in;
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+  }
+
+  .header.hidden {
+    transform: translateY(-100%);
   }
 
   .header.home {
@@ -35,7 +40,7 @@
   }
 
   .header.surah {
-    position: absolute;
+    position: fixed;
   }
 
   .inner {

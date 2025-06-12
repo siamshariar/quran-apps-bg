@@ -20,6 +20,10 @@ import { useTheme } from '@mui/material/styles';
 
 const Layout = ({ children }) => {
   const [showScrollButton, setShowScrollButton] = useState(false)
+  const [headerVisible, setHeaderVisible] = useState(true)
+  const [isScrolling, setIsScrolling] = useState(false)
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const [scrollDirection, setScrollDirection] = useState("up")
   // const [searchModalOpen, updateSearchModalOpen] = useState(false)
 
   // const searchModalController = open => {
@@ -29,16 +33,38 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.pageYOffset > 300) {
-        setShowScrollButton(true);
-      } else {
-        setShowScrollButton(false);
+      const currentScrollY = window.pageYOffset
+
+      if (!isScrolling) {
+        setShowScrollButton(currentScrollY > 300)
       }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
+
+      if (Math.abs(currentScrollY - lastScrollY) < 5) {
+        return
+      }
+
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        if (headerVisible) {
+          setHeaderVisible(false)
+          setScrollDirection("down")
+        }
+      } else if (currentScrollY < lastScrollY) {
+        if (!headerVisible) {
+          setHeaderVisible(true)
+          setScrollDirection("up")
+        }
+      }
+
+      if (currentScrollY <= 80) {
+        setHeaderVisible(true)
+      }
+
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isScrolling, lastScrollY, headerVisible]);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -46,6 +72,16 @@ const Layout = ({ children }) => {
       behavior: 'smooth'
     });
   };
+
+    const getSidenavMarginTop = () => {
+    if (headerVisible) {
+      return 90 
+    } else if (scrollDirection === "up") {
+      return 100
+    } else {
+      return 24
+    }
+  }
 
   return (
     <SettingsContextProvider>
@@ -66,6 +102,7 @@ const Layout = ({ children }) => {
                 isChapterPage={true}
                 // searchModalController={searchModalController}
                 hasSidenav={true}
+                headerVisible={headerVisible}
               />
 
               {/* TODO: Fix redirect */}
@@ -93,7 +130,7 @@ const Layout = ({ children }) => {
                 )}
               >
                 <div className={styles.content}>
-                  <Sidenav chapters={children.props.chapters} />
+                  <Sidenav chapters={children.props.chapters} headerVisible={headerVisible} marginTop={getSidenavMarginTop()}/>
                   {children}
                 </div>
               </main>

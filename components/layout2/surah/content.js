@@ -10,6 +10,7 @@ import InfoIcon from "../../icons/Info";
 import PlayIcon from "../../icons/PlayArrow";
 import PauseIcon from "../../icons/Pause";
 import Bismillah from "../../icons/Bismillah";
+import Settings from "../../settings"
 
 import styles from "./content.module.scss";
 import { config } from "../../../lib/config";
@@ -21,9 +22,18 @@ const MemoizedBismillah = memo(Bismillah);
 const MemoizedPagination = memo(Pagination);
 
 const getTranslatorName = (translationCode) => ({
-    vietnamese_hassan: 'Hasan Abdul-Karim',
-    vietnamese_rwwad: 'Ruwwad Translation Center',
-}[translationCode] || translationCode);
+    vietnamese_hassan: "Hasan Abdul-Karim",
+    vietnamese_rwwad: "Ruwwad Translation Center",
+    english_abdel_haleem: "M.A.S. Abdel Haleem",
+    english_mustafa_khattab: "Dr. Mustafa Khattab",
+    english_usmani: "T. Usmani",
+    english_maududi: "A. Maududi (Tafhim commentary)",
+    english_pickthall: "M. Pickthall",
+    english_yusuf_ali: "A. Yusuf Ali",
+    english_saheeh: "Saheeh International",
+    english_hilali_khan: "Al-Hilali & Khan",
+    english_transliteration: "Transliteration",
+  })[translationCode] || translationCode
 
 export default function ChapterContent({
   contentType,
@@ -41,7 +51,7 @@ export default function ChapterContent({
   const printRef = useRef(null);
 
 
-  const { translation } = useContext(SettingsContext);
+  const { translation, activeTranslations = [translation] } = useContext(SettingsContext);
   const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } =
     useContext(AudioPlayerContext);
 
@@ -50,6 +60,7 @@ export default function ChapterContent({
   const [modalTitle, setModalTitle] = useState(null);
   const [modalContent, setModalContent] = useState(null);
   const [expandedSetting, setExpandedSetting] = useState(null);
+  const [showMultiTranslationModal, setShowMultiTranslationModal] = useState(false)
 
   const translationPrefix = translation !== "vietnamese_hassan" ? `/${translation}` : "";
 
@@ -215,7 +226,7 @@ export default function ChapterContent({
   const [didMount, setDidMount] = useState(false);
 
   useEffect(() => {
-    const filtered = currentVerses?.map(verse => verse.mp3Url) || [];
+    const filtered = currentVerses?.map((verse) => verse.mp3Url) || [];
     setPlaylist(filtered);
     setChapterMp3Url(chapterMp3Url);
 
@@ -334,7 +345,16 @@ export default function ChapterContent({
   }, []);
 
   const renderVerse = useCallback((index) => {
-    const verse = currentVerses[index];
+    const verse = currentVerses[index]
+      const verseTranslations = {}
+      if (activeTranslations && activeTranslations.length > 0) {
+        activeTranslations.forEach((translationCode) => {
+          if (allTranslations && allTranslations[translationCode] && allTranslations[translationCode][index]) {
+            verseTranslations[translationCode] = allTranslations[translationCode][index]
+          }
+        })
+      }
+
     return (
       <MemoizedVerseCard
         key={`${translation}-${verse.verseNo}`}
@@ -348,9 +368,13 @@ export default function ChapterContent({
         isVirtualized={true}
         isLastVerse={index === currentVerses.length - 1}
         translation={translation}
+        allTranslations={verseTranslations}
+        activeTranslations={activeTranslations}
       />
     );
-  }, [chapterName, chapterNo, chapterSlug, currentVerses, translation]);
+  }, [chapterName, chapterNo, chapterSlug, currentVerses, translation, activeTranslations, allTranslations],
+)
+  const availableTranslations = allTranslations ? Object.keys(allTranslations) : []
 
   return (
     <div className={styles.chapter}>

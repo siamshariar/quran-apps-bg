@@ -10,6 +10,7 @@ import PinIcon from "../../icons/PinOutline";
 import BookmarkBorderIcon from "../../icons/BookmarkBorder";
 import AutoStoriesIcon from "../../icons/AutoStories";
 import styles from "./index.module.scss";
+import { t } from "../../../lib/config";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,36 +65,56 @@ export default function Save() {
         aria-label="Bookmark tabs"
       >
         <Tab
+          sx={{ textTransform: "capitalize" }}
           classes={{
             root: styles.tab,
             wrapper: styles.tab_wrapper,
-          }}
-          icon={<BookmarkBorderIcon />}
-          label="Bookmarks"
+            selected: styles.tab_selected,
+         }}
+          label={
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <BookmarkBorderIcon style={{ marginRight: "6px" }} />
+              {t('Bookmarks')}
+            </span>
+          }
           disableRipple
+          iconPosition="start"
           disableFocusRipple
           {...a11yProps(0)}
         />
 
         <Tab
+          sx={{ textTransform: "capitalize" }}
           classes={{
             root: styles.tab,
             wrapper: styles.tab_wrapper,
+            selected: styles.tab_selected,
           }}
-          icon={<PinIcon />}
-          label="Pin"
+          label={
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <PinIcon style={{ marginRight: "6px" }} />
+              {t('Pin')}
+            </span>
+          }
           disableRipple
+          iconPosition="start"
           disableFocusRipple
           {...a11yProps(1)}
         />
 
         <Tab
+          sx={{ textTransform: "capitalize" }}
           classes={{
             root: styles.tab,
             wrapper: styles.tab_wrapper,
+            selected: styles.tab_selected,
           }}
-          icon={<AutoStoriesIcon />}
-          label="Last Read"
+          label={
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <AutoStoriesIcon style={{ marginRight: "6px" }} />
+              {t('Last Read')}
+            </span>
+          }
           disableRipple
           disableFocusRipple
           {...a11yProps(2)}

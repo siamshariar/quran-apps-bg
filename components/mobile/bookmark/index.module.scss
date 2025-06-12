@@ -54,3 +54,26 @@
   margin-right: 8px;
   fill: var(--txt11);
 }
+
+.tab span svg {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 0 !important;
+  margin-right: 6px !important;
+  fill: var(--txt11);
+  left: -2px;
+  position: relative;
+  fill: currentColor;
+}
+.tab {
+  color: var(--text-secondary) !important;
+  text-transform: none;
+
+  &.Mui-selected {
+    color: var(--tab-selected) !important;
+  }
+}
+
+.tab_selected {
+  color: var(--tab-selected) !important;
+}

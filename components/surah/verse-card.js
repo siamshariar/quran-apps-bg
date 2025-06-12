@@ -23,13 +23,15 @@ export default function VerseCard({
   isBookmarkPage,
   isVirtualized,
   isLastVerse,
-  translation
+  translation,
+  allTranslations = {},
+  activeTranslations = [translation],
 }) {
     const { view, changeActiveVerse } = useContext(SettingsContext)
     const [expanded, setExpanded] = useState(true)
-  const [displayTranslation, setDisplayTranslation] = useState(verse.translation)
-  const translationRef = useRef(null)
-  const prevTranslation = useRef(translation)
+  const [displayTranslations, setDisplayTranslations] = useState({})
+  const translationRefs = useRef({})
+  const prevTranslations = useRef({})
   const refTarget = useRef()
   const isTargetVisible = useOnScreen(refTarget)
   const { addLastRead } = useContext(PinContext)
@@ -42,23 +44,40 @@ export default function VerseCard({
   }, [isTargetVisible])
 
   useEffect(() => {
-    if (prevTranslation.current !== translation) {
+    const initialDisplayTranslations = { [translation]: verse.translation }
+    setDisplayTranslations(initialDisplayTranslations)
 
-      if (translationRef.current) {
-        translationRef.current.style.opacity = '0'
+    prevTranslations.current = { [translation]: translation }
+  }, [])
+
+  useEffect(() => {
+    const updatedDisplayTranslations = { ...displayTranslations }
+
+    activeTranslations.forEach((translationCode) => {
+      if (allTranslations[translationCode]) {
+        const currentTranslation = allTranslations[translationCode].translation
+
+        if (prevTranslations.current[translationCode] !== translationCode) {
+      if (translationRefs.current[translationCode]) {
+        translationRefs.current[translationCode].style.opacity = '0'
       }
-      
-      const timer = setTimeout(() => {
-        setDisplayTranslation(verse.translation)
-        if (translationRef.current) {
-          translationRef.current.style.opacity = '1'
+
+          setTimeout(() => {
+        setDisplayTranslations((prev) => ({
+              ...prev,
+              [translationCode]: currentTranslation,
+            }))
+
+            if (translationRefs.current[translationCode]) {
+              translationRefs.current[translationCode].style.opacity = "1"
         }
       }, 150)
       
-      prevTranslation.current = translation
-      return () => clearTimeout(timer)
+      prevTranslations.current[translationCode] = translationCode
+      }
     }
-  }, [translation, verse.translation])
+    })
+  }, [activeTranslations, allTranslations])
 
     const controlAccordion = () => {
         setExpanded(!expanded)
@@ -79,6 +98,21 @@ export default function VerseCard({
         console.log('visible verse-' + verse.verseNo)
       }
     }, [isTargetVisible]);
+
+  const getTranslatorName = (translationCode) =>
+    ({
+      vietnamese_hassan: "Hasan Abdul-Karim",
+      vietnamese_rwwad: "Ruwwad Translation Center",
+      english_abdel_haleem: "M.A.S. Abdel Haleem",
+      english_mustafa_khattab: "Dr. Mustafa Khattab",
+      english_usmani: "T. Usmani",
+      english_maududi: "A. Maududi",
+      english_pickthall: "M. Pickthall",
+      english_yusuf_ali: "A. Yusuf Ali",
+      english_saheeh: "Saheeh International",
+      english_hilali_khan: "Al-Hilali & Khan",
+      english_transliteration: "Transliteration",
+    })[translationCode] || translationCode
 
     return (
         <div id={`verse-${index + 1}`} className={`${styles.wrapper} ${isVirtualized ? styles.virtualized : ""} ${isLastVerse ? styles.last_child : ""}`}>
@@ -105,19 +139,32 @@ export default function VerseCard({
                 </div>
             </div>
 
-            {view.arabic && view.translation && (
-              <hr className={styles.separator} />
-            )}
+            {view.arabic && view.translation && <hr className={styles.separator} />}
 
-            <div 
-                ref={translationRef}
-                className={view.translation ? styles.verse_arabic : styles.verse_arabic_display_none}
-                style={{ transition: 'opacity 0.15s ease' }}
-              >
-                <div className={`${styles.verse_text} text_trans`}>
-                    {displayTranslation}
+            {view.translation &&
+              activeTranslations.map((translationCode, idx) => {
+                const translationText =
+                  allTranslations[translationCode]?.translation || 
+                  (translationCode === translation ? verse.translation : "");
+
+                if (!translationText) return null;
+
+                return (
+                  <div key={translationCode} className={styles.translation_block}>
+                    {idx > 0 && <hr className={styles.translation_separator} />}
+                    <div
+                      ref={(el) => (translationRefs.current[translationCode] = el)}
+                      className={styles.verse_translation}
+                      style={{ transition: "opacity 0.15s ease" }}
+                    >
+                      <div className={styles.verse_text}>
+                        {displayTranslations[translationCode] || translationText}
+                      </div>
                 </div>
             </div>
+            );
+          })
+        }
 
             {(view.arabic || view.translation) && shouldShowFootnote && (
               <hr className={styles.separator} />

@@ -6,6 +6,7 @@ import classNames from "classnames";
 import CloseIcon from "../icons/Close";
 import styles from "./ModalPrimary.module.scss";
 import css from "../core/scrollbar.module.scss";
+import { t } from "../../lib/config"
 
 const style = {
   wrapper: {
@@ -44,7 +45,7 @@ const PrimaryModal = ({ open, closer, title, content }) => {
           <div className={classNames(css.scrollbar, styles.scrollbar)}>
             <Typography variant="h6" component="div">
               <div className={styles.header}>
-                <p className={styles.title}>{title}</p>
+                {title && title !== t("Translations") && <p className={styles.title}>{title}</p>}
                 <button
                   className={styles.close}
                   onClick={(e) => handleClose(e)}

@@ -1,0 +1,234 @@
+.translationModal {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0 0 16px 0;
+  border-bottom: 1px dashed var(--bdr14);
+  margin-bottom: 16px;
+  margin-right: 0;
+}
+
+.backBtn {
+  margin-right: 12px !important;
+  padding: 8px !important;
+  width: 34px !important;
+  height: 34px !important;
+  background-color: var(--bg22) !important;
+  border-radius: 50% !important;
+}
+
+.backBtn:hover {
+  background-color: var(--main-color) !important;
+}
+
+.backBtn svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: var(--txt12) !important;
+}
+
+.backBtn:hover svg {
+  fill: var(--bg22) !important;
+}
+
+.closeBtn {
+  padding: 8px !important;
+  width: 34px !important;
+  height: 34px !important;
+  background-color: var(--bg22) !important;
+  border-radius: 50% !important;
+}
+
+.closeBtn:hover {
+  background-color: var(--main-color) !important;
+}
+
+.closeBtn svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: var(--txt12) !important;
+}
+
+.closeBtn:hover svg {
+  fill: var(--bg22) !important;
+}
+
+.title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  color: var(--txt11) !important;
+  margin: 0 !important;
+  left: 50%;
+}
+
+.searchContainer {
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--bg22);
+  border-radius: 12px;
+  border: 1px solid var(--bdr14);
+  transition: all 0.2s ease;
+  padding-left: 20px;
+
+  &:focus-within {
+    border-color: var(--main-color);
+    background-color: var(--bg11);
+  }
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  width: 18px;
+  height: 18px;
+  padding-top: 10px;
+  stroke: var(--search-icon-color);
+  stroke-width: 2.5px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px 16px 12px 8px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: transparent;
+  color: var(--txt11);
+  outline: none;
+  font-family: "Montserrat", sans-serif;
+  
+  &::placeholder {
+    color: var(--txt12);
+    font-size: 14px;
+    font-weight: 400;
+    opacity: 0.8;
+  }
+  
+  &:focus {
+    background-color: transparent;
+  }
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.languageList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.languageSection {
+  margin-bottom: 16px;
+}
+
+.languageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--bdr14);
+  margin-bottom: 8px;
+}
+
+.languageName {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--txt12);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.translationList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.translationItem {
+  display: flex;
+  align-items: center;
+  padding: 4px 0px;
+  border-radius: 4px;
+  
+  &:hover {
+    background-color: var(--bg22);
+  }
+}
+
+.formControlLabel {
+  margin: 0 !important;
+  flex: 1;
+  
+  .MuiCheckbox-root {
+    padding: 8px !important;
+    color: var(--txt12) !important;
+    
+    &.Mui-checked {
+      color: var(--main-color) !important;
+    }
+  }
+}
+
+.translationInfo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 4px;
+}
+
+.translationName {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--txt11);
+  line-height: 1.2;
+}
+
+.translationDescription {
+  font-size: 12px;
+  color: var(--txt12);
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
+.checkbox {
+  color: var(--txt12) !important;
+}
+
+/* For the unchecked state */
+.checkbox .MuiIconButton-root {
+  border-radius: 4px !important;
+}
+
+/* For the checked state */
+.checkbox .MuiSvgIcon-root {
+  border-radius: 4px !important;
+}
+
+.btn {
+  padding-left: 0px !important;
+  margin-left: -6px !important;
+  color: var(--txt12);
+  
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}

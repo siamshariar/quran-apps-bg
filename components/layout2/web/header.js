@@ -2,7 +2,7 @@ import GoToVerse from "../../mobile/go-to-verse";
 import { useContext } from "react";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import { SidenavContext } from "../../../contexts/SidenavContext";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
@@ -41,7 +41,7 @@ export default function HeaderWeb({
   chapters,
   isChapterPage,
   hasSidenav,
-}) {
+  headerVisible = true }) {
   const { bookmarkOpen, changeBookmarkOpen } = useContext(SidenavContext);
   // const router = useRouter();
 
@@ -57,7 +57,7 @@ export default function HeaderWeb({
   };
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState(null);
+  const [modalTitle, setModalTitle] = useState("");
   const [modalContent, setModalContent] = useState(null);
 
   const handleModalClose = (open) => (event) => {
@@ -68,6 +68,9 @@ export default function HeaderWeb({
       return;
     }
     setModalOpen(open);
+    if (!open) {
+      setModalTitle("")
+    }
   };
 
   const handleItem = (e, item, title) => {
@@ -95,12 +98,14 @@ export default function HeaderWeb({
     window.onscroll = () => {
       setOffset(window.pageYOffset);
     };
+    if (header.current) {
     header.current.classList.add(styles.scrolled);
     if (offset > 5) {
       header.current.classList.add(styles.scrolled);
     } else {
       header.current.classList.remove(styles.scrolled);
     }
+  }
 
     return () => setDidMount(false);
   }, [offset]);
@@ -153,16 +158,25 @@ export default function HeaderWeb({
     document.dispatchEvent(settingsEvent);
   };
 
+  const handleTitleChange = useCallback((newTitle) => {
+    console.log("Title changing to:", newTitle)
+    setModalTitle(newTitle)
+  }, [])
+
   const openSettingsWithHomeTranslation = () => {
     handleClose();
-    setModalTitle(t('Settings'));
-    setModalContent(<Settings controller={handleModalClose}  />);
+    const initialTitle = t("Settings")
+    setModalTitle(initialTitle)
+
+    const settingsContent = <Settings controller={handleModalClose} onTitleChange={handleTitleChange} />;
+
+    setModalContent(settingsContent)
     setModalOpen(true);
   };
 
   return (
     <>
-      <div className={`${styles.header} ${styles[page]}`} ref={header}>
+      <div className={`${styles.header} ${styles[page]} ${!headerVisible ? styles.hidden : ""}`} ref={header}>
         <Container>
           <div className={styles.inner}>
             <div className={styles.left}>

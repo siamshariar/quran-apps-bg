@@ -14,11 +14,16 @@ import UpIcon from '../icons/ChevronUp'
 import DownIcon from '../icons/ChevronDown'
 import PlusIcon from '../icons/Plus'
 import MinusIcon from '../icons/Minus'
+import ChevronRightIcon from '../icons/ChevronRight'
+import TranslationModalContent from './translation-modal'
 import { config, t } from '../../lib/config'
 import styles from './index.module.scss'
 
-export default function Settings({ defaultExpanded, controller }) {
+export default function Settings({ defaultExpanded, showTranslationModal = false, onShowTranslationModal = null, onTitleChange = null }) {
     const [expandedPanel, setExpandedPanel] = useState(null)
+    const [internalShowTranslationModal, setInternalShowTranslationModal] = useState(false)
+    const isTranslationModalOpen = onShowTranslationModal ? showTranslationModal : internalShowTranslationModal
+    const handleTranslationModal = onShowTranslationModal || setInternalShowTranslationModal
 
     useEffect(() => {
         if (defaultExpanded) {
@@ -26,15 +31,38 @@ export default function Settings({ defaultExpanded, controller }) {
         }
     }, [defaultExpanded])
 
+  useEffect(() => {
+    if (onTitleChange) {
+      if (isTranslationModalOpen) {
+        onTitleChange(t("Translations"))
+      } else {
+        onTitleChange(t("Settings"))
+      }
+    }
+  }, [isTranslationModalOpen, onTitleChange])
+
     const handleAccordionChange = (panel) => (event, isExpanded) => {
         setExpandedPanel(isExpanded ? panel : false)
     }
+
+  const handleOpenTranslationModal = () => {
+    handleTranslationModal(true)
+  }
+
+  const handleCloseTranslationModal = () => {
+    handleTranslationModal(false)
+  }
+
+  if (isTranslationModalOpen) {
+    return <TranslationModalContent onBack={handleCloseTranslationModal} />
+  }
 
     return (
         <div className={styles.wrapper}>
             <Translation 
                 expanded={expandedPanel === 'translation'}
                 onAccordionChange={handleAccordionChange}
+                onOpenModal={handleOpenTranslationModal}
                 t={t}
             />
             <hr className={styles.divider} />
@@ -59,59 +87,50 @@ export default function Settings({ defaultExpanded, controller }) {
 }
 
 
-const Translation = ({ expanded, onAccordionChange }) => {
-    const { translation, changeTranslation } = useContext(SettingsContext)
+function Translation({ expanded, onAccordionChange, onOpenModal }) {
+    const { translation, selectedTranslations = [translation] } = useContext(SettingsContext)
 
-    const handleTranslationChange = (newTranslation) => {
-        changeTranslation(newTranslation)
+  const getTranslatorName = (translationCode) => {
+    const translationMap = {
+      vietnamese_hassan: "Hasan Abdul-Karim",
+      vietnamese_rwwad: "Ruwwad Translation Center",
+      english_abdel_haleem: "M.A.S. Abdel Haleem",
+      english_mustafa_khattab: "Dr. Mustafa Khattab",
+      english_usmani: "T. Usmani",
+      english_maududi: "A. Maududi",
+      english_pickthall: "M. Pickthall",
+      english_yusuf_ali: "A. Yusuf Ali",
+      english_saheeh: "Saheeh International",
+      english_hilali_khan: "Al-Hilali & Khan",
+      english_transliteration: "Transliteration",
     }
+    return translationMap[translationCode] || translationCode
+  }
 
-    const availableTranslations = config?.availableTranslations || [
-        {
-            code: 'vietnamese_hassan',
-            name: 'Hasan Abdul-Karim'
-        },
-        {
-            code: 'vietnamese_rwwad',
-            name: 'Ruwwad Translation Center'
-        }
-    ]
+  const getSelectedTranslationsText = () => {
+    if (selectedTranslations.length === 1) {
+      return getTranslatorName(selectedTranslations[0])
+    } else if (selectedTranslations.length === 2) {
+      return `${getTranslatorName(selectedTranslations[0])}, ${getTranslatorName(selectedTranslations[1])}`
+    } else {
+      return `${getTranslatorName(selectedTranslations[0])}, The Clear Quran`
+    }
+  }
 
     return (
         <div className={`${styles.block} ${styles.translation}`}>
             <div className={styles.title}>{t('Translation')}</div>
             <div className={styles.list}>
                 <div className={styles.item}>
-                    <Accordion
-                        className={styles.accordion}
-                        expanded={expanded}
-                        onChange={onAccordionChange('translation')}
-                    >
-                        <AccordionSummary className={styles.accordion_summary}>
-                            <IconButton className={styles.btn}>
-                                {expanded ? <UpIcon /> : <DownIcon />}
-                            </IconButton>
-                            <div className={styles.label}>{t('Choose Translation')}</div>
-                        </AccordionSummary>
-
-                        <AccordionDetails className={styles.accordion_details}>
-                            <RadioGroup
-                                name="translation"
-                                value={translation || 'vietnamese_hassan'}
-                                onChange={(e) => handleTranslationChange(e.target.value)}
-                            >
-                                {availableTranslations.map(t => (
-                                    <FormControlLabel
-                                        key={t.code}
-                                        className="settings_radio"
-                                        value={t.code}
-                                        control={<Radio />}
-                                        label={t.name}
-                                    />
-                                ))}
-                            </RadioGroup>
-                        </AccordionDetails>
-                    </Accordion>
+                  <div className={styles.translationSelector} onClick={onOpenModal}>
+                    <div className={styles.translationInfo}>
+                  <div className={styles.translationLabel}>{t("Selected Translations")}</div>
+                  <div className={styles.translationName}>{getSelectedTranslationsText()}</div>
+                </div>
+                <IconButton className={styles.btn}>
+                  <ChevronRightIcon />
+                </IconButton>
+            </div>
                 </div>
             </div>
         </div>

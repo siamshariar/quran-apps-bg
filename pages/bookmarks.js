@@ -32,6 +32,7 @@ function BookmarkInner({ chapters }) {
   const [isMobile, setIsMobile] = useState(false);
   const [bookmarkEntries, setBookmarkEntries] = useState([]);
   const [initialized, setInitialized] = useState(false);
+  const [prevKey, setPrevKey] = useState(null)
 
   const mountedRef = useRef(true)
   const abortControllerRef = useRef(null)
@@ -64,7 +65,17 @@ function BookmarkInner({ chapters }) {
   }, [router.query.key]);
 
   useEffect(() => {
-    if (!key || initialized) return
+    if (key && key !== prevKey) {
+      setBookmarkName(null);
+      setExists(true);
+      setBookmarksCache({});
+      setBookmarkEntries([]);
+      setPrevKey(key);
+    }
+  }, [key, prevKey]);
+
+  useEffect(() => {
+    if (!key) return
 
       const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks") || "{}");
       if (!savedBookmarks[key]) {

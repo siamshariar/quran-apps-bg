@@ -12,17 +12,25 @@ import SettingsIcon from "../../icons/SettingsOutlined";
 import styles from "./index.module.scss";
 import { t } from "../../../lib/config";
 
-export default function Sidenav({ chapters }) {
+export default function Sidenav({ chapters, headerVisible = true, scrollDirection = "up", marginTop = 24 }) {
   const { bookmarkOpen, changeBookmarkOpen } = useContext(SidenavContext);
 
   const [chapterListOpen, updateChapterListOpen] = useState(false);
   const [settingsOpen, updateSettingsOpen] = useState(false);
   const [expandedSetting, setExpandedSetting] = useState(null);
   // const [saveOpen, updateSaveOpen] = useState(false);
+  const [sidenavStyle, setSidenavStyle] = useState({});
 
   const refChapters = useRef(null);
   const refSave = useRef(null);
   const refSettings = useRef(null);
+
+  useEffect(() => {
+    setSidenavStyle({
+      top: `${marginTop}px`,
+      transition: "top 0.3s ease-in-out",
+    })
+  }, [marginTop, headerVisible, scrollDirection])
 
   const handler = (event) => {
     if (
@@ -118,7 +126,7 @@ export default function Sidenav({ chapters }) {
   };
 
   return (
-    <div className={styles.sidenav}>
+    <div className={styles.sidenav} style={sidenavStyle}>
       <ul className={styles.menu}>
         <li className={chapterListOpen ? styles.open : ""} ref={refChapters}>
           <Tooltip
