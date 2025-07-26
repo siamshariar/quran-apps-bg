@@ -192,4 +192,11 @@
 .name span:nth-child(2) {
   font-size: 12px;
   opacity: 0.6;
+  color: var(--txt13);
+  display: -moz-box;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

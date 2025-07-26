@@ -1,8 +1,9 @@
 import { server, config, t } from "../../../../lib/config"
-import { getChaptersInfo, getVerseDetails } from "../../../../lib/fetch"
+import { getChaptersInfo, getVerseDetails, getVerseTransliteration } from "../../../../lib/fetch"
 import Layout from "../../../../components/layouts/layout-chapter"
 import Meta from "../../../../components/core/meta"
 import ChapterContent from "../../../../components/layout2/surah/content"
+import { getFallbackVerseTransliteration } from "../../../../data/transliteration"
 
 export default function Verse({
   chapters,
@@ -17,10 +18,10 @@ export default function Verse({
   loading,
   translation,
 }) {
-  const verse = verses[0];
+  const verse = verses[0]
 
   if (!verse) {
-    return <p>Verse not found.</p>;
+    return <p>Verse not found.</p>
   }
 
   return (
@@ -32,7 +33,6 @@ export default function Verse({
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
-
       <ChapterContent
         contentType={mode}
         contentTitle={contentTitle}
@@ -42,73 +42,92 @@ export default function Verse({
         chapterMp3Url={chapterMp3Url}
         verses={verses}
         allTranslations={allTranslations}
-        // prevChapter={prevChapter}
-        // nextChapter={nextChapter}
         chapters={chapters}
         loading={loading}
       />
     </>
-  );
+  )
 }
 
 Verse.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
-};
+  return <Layout>{page}</Layout>
+}
 
 export async function getStaticProps(context) {
-  const { slug, verseNo, translation = "vietnamese_hassan"} = context.params;
-  const decodedSlug = decodeURIComponent(slug);
-  const chapterNo = parseInt(decodedSlug.split("-")[0]);
+  const { slug, verseNo, translation = "vietnamese_hassan" } = context.params
+  const decodedSlug = decodeURIComponent(slug)
+  const chapterNo = Number.parseInt(decodedSlug.split("-")[0])
+
   try {
-  const [verseDetails, defaultTranslation, rwwadTranslation, chaptersInfo] = await Promise.all([
-    getVerseDetails(chapterNo, verseNo, translation),
-    getVerseDetails(chapterNo, verseNo, "vietnamese_hassan"),
-    getVerseDetails(chapterNo, verseNo, "vietnamese_rwwad"),
-    getChaptersInfo(),
-  ])
+    const [verseDetails, defaultTranslation, rwwadTranslation, transliterationData, chaptersInfo] = await Promise.all([
+      getVerseDetails(chapterNo, verseNo, translation),
+      getVerseDetails(chapterNo, verseNo, "vietnamese_hassan"),
+      getVerseDetails(chapterNo, verseNo, "vietnamese_rwwad"),
+      getVerseTransliteration(chapterNo, verseNo),
+      getChaptersInfo(),
+    ])
 
-  if (!verseDetails || !chaptersInfo[chapterNo - 1]) {
+    if (!verseDetails || !chaptersInfo[chapterNo - 1]) {
+      return {
+        notFound: true,
+      }
+    }
+
+    const chapterData = chaptersInfo[chapterNo - 1]
+
+    // Prepare all translations object
+    const allTranslations = {
+      vietnamese_hassan: [defaultTranslation],
+      vietnamese_rwwad: [rwwadTranslation],
+    }
+
+    // Add transliteration if available
+    if (transliterationData) {
+      allTranslations.english_transliteration = [transliterationData]
+    } else {
+      // Try fallback transliteration
+      const fallbackTransliteration = getFallbackVerseTransliteration(chapterNo, Number.parseInt(verseNo))
+      if (fallbackTransliteration) {
+        allTranslations.english_transliteration = [
+          {
+            verseNo: Number.parseInt(verseNo),
+            translation: fallbackTransliteration,
+          },
+        ]
+        console.log("Using fallback transliteration for verse", verseNo)
+      }
+    }
+
     return {
-      notFound: true,
-    };
-  }
-
-  const chapterData = chaptersInfo[chapterNo - 1];
-  // const chapterNo = details.chapter.chapterNo;
-
-  return {
-    props: {
-      chapterNo,
-      chapterName: chapterData.name,
-      chapterSlug: chapterData.slug,
-      chapterMp3Url: chapterData.mp3Url,
-      verses: [verseDetails],
-      allTranslations: {
-        vietnamese_hassan: [defaultTranslation],
-        vietnamese_rwwad: [rwwadTranslation],
+      props: {
+        chapterNo,
+        chapterName: chapterData.name,
+        chapterSlug: chapterData.slug,
+        chapterMp3Url: chapterData.mp3Url,
+        verses: [verseDetails],
+        allTranslations,
+        chapters: chaptersInfo,
+        contentTitle: `${chapterData.name} : Câu ${verseDetails.verseNo}`,
+        mode: "verse",
+        key: uniqueKey(chapterNo, verseNo),
+        translation,
       },
-      chapters: chaptersInfo,
-      contentTitle: `${chapterData.name} : Câu ${verseDetails.verseNo}`,
-      mode: "verse",
-      key: uniqueKey(chapterNo, verseNo),
-      translation,
-    },
-    revalidate: 60,
-  };
-} catch (error) {
-  console.error("getStaticProps failed for:", { slug, verseNo, translation }, error);
-  return { notFound: true };
-}
+      revalidate: 60,
+    }
+  } catch (error) {
+    console.error("getStaticProps failed for:", { slug, verseNo, translation }, error)
+    return { notFound: true }
+  }
 }
 
 export async function getStaticPaths() {
-  const chapters = await getChaptersInfo();
-  const translations = ["vietnamese_rwwad"];
-  const paths = [];
+  const chapters = await getChaptersInfo()
+  const translations = ["vietnamese_rwwad"]
+  const paths = []
 
   chapters.forEach((chapter) => {
-    const slug = encodeURI(chapter.slug);
-    const totalVerse = parseInt(chapter.totalVerse || "5");
+    const slug = encodeURI(chapter.slug)
+    const totalVerse = Number.parseInt(chapter.totalVerse || "5")
 
     for (let i = 1; i <= Math.min(totalVerse, 5); i++) {
       translations.forEach((translation) => {
@@ -117,20 +136,20 @@ export async function getStaticPaths() {
             slug,
             verseNo: String(i),
             translation,
-        },
-      })
+          },
+        })
       })
     }
-  });
+  })
 
   return {
     paths,
     fallback: "blocking",
-  };
+  }
 }
 
 const uniqueKey = (chapterNo, verseNo) => {
-  const s1 = String(chapterNo).padStart(3, "0");
-  const s2 = String(verseNo).padStart(3, "0");
-  return s1 + s2;
-};
+  const s1 = String(chapterNo).padStart(3, "0")
+  const s2 = String(verseNo).padStart(3, "0")
+  return s1 + s2
+}

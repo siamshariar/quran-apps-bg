@@ -67,9 +67,14 @@
 }
 
 .translation_info {
-  font-size: 1rem;
-  color: #808080;
-  margin-left: 12px;
+    font-family: "Montserrat", sans-serif;
+    width: 100%;
+    font-size: 1rem;
+    color: #808080;
+    pointer-events: auto;
+    position: relative;
+    z-index: 5;
+    line-height: 1.5;
 }
 
 .change_link {

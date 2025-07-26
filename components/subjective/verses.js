@@ -1,16 +1,12 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState, useCallback } from "react";
 import { Virtuoso } from 'react-virtuoso';
 import Skeleton from "react-loading-skeleton";
 import { AudioPlayerContext } from "../../contexts/AudioPlayerContext";
-import Sidenav from "../layout2/sidenav";
 import { SettingsContext } from "../../contexts/SettingsContext"
 import { useRouter } from "next/router"
 import VerseCard from "../surah/verse-card";
-// import Pagination from "../surah/pagination";
-// import QuranIcon from "../icons/Quran";
-// import Bismillah from "../icons/Bismillah";
-// import useLoader from "../../hooks/useLoader";
 import { t } from "../../lib/config";
+import { getSubjectiveVersesByTranslation } from "../../lib/fetch";
 import styles from "../layout2/surah/content.module.scss";
 
 const getTranslatorName = (translationCode) => {
@@ -28,29 +24,76 @@ export default function SubjectiveVerses({
   allTranslations = {},
   loading,
   initialTranslation = "vietnamese_hassan",
+  slug,
 }) {
   const router = useRouter()
-  // const loading = useLoader();
   const printRef = useRef();
   const { translation, isReady } = useContext(SettingsContext)
-  const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } =
-    useContext(AudioPlayerContext);
+  const { setPlaylist, setChapterMp3Url } = useContext(AudioPlayerContext);
+  const [dynamicTranslations, setDynamicTranslations] = useState(allTranslations);
+  const [isRefetching, setIsRefetching] = useState(false);
+  const [isMobile, setIsMobile] = useState(false)
+  const isLoading = loading || router.isFallback || !isReady || isRefetching
+  const currentVerses = dynamicTranslations?.[translation] || verses
 
-  const isLoading = loading || router.isFallback || !isReady
-  const currentVerses = allTranslations?.[translation] || verses
+  // Add mobile detection
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const mobile = window.innerWidth < 1024
+      setIsMobile(mobile)
+      console.log("Screen size check:", { width: window.innerWidth, isMobile: mobile })
+    }
+    
+    // Only run on client side
+    if (typeof window !== 'undefined') {
+      checkScreenSize()
+      window.addEventListener("resize", checkScreenSize)
+      return () => window.removeEventListener("resize", checkScreenSize)
+    }
+  }, [])
 
-  console.log("SubjectiveVerses render:", {
-    isReady,
-    translation,
-    initialTranslation,
-    loading,
-    routerIsFallback: router.isFallback,
-    isLoading,
-    currentPath: typeof window !== "undefined" ? window.location.pathname : "SSR",
-    hasAllTranslations: !!allTranslations,
-    availableTranslations: Object.keys(allTranslations || {}),
-    currentVersesCount: currentVerses?.length,
-  })
+  const refetchTranslation = useCallback(async (newTranslation) => {
+    if (!slug || !verses.length) return;
+    setIsRefetching(true);
+    
+    try {
+      const verseIds = verses.map((verse) => {
+        return `${verse.chapter?.chapterNo || verse.chapterNo}:${verse.verseNo}`
+      });
+
+      const translationData = await getSubjectiveVersesByTranslation(verseIds, newTranslation);
+      const finalTranslation = translationData?.length > 0 ? translationData : verses;
+
+      setDynamicTranslations(prev => ({
+        ...prev,
+        [newTranslation]: finalTranslation
+      }));
+    } catch (error) {
+      console.error('Error refetching translation:', error);
+    } finally {
+      setIsRefetching(false);
+    }
+  }, [slug, verses]);
+
+  useEffect(() => {
+    if (isReady && translation && !dynamicTranslations[translation]) {
+      refetchTranslation(translation);
+    }
+  }, [translation, isReady, dynamicTranslations, refetchTranslation]);
+
+  useEffect(() => {
+    const handleTranslationChange = (event) => {
+      const newTranslation = event.detail.translation;
+      if (newTranslation && !dynamicTranslations[newTranslation]) {
+        refetchTranslation(newTranslation);
+      }
+    };
+
+    window.addEventListener("subjectiveTranslationChanged", handleTranslationChange);
+    return () => {
+      window.removeEventListener("subjectiveTranslationChanged", handleTranslationChange);
+    };
+  }, [dynamicTranslations, refetchTranslation]);
 
   useEffect(() => {
     if (currentVerses && !isLoading) {
@@ -58,86 +101,74 @@ export default function SubjectiveVerses({
       setPlaylist(filtered)
       setChapterMp3Url(null)
     }
-    //setChapterMp3Url(chapterMp3Url);
   }, [currentVerses, isLoading, setPlaylist, setChapterMp3Url])
 
-  // const [prev, setPrev] = useState(
-  //   contentType === "chapter" && chapters[chapterNo - 2]
-  //     ? {
-  //         link: `/chapters/${chapters[chapterNo - 2].slug}`,
-  //         name: chapters[chapterNo - 2].name,
-  //       }
-  //     : contentType === "verse" && verses[0].verseNo > 1
-  //     ? {
-  //         link: `/chapters/${chapters[chapterNo - 1].slug}/verses/${
-  //           verses[0].verseNo - 1
-  //         }`,
-  //         name: "Prev verse",
-  //       }
-  //     : null
-  // );
-
-  // const [next, setNext] = useState(
-  //   contentType === "chapter" && chapters[chapterNo]
-  //     ? {
-  //         link: `/chapters/${chapters[chapterNo].slug}`,
-  //         name: chapters[chapterNo].name,
-  //       }
-  //     : contentType === "verse" &&
-  //       verses[0].verseNo < chapters[chapterNo - 1].totalVerse
-  //     ? {
-  //         link: `/chapters/${chapters[chapterNo - 1].slug}/verses/${
-  //           verses[0].verseNo + 1
-  //         }`,
-  //         name: "Next verse",
-  //       }
-  //     : null
-  // );
-
-  useEffect(() => {
-    if (router.isReady && isReady && !isLoading) {
-      const currentPath = router.asPath.split("?")[0]
-
-      let expectedPath
-      if (translation === "vietnamese_hassan") {
-        if (currentPath.startsWith("/vietnamese_rwwad")) {
-          expectedPath = currentPath.replace(/^\/vietnamese_rwwad/, "")
-        }
-      } else if (translation === "vietnamese_rwwad") {
-        if (!currentPath.startsWith("/vietnamese_rwwad")) {
-          expectedPath = `/vietnamese_rwwad${currentPath}`
-        }
+  const openSettings = useCallback(() => {
+    console.log("Attempting to open settings...");
+    try {
+      if (isMobile) {
+        console.log("Opening mobile translation modal");
+        const event = new CustomEvent("openMobileTranslationModal", {
+          detail: { 
+            open: true,
+            source: "subjective-verse"
+          },
+          bubbles: true,
+          composed: true
+        });
+        
+        // Dispatch at multiple levels
+        document.dispatchEvent(event);
+        window.dispatchEvent(event);
+        
+        // Add timeout as fallback
+        setTimeout(() => {
+          window.dispatchEvent(
+            new CustomEvent("openMobileTranslationModal", {
+              detail: { 
+                open: true,
+                source: "subjective-verse-timeout"
+              },
+              bubbles: true,
+              composed: true
+            })
+          );
+        }, 50);
+      } else {
+        console.log("Opening desktop sidenav settings");
+        const event = new CustomEvent("openSidenavSettings", {
+          detail: {
+            open: true,
+            expandedSetting: "translation",
+            source: "subjective-verse"
+          },
+          bubbles: true,
+          composed: true
+        });
+        
+        document.dispatchEvent(event);
+        window.dispatchEvent(event);
       }
-      if (expectedPath && expectedPath !== currentPath) {
-        console.log("Translation changed by user, updating URL from", currentPath, "to", expectedPath)
-        window.history.replaceState({}, "", expectedPath)
-      }
+    } catch (error) {
+      console.error("Error in openSettings:", error);
     }
-  }, [translation, router.isReady, isReady, router.asPath, router.route, isLoading])
+  }, [isMobile]);
 
-  const openSettingsWithTranslation = () => {
-    const settingsEvent = new CustomEvent("openSettings", {
-      detail: { open: true },
-    })
-    document.dispatchEvent(settingsEvent)
-  }
   const uniqueKey = (chapterNo, verseNo) => {
     let s1 = "0000" + chapterNo;
     s1 = s1.substring(s1.length - 3);
-
     let s2 = "0000" + verseNo;
     s2 = s2.substring(s2.length - 3);
-
     return s1 + s2;
   };
 
   return (
     <div className={styles.chapter}>
       <div className={styles.chapter_tab} ref={printRef}>
-        {isLoading && (
+        {isLoading ? (
           <>
             <Skeleton
-              style={{marginBottom: "24px"}} //
+              style={{marginBottom: "24px"}}
               count={1}
               height={49}
               width={`100%`}
@@ -150,35 +181,35 @@ export default function SubjectiveVerses({
               className="skeleton"
             />
           </>
-        )}
-
-        {!isLoading && (
-        <>
-        <div className={styles.title}>
-          {/*<span className={styles.title_icon}><QuranIcon /></span>*/}
-          <span className={styles.title_text}>{contentTitle}</span>
-        </div>
-
-        {/* <div className={styles.bismillah}>
-            <Bismillah />
-          </div> */}
-
-        <div className={styles.change_translation}>
-              <span className={styles.translation_info}>
-                {t('Translation by')} {getTranslatorName(translation)}{" "}
-                <span className={styles.change_link} onClick={openSettingsWithTranslation}>
-                  ({t('Change')})
-                </span>
-              </span>
+        ) : (
+          <>
+            <div className={styles.title}>
+              <span className={styles.title_text}>{contentTitle}</span>
             </div>
 
-            {currentVerses && currentVerses.length > 0 ? (
-        <div className={styles.verses}>
-          <Virtuoso
-              useWindowScroll
-              totalCount={currentVerses.length} // Total number of items
-              itemContent={(index) => (
-                  <VerseCard
+            <div className={styles.change_translation}>
+              <div className={styles.translation_info}>
+                <p>{t("Translation by")}</p>
+                <p>
+                  {getTranslatorName(translation)}{" "}
+                  <span 
+                    className={styles.change_link} 
+                    onClick={openSettings}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    ({t("Change")})
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            {currentVerses?.length > 0 ? (
+              <div className={styles.verses}>
+                <Virtuoso
+                  useWindowScroll
+                  totalCount={currentVerses.length}
+                  itemContent={(index) => (
+                    <VerseCard
                       key={`${translation}-${currentVerses[index]?.verseNo || index}`}
                       chapterName={currentVerses[index]?.chapter?.name || ""}
                       index={index}
@@ -190,32 +221,16 @@ export default function SubjectiveVerses({
                       isVirtualized={true}
                       isLastVerse={index === currentVerses.length - 1}
                       translation={translation}
-                  />
-              )}
-          />
-
-          {/*{verses &&*/}
-          {/*  verses.map((verse, index) => (*/}
-          {/*    <VerseCard*/}
-          {/*      key={uniqueKey(verse.chapter.chapterNo, verse.verseNo)}*/}
-          {/*      chapterName={verse.chapter.name}*/}
-          {/*      index={index}*/}
-          {/*      chapterNo={verse.chapter.chapterNo}*/}
-          {/*      chapterSlug={verse.chapter.slug}*/}
-          {/*      verse={verse}*/}
-          {/*      ayaArabic={verse.arabic}*/}
-          {/*      printRef={printRef.current}*/}
-          {/*    />*/}
-          {/*  ))}*/}
-        </div>
+                    />
+                  )}
+                />
+              </div>
             ) : (
               <div className={styles.empty}>No verses found</div>
             )}
-        </>
+          </>
         )}
       </div>
-
-      {/* <Pagination prev={prev} next={next} /> */}
     </div>
   );
 }

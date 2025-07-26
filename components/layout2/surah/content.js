@@ -1,27 +1,24 @@
-import { memo, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
-import { Virtuoso } from 'react-virtuoso';
-import Skeleton from 'react-loading-skeleton';
-import { AudioPlayerContext } from "../../../contexts/AudioPlayerContext";
-import VerseCard from "../../surah/verse-card";
-import Pagination from "../../surah/pagination";
-import QuranIcon from "../../icons/Quran";
-import InfoIcon from "../../icons/Info";
-import PlayIcon from "../../icons/PlayArrow";
-import PauseIcon from "../../icons/Pause";
-import Bismillah from "../../icons/Bismillah";
-import Settings from "../../settings"
+"use client"
 
-import styles from "./content.module.scss";
-import { config } from "../../../lib/config";
-import { SettingsContext } from '../../../contexts/SettingsContext'
-import { t } from "../../../lib/config";
-// import useLoader from "../../../hooks/useLoader";
-const MemoizedVerseCard = memo(VerseCard);
-const MemoizedBismillah = memo(Bismillah);
-const MemoizedPagination = memo(Pagination);
+import { memo, useCallback, useContext, useEffect, useRef, useState } from "react"
+import { useRouter } from "next/router"
+import { Virtuoso } from "react-virtuoso"
+import Skeleton from "react-loading-skeleton"
+import { AudioPlayerContext } from "../../../contexts/AudioPlayerContext"
+import VerseCard from "../../surah/verse-card"
+import Pagination from "../../surah/pagination"
+import Bismillah from "../../icons/Bismillah"
+import styles from "./content.module.scss"
+import { config } from "../../../lib/config"
+import { SettingsContext } from "../../../contexts/SettingsContext"
+import { t } from "../../../lib/config"
 
-const getTranslatorName = (translationCode) => ({
+const MemoizedVerseCard = memo(VerseCard)
+const MemoizedBismillah = memo(Bismillah)
+const MemoizedPagination = memo(Pagination)
+
+const getTranslatorName = (translationCode) =>
+  ({
     vietnamese_hassan: "Hasan Abdul-Karim",
     vietnamese_rwwad: "Ruwwad Translation Center",
     english_abdel_haleem: "M.A.S. Abdel Haleem",
@@ -47,22 +44,80 @@ export default function ChapterContent({
   allTranslations,
   loading,
 }) {
-  // const loading = useLoader();
-  const printRef = useRef(null);
-
-
-  const { translation, activeTranslations = [translation] } = useContext(SettingsContext);
-  const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } =
-    useContext(AudioPlayerContext);
-
-  const currentVerses = allTranslations?.[translation] || verses;
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState(null);
-  const [modalContent, setModalContent] = useState(null);
-  const [expandedSetting, setExpandedSetting] = useState(null);
+  const printRef = useRef(null)
+  const { translation, activeTranslations = [translation] } = useContext(SettingsContext)
+  const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } = useContext(AudioPlayerContext)
+  const currentVerses = allTranslations?.[translation] || verses
+  const [modalOpen, setModalOpen] = useState(false)
+  const [modalTitle, setModalTitle] = useState(null)
+  const [modalContent, setModalContent] = useState(null)
+  const [expandedSetting, setExpandedSetting] = useState(null)
   const [showMultiTranslationModal, setShowMultiTranslationModal] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const translationPrefix = translation !== "vietnamese_hassan" ? `/${translation}` : ""
+  const lastScrolledVerseRef = useRef(null)
 
-  const translationPrefix = translation !== "vietnamese_hassan" ? `/${translation}` : "";
+  // Debug logging
+  useEffect(() => {
+    console.log("ChapterContent Debug:", {
+      chapterNo,
+      allTranslations,
+      hasTransliteration: !!allTranslations?.english_transliteration,
+      transliterationLength: allTranslations?.english_transliteration?.length,
+    })
+  }, [allTranslations, chapterNo])
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const mobile = window.innerWidth < 1024
+      setIsMobile(mobile)
+      console.log("Screen size check:", { width: window.innerWidth, isMobile: mobile })
+    }
+    checkScreenSize()
+    window.addEventListener("resize", checkScreenSize)
+    return () => window.removeEventListener("resize", checkScreenSize)
+  }, [])
+
+  const scrollToVerse = useCallback((verseNumber, behavior = "smooth") => {
+    if (!virtuosoRef.current || !verseNumber) return
+    const verseIndex = verseNumber - 1
+    if (lastScrolledVerseRef.current === verseNumber) return
+    lastScrolledVerseRef.current = verseNumber
+    virtuosoRef.current.scrollToIndex({
+      index: verseIndex,
+      align: "start",
+      behavior: behavior === "smooth" ? "smooth" : "auto",
+    })
+    setTimeout(
+      () => {
+        const verseElement = document.getElementById(`verse-${verseNumber}`)
+        if (verseElement) {
+          verseElement.scrollIntoView({
+            behavior: behavior,
+            block: "start",
+            inline: "nearest",
+          })
+        }
+      },
+      behavior === "smooth" ? 100 : 0,
+    )
+  }, [])
+
+  useEffect(() => {
+    const handleForceScrollToVerse = (event) => {
+      const { verseNumber, chapterSlug: targetChapterSlug, timestamp } = event.detail
+      if (targetChapterSlug === chapterSlug && verseNumber) {
+        lastScrolledVerseRef.current = null
+        setTimeout(() => {
+          scrollToVerse(verseNumber, "auto")
+        }, 50)
+      }
+    }
+    document.addEventListener("forceScrollToVerse", handleForceScrollToVerse)
+    return () => {
+      document.removeEventListener("forceScrollToVerse", handleForceScrollToVerse)
+    }
+  }, [chapterSlug, scrollToVerse])
 
   useEffect(() => {
     const handleScrollToTop = (event) => {
@@ -72,7 +127,6 @@ export default function ChapterContent({
           align: "start",
           behavior: "smooth",
         })
-
         setTimeout(() => {
           window.scrollTo({
             top: 0,
@@ -81,7 +135,6 @@ export default function ChapterContent({
         }, 100)
       }
     }
-
     document.addEventListener("scrollToTop", handleScrollToTop)
     return () => {
       document.removeEventListener("scrollToTop", handleScrollToTop)
@@ -89,15 +142,13 @@ export default function ChapterContent({
   }, [])
 
   useEffect(() => {
-    let filtered = [];
+    const filtered = []
     verses.forEach((verse) => {
-      filtered.push(verse.mp3Url);
-    });
-    setPlaylist(filtered);
-    // setPlaylist(filteredPlaylist);
-
-    setChapterMp3Url(chapterMp3Url);
-  }, []);
+      filtered.push(verse.mp3Url)
+    })
+    setPlaylist(filtered)
+    setChapterMp3Url(chapterMp3Url)
+  }, [])
 
   const [prev, setPrev] = useState(
     contentType === "chapter" && chapters[chapterNo - 2]
@@ -106,21 +157,19 @@ export default function ChapterContent({
           name: chapters[chapterNo - 2].name,
         }
       : contentType === "verse" && Number(verses[0].verseNo) > 1
-      ? {
-          link: `${translationPrefix}/chapters/${chapters[chapterNo - 1].slug}/verses/${
-            Number(verses[0].verseNo) - 1
-          }`,
-          name: "Prev verse",
-        }
-      : contentType === "verse" &&
-        Number(verses[0].verseNo) == 1 &&
-        chapterNo > 1
-      ? {
-          link: `${translationPrefix}/chapters/${chapters[chapterNo - 2].slug}/verses/1`,
-          name: "Prev chapter",
-        }
-      : null
-  );
+        ? {
+            link: `${translationPrefix}/chapters/${chapters[chapterNo - 1].slug}/verses/${
+              Number(verses[0].verseNo) - 1
+            }`,
+            name: "Prev verse",
+          }
+        : contentType === "verse" && Number(verses[0].verseNo) == 1 && chapterNo > 1
+          ? {
+              link: `${translationPrefix}/chapters/${chapters[chapterNo - 2].slug}/verses/1`,
+              name: "Prev chapter",
+            }
+          : null,
+  )
 
   const [next, setNext] = useState(
     contentType === "chapter" && chapters[chapterNo]
@@ -128,24 +177,22 @@ export default function ChapterContent({
           link: `${translationPrefix}/chapters/${chapters[chapterNo].slug}`,
           name: chapters[chapterNo].name,
         }
-      : contentType === "verse" &&
-        Number(verses[0].verseNo) < chapters[chapterNo - 1].totalVerse
-      ? {
-          link: `${translationPrefix}/chapters/${chapters[chapterNo - 1].slug}/verses/${
-            Number(verses[0].verseNo) + 1
-          }`,
-          name: "Next verse",
-        }
-      : contentType === "verse" &&
-        Number(verses[0].verseNo) == chapters[chapterNo - 1].totalVerse &&
-        chapterNo < chapters.length
-      ? {
-          link: `${translationPrefix}/chapters/${chapters[chapterNo].slug}/verses/1`,
-          name: "Next chapter",
-        }
-      : null
-  );
-
+      : contentType === "verse" && Number(verses[0].verseNo) < chapters[chapterNo - 1].totalVerse
+        ? {
+            link: `${translationPrefix}/chapters/${chapters[chapterNo - 1].slug}/verses/${
+              Number(verses[0].verseNo) + 1
+            }`,
+            name: "Next verse",
+          }
+        : contentType === "verse" &&
+            Number(verses[0].verseNo) == chapters[chapterNo - 1].totalVerse &&
+            chapterNo < chapters.length
+          ? {
+              link: `${translationPrefix}/chapters/${chapters[chapterNo].slug}/verses/1`,
+              name: "Next chapter",
+            }
+          : null,
+  )
 
   useEffect(() => {
     if (contentType === "chapter" && chapters[chapterNo - 2]) {
@@ -173,7 +220,6 @@ export default function ChapterContent({
         name: "Prev chapter",
       })
     }
-
     if (contentType === "chapter" && chapters[chapterNo]) {
       setNext({
         link:
@@ -205,148 +251,183 @@ export default function ChapterContent({
     }
   }, [translation, contentType, chapterNo, verses])
 
-  const playingThisChapter = playing && audioType === "chapter";
+  const playingThisChapter = playing && audioType === "chapter"
 
   const controlPlay = () => {
-    play(0, "chapter");
-  };
+    play(0, "chapter")
+  }
 
   const controlPause = () => {
-    pause();
-  };
+    pause()
+  }
 
   // prev next on key press or left right drag
-  const router = useRouter();
-
-  const [isKeyPressUp, setIsKeyPressUp] = useState(false);
-  const [keyPressType, setKeyPressType] = useState(null);
-  const [touchStart, setTouchStart] = useState(0);
-  const [touchEnd, setTouchEnd] = useState(0);
-  const [isTouchEnd, setIsTouchEnd] = useState(false);
-  const [didMount, setDidMount] = useState(false);
+  const router = useRouter()
+  const [isKeyPressUp, setIsKeyPressUp] = useState(false)
+  const [keyPressType, setKeyPressType] = useState(null)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
+  const [isTouchEnd, setIsTouchEnd] = useState(false)
+  const [didMount, setDidMount] = useState(false)
 
   useEffect(() => {
-    const filtered = currentVerses?.map((verse) => verse.mp3Url) || [];
-    setPlaylist(filtered);
-    setChapterMp3Url(chapterMp3Url);
-
+    const filtered = currentVerses?.map((verse) => verse.mp3Url) || []
+    setPlaylist(filtered)
+    setChapterMp3Url(chapterMp3Url)
     if (contentType === "verse") {
       document.addEventListener("keydown", (event) => {
         if (event.key == "ArrowRight" && next !== null) {
-          setIsKeyPressUp(false);
-          setKeyPressType("right");
+          setIsKeyPressUp(false)
+          setKeyPressType("right")
         } else if (event.key == "ArrowLeft" && prev !== null) {
-          setIsKeyPressUp(false);
-          setKeyPressType("left");
+          setIsKeyPressUp(false)
+          setKeyPressType("left")
         }
-      });
-
+      })
       document.addEventListener("keyup", (event) => {
-        if (
-          (event.key == "ArrowRight" && next !== null) ||
-          (event.key == "ArrowLeft" && prev !== null)
-        ) {
-          setIsKeyPressUp(true);
+        if ((event.key == "ArrowRight" && next !== null) || (event.key == "ArrowLeft" && prev !== null)) {
+          setIsKeyPressUp(true)
         }
-      });
-
+      })
       document.body.addEventListener("touchstart", (e) => {
-        setTouchStart(e.targetTouches[0].clientX);
-        setIsTouchEnd(false);
-      });
-
+        setTouchStart(e.targetTouches[0].clientX)
+        setIsTouchEnd(false)
+      })
       document.body.addEventListener("touchend", (e) => {
-        setTouchEnd(e.changedTouches[0].clientX);
-        setIsTouchEnd(true);
-      });
+        setTouchEnd(e.changedTouches[0].clientX)
+        setIsTouchEnd(true)
+      })
     }
-    return () => setDidMount(true);
-  }, []);
+    return () => setDidMount(true)
+  }, [])
 
   useEffect(() => {
     if (isKeyPressUp) {
       if (keyPressType == "left" && prev !== null) {
-        router.push(prev.link);
+        router.push(prev.link)
       } else if (keyPressType == "right" && next !== null) {
-        router.push(next.link);
+        router.push(next.link)
       }
     }
-  }, [isKeyPressUp]);
+  }, [isKeyPressUp])
 
   useEffect(() => {
     if (isTouchEnd) {
       if (touchEnd - touchStart > 150 && prev !== null) {
-        router.push(prev.link);
+        router.push(prev.link)
       } else if (touchStart - touchEnd > 150 && next !== null) {
-        router.push(next.link);
+        router.push(next.link)
       }
     }
-  }, [isTouchEnd]);
+  }, [isTouchEnd])
 
-  const virtuosoRef = useRef(null);
+  const virtuosoRef = useRef(null)
 
   const scrollToIndex = (index) => {
     virtuosoRef.current?.scrollToIndex({
       index: index,
       align: "start",
       behavior: "smooth",
-    });
-  };
+    })
+  }
 
   const getIndexFromHash = () => {
-    const hashIndex = Number.parseInt(window.location.hash.replace("#verse-", ""), 10);
-    return isNaN(hashIndex) ? null : hashIndex - 1;
-  };
+    const hashIndex = Number.parseInt(window.location.hash.replace("#verse-", ""), 10)
+    return isNaN(hashIndex) ? null : hashIndex - 1
+  }
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hash && virtuosoRef.current && !loading) {
-      const indexFromHash = getIndexFromHash();
-      if (indexFromHash !== null) {
-      scrollToIndex(indexFromHash);
-      };
+    if (typeof window !== "undefined" && window.location.hash && !loading) {
+      const verseNumber = Number.parseInt(window.location.hash.replace("#verse-", ""), 10)
+      if (!isNaN(verseNumber)) {
+        lastScrolledVerseRef.current = null
+        const scrollAttempts = [0, 100, 300, 500]
+        scrollAttempts.forEach((delay) => {
+          setTimeout(() => {
+            scrollToVerse(verseNumber, "auto")
+          }, delay)
+        })
+      }
     }
-  }, [router, loading]);
+  }, [router.asPath, loading, scrollToVerse])
 
-  const openSettingsModal = () => {
-    setModalTitle("Settings");
-    setModalContent(
-      <Settings 
-        defaultExpanded="translation"
-        controller={(open) => (event) => {
-          if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
-            return;
-          }
-          setModalOpen(open);
-        }}
-      />
-    );
-    setModalOpen(true);
-  };
+  useEffect(() => {
+    const handleRouteChange = () => {
+      if (typeof window !== "undefined" && window.location.hash) {
+        const verseNumber = Number.parseInt(window.location.hash.replace("#verse-", ""), 10)
+        if (!isNaN(verseNumber)) {
+          lastScrolledVerseRef.current = null
+          setTimeout(() => {
+            scrollToVerse(verseNumber, "auto")
+          }, 100)
+        }
+      }
+    }
+    router.events.on("routeChangeComplete", handleRouteChange)
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange)
+    }
+  }, [router.events, scrollToVerse])
 
+  const openSettings = useCallback(() => {
+    if (isMobile) {
+      const event = new CustomEvent("openMobileTranslationModal", {
+        detail: { open: true },
+        bubbles: true,
+      })
+      document.dispatchEvent(event)
+      setTimeout(() => {
+        window.dispatchEvent(
+          new CustomEvent("openMobileTranslationModal", {
+            detail: { open: true },
+            bubbles: true,
+          }),
+        )
+      }, 10)
+    } else {
+      console.log("Dispatching openSidenavSettings event for desktop")
+      document.dispatchEvent(
+        new CustomEvent("openSidenavSettings", {
+          detail: {
+            open: true,
+            expandedSetting: "translation",
+          },
+          bubbles: true,
+        }),
+      )
+    }
+  }, [isMobile])
 
   useEffect(() => {
     const handleScrollPosition = () => {
-      if (typeof window !== 'undefined' && window.location.hash) {
-        const hashIndex = Number.parseInt(window.location.hash.replace("#verse-", ""), 10);
+      if (typeof window !== "undefined" && window.location.hash) {
+        const hashIndex = Number.parseInt(window.location.hash.replace("#verse-", ""), 10)
         if (!isNaN(hashIndex)) {
           requestAnimationFrame(() => {
             virtuosoRef.current?.scrollToIndex({
               index: hashIndex - 1,
               align: "start",
-              behavior: "instant"
-            });
-          });
+              behavior: "instant",
+            })
+          })
         }
       }
-    };
+    }
+    const timer = setTimeout(handleScrollPosition, 0)
+    return () => clearTimeout(timer)
+  }, [])
 
-    const timer = setTimeout(handleScrollPosition, 0);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const renderVerse = useCallback((index) => {
-    const verse = currentVerses[index]
+  const renderVerse = useCallback(
+    (index) => {
+      const verse = currentVerses[index]
       const verseTranslations = {}
+
+      // Always include transliteration data if available
+      if (allTranslations && allTranslations["english_transliteration"]) {
+        verseTranslations["english_transliteration"] = allTranslations["english_transliteration"][index]
+        console.log(`Passing transliteration for verse ${index + 1}:`, verseTranslations["english_transliteration"])
+      }
+
       if (activeTranslations && activeTranslations.length > 0) {
         activeTranslations.forEach((translationCode) => {
           if (allTranslations && allTranslations[translationCode] && allTranslations[translationCode][index]) {
@@ -355,25 +436,27 @@ export default function ChapterContent({
         })
       }
 
-    return (
-      <MemoizedVerseCard
-        key={`${translation}-${verse.verseNo}`}
-        chapterName={chapterName}
-        index={index}
-        chapterNo={chapterNo}
-        chapterSlug={chapterSlug}
-        verse={verse}
-        ayaArabic={verse.arabic}
-        printRef={printRef.current}
-        isVirtualized={true}
-        isLastVerse={index === currentVerses.length - 1}
-        translation={translation}
-        allTranslations={verseTranslations}
-        activeTranslations={activeTranslations}
-      />
-    );
-  }, [chapterName, chapterNo, chapterSlug, currentVerses, translation, activeTranslations, allTranslations],
-)
+      return (
+        <MemoizedVerseCard
+          key={`${translation}-${verse.verseNo}`}
+          chapterName={chapterName}
+          index={index}
+          chapterNo={chapterNo}
+          chapterSlug={chapterSlug}
+          verse={verse}
+          ayaArabic={verse.arabic}
+          printRef={printRef.current}
+          isVirtualized={true}
+          isLastVerse={index === currentVerses.length - 1}
+          translation={translation}
+          allTranslations={verseTranslations}
+          activeTranslations={activeTranslations}
+        />
+      )
+    },
+    [chapterName, chapterNo, chapterSlug, currentVerses, translation, activeTranslations, allTranslations],
+  )
+
   const availableTranslations = allTranslations ? Object.keys(allTranslations) : []
 
   return (
@@ -386,100 +469,59 @@ export default function ChapterContent({
             <Skeleton style={{ marginTop: "32px" }} count={1} height={64} width={`100%`} className="skeleton" />
           </>
         ) : (
-        <>
-        <div className={styles.title}>
-          {/*<span className={styles.title_icon}><QuranIcon /></span>*/}
-          <span className={styles.title_text}>{contentTitle}</span>
-          </div>
-          {/* <span className={styles.title_icon}><InfoIcon /></span> */}
-
-          {/*{playingThisChapter && (*/}
-          {/*    <span*/}
-          {/*        className={styles.title_icon}*/}
-          {/*        onClick={controlPause}*/}
-          {/*    >*/}
-          {/*        <PauseIcon />*/}
-          {/*    </span>*/}
-          {/*)}*/}
-          {/*{!playingThisChapter && (*/}
-          {/*    <span*/}
-          {/*        className={styles.title_icon}*/}
-          {/*        onClick={controlPlay}*/}
-          {/*    >*/}
-          {/*        <PlayIcon />*/}
-          {/*    </span>*/}
-          {/*)}*/}
+          <>
+            <div className={styles.title}>
+              <span className={styles.title_text}>{contentTitle}</span>
+            </div>
             <div className={styles.change_translation}>
-          <span className={styles.translation_info}>
-            {t('Translation by')} {getTranslatorName(translation)}{' '}
-          <span
-                className={styles.change_link}
-                  onClick={() => {
-                    document.dispatchEvent(new CustomEvent("openSettings", {
-                      detail: { open: true },
-                    }));
-                  }}
-                >
-                ({t('Change')})
-              </span>
-          </span>
-        </div>
-
-        {contentType !== "verse" && (
-          <div className={styles.bismillah}>
-            <MemoizedBismillah />
-          </div>
-        )}
-
-        <div className={styles.verses}>
-        <Virtuoso
-          ref={virtuosoRef}
-          useWindowScroll
-          // style={{ height: 300 }} // Adjust height according to your requirement
-            totalCount={currentVerses?.length || 0}
-            itemContent={renderVerse}
-            overscan={1000}
-            increaseViewportBy={{ top: 500, bottom: 500 }}
-            style={{ 
-              height: '100%',
-              minHeight: 'calc(100vh - 200px)',
-              contain: 'strict',
-              willChange: 'transform'
-            }}
-        />
-
-          {/* {suraTranslation.result &&
-            suraTranslation.result.map((verse, index) => (
-              <VerseCard
-                key={verse.aya}
-                chapterName={chapterName}
-                index={index}
-                chapterNumber={chapterNumber}
-                verse={verse}
-                ayaArabic={verses[index].arabic}
+              <div className={styles.translation_info}>
+                <p>{t("Translation by")}</p>
+                <p>
+                  {getTranslatorName(translation)}{" "}
+                  <span className={styles.change_link} onClick={openSettings}>
+                    ({t("Change")})
+                  </span>
+                </p>
+              </div>
+            </div>
+            {contentType !== "verse" && (
+              <div className={styles.bismillah}>
+                <MemoizedBismillah />
+              </div>
+            )}
+            <div className={styles.verses}>
+              <Virtuoso
+                ref={virtuosoRef}
+                useWindowScroll
+                totalCount={currentVerses?.length || 0}
+                itemContent={renderVerse}
+                overscan={1000}
+                increaseViewportBy={{ top: 500, bottom: 500 }}
+                style={{
+                  height: "100%",
+                  minHeight: "calc(100vh - 200px)",
+                  contain: "strict",
+                  willChange: "transform",
+                }}
               />
-            ))} */}
-        </div>
-
-        <div className={styles.print_footer}>
-          {/* todo <span>Vietnamese Hassan</span> */}
-          <span>{getTranslatorName(translation)}</span>
-          <span>www.{config.domain}</span>
-        </div>
-        </>
+            </div>
+            <div className={styles.print_footer}>
+              <span>{getTranslatorName(translation)}</span>
+              <span>www.{config.domain}</span>
+            </div>
+          </>
         )}
       </div>
-
       {!loading && (
-      <MemoizedPagination
-        prev={prev}
-        next={next}
-        contentType={contentType}
-        chapterSlug={chapterSlug}
-        verseNo={currentVerses?.[0]?.verseNo}
-        translation={translation}
-      />
+        <MemoizedPagination
+          prev={prev}
+          next={next}
+          contentType={contentType}
+          chapterSlug={chapterSlug}
+          verseNo={currentVerses?.[0]?.verseNo}
+          translation={translation}
+        />
       )}
     </div>
-  );
+  )
 }

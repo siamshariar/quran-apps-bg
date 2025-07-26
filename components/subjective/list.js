@@ -125,7 +125,7 @@ export default function SubjectiveContent({
       </div>
 
       {(!subjectiveList || !subjectiveList.length) && (
-        <h2 className={styles.empty}>No records found!</h2>
+        <h2 className={styles.empty}>{t("No records found")}!</h2>
       )}
       </>
       )}

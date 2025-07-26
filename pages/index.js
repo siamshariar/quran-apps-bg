@@ -3,6 +3,8 @@ import { getChaptersInfo } from "../lib/fetch";
 import Layout from "../components/layouts/layout-home";
 import Meta from "../components/core/meta";
 import Banner from "../components/layout2/home/banner";
+import SearchSection from "../components/layout2/home/search-section";
+import Collection from "../components/layout2/home/collection";
 import ChapterList from "../components/layout2/home/chapter-list";
 
 export default function Home({ chapters }) {
@@ -17,6 +19,8 @@ export default function Home({ chapters }) {
       />
 
       <Banner />
+      <SearchSection chapters={chapters}/>
+      <Collection />
       <ChapterList chapters={chapters} />
     </>
   );

@@ -4,6 +4,24 @@ import { SettingsContext } from "../../contexts/SettingsContext";
 import { useRouter } from "next/router";
 import AutoStoriesIcon from "../icons/AutoStories";
 import styles from "../bookmark/list.module.scss";
+import { t } from "../../lib/config";
+
+function formatToEnglishName(name) {
+  return name
+    .replace(/(chương|chuong|surah|surat|chapter|āl|'imran|‘imrān)\s*/gi, '')
+    .replace(/[āăâáàä]/gi, 'a')
+    .replace(/[éèêëē]/gi, 'e')
+    .replace(/[īîïíì]/gi, 'i')
+    .replace(/[ōôöóò]/gi, 'o')
+    .replace(/[ūûüúù]/gi, 'u')
+    .replace(/[‘’'",.]/g, '')
+    .replace(/\s+/g, '-') 
+    .replace(/-{2,}/g, '-') 
+    .replace(/^-+/, '') 
+    .replace(/-+$/, '') 
+    .toLowerCase()
+    .trim();
+}
 
 export default function LastReadList({ controller }) {
   const { lastRead } = useContext(PinContext);
@@ -12,17 +30,17 @@ export default function LastReadList({ controller }) {
 
   const handleClick = (e, slug, verse) => {
     e.preventDefault();
-
+    const englishSlug = formatToEnglishName(slug).replace(/\s+/g, '-').toLowerCase();
+    
     // const href =
     //   verseMode === "scroll"
     //     ? `/chapters/${slug}#verse-${verse}`
     //     : verseMode === "slide"
     //     ? `/chapters/${slug}/verses/${verse}`
     //     : `/chapters/${slug}#verse-${verse}`;
-    const href = `/chapters/${slug}#verse-${verse}`;
 
+    router.push(`/chapters/${englishSlug}#verse-${verse}`);
     controller(false)(e);
-    router.push(href);
   };
 
   const formatDate = (date) => {
@@ -81,7 +99,7 @@ export default function LastReadList({ controller }) {
       </div>
 
       {lastRead && lastRead.length == 0 && (
-        <h2 className={styles.no_record}>No records found</h2>
+        <h2 className={styles.no_record}>{t("No records found")}</h2>
       )}
     </div>
   );

@@ -1,0 +1,481 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  overflow-y: auto;
+
+  // Keep old style for desktop (1024px and above)
+  @media screen and (min-width: 1024px) {
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // Full screen for mobile and tablet (under 1024px) like settings modal
+  @media screen and (max-width: 1023px) {
+    padding: 0;
+    align-items: flex-end;
+  }
+}
+
+.modalContent {
+  background: var(--bg11);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 80vh;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  position: relative;
+  border: 1px solid var(--bdr11);
+
+  // Keep old style for desktop (1024px and above)
+  @media screen and (min-width: 1024px) {
+    max-width: 500px;
+    max-height: 80vh;
+    border-radius: 12px;
+    margin: auto;
+  }
+
+  // Full screen like settings modal for mobile and tablet (under 1024px)
+  @media screen and (max-width: 1023px) {
+    max-width: 100%;
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
+    margin: 0;
+    animation: slideUp 0.3s ease-out;
+  }
+
+  &.dark {
+    --text-primary: var(--txt11);
+    --text-secondary: var(--txt12);
+    --background-primary: var(--bg11);
+    --background-secondary: var(--bg22);
+    --border-color: var(--bdr11);
+    --accent-color: var(--clr11);
+    --hover-color: var(--bg22);
+  }
+
+  &.light {
+    --text-primary: var(--txt11);
+    --text-secondary: var(--txt12);
+    --background-primary: var(--bg11);
+    --background-secondary: var(--bg22);
+    --border-color: var(--bdr11);
+    --accent-color: var(--clr11);
+    --hover-color: var(--bg22);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header {
+  border-bottom: 1px solid var(--border-color);
+
+  // Mobile style like settings modal
+  @media screen and (max-width: 1023px) {
+    border-bottom: 1px solid var(--bdr14);
+  }
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  padding: 24px 24px 18px 24px;
+
+  // Mobile style like settings modal
+  @media screen and (max-width: 1023px) {
+    padding: 16px 20px;
+    min-height: 60px;
+  }
+}
+
+.left {
+}
+
+.title {
+}
+
+.title h2 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  color: var(--txt11) !important;
+  margin: 0 !important;
+
+  // Mobile style like settings modal
+  @media screen and (max-width: 1023px) {
+    font-size: 20px !important;
+    font-weight: 600 !important;
+  }
+}
+
+.right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  right: -6px;
+}
+
+.icon {
+  height: 34px;
+  width: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: var(--bg22);
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-left: 7px;
+
+  // Mobile style like settings modal
+  @media screen and (max-width: 1023px) {
+    padding: 8px !important;
+    width: 40px !important;
+    height: 40px !important;
+    background-color: var(--bg22) !important;
+    border-radius: 50% !important;
+  }
+
+  &:hover {
+    // Mobile style
+    @media screen and (max-width: 1023px) {
+      background-color: var(--main-color) !important;
+    }
+  }
+
+  svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--txt12);
+
+    // Mobile style
+    @media screen and (max-width: 1023px) {
+      width: 20px !important;
+      height: 20px !important;
+      fill: var(--txt12) !important;
+    }
+  }
+
+  &:hover svg {
+    // Mobile style
+    @media screen and (max-width: 1023px) {
+      fill: var(--bg22) !important;
+    }
+  }
+}
+
+.search {
+  display: block;
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  right: 18px;
+  height: 48px;
+  background: var(--bg11);
+  transform: scaleX(0);
+  transition: transform 250ms ease;
+  transform-origin: center;
+
+  @media screen and (max-width: 1023px) {
+    left: 1.5rem;
+    right: 1.5rem;
+    top: 1.5rem;
+    height: 52px;
+  }
+}
+
+.search.open {
+  transform: scaleX(1);
+}
+
+.search input[type=text] {
+  padding-left: 20px;
+  padding-right: 48px;
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  margin: 0;
+  border: none;
+  display: block;
+  background: var(--bg22);
+  color: var(--txt11);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+
+  @media screen and (max-width: 1023px) {
+    font-size: 16px;
+    padding-left: 24px;
+    padding-right: 52px;
+  }
+}
+
+.search input[type=text]::placeholder {
+  color: var(--txt12);
+  opacity: 0.8;
+}
+
+.search span {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  width: 22px;
+  height: 22px;
+  transform: translateY(-50%);
+  cursor: pointer;
+
+  @media screen and (max-width: 1023px) {
+    right: 24px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.search span svg {
+  width: 22px;
+  height: 22px;
+  opacity: 0.7;
+  fill: var(--txt11);
+
+  @media screen and (max-width: 1023px) {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 24px 24px 24px;
+  max-height: 400px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--background-secondary);
+
+  // Keep old style for desktop
+  @media screen and (min-width: 1024px) {
+    padding: 0 24px 24px 24px;
+    max-height: 400px;
+  }
+
+  // Mobile style like settings modal
+  @media screen and (max-width: 1023px) {
+    padding: 20px;
+    max-height: none;
+    flex: 1;
+    background-color: var(--bg11);
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--background-secondary);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+
+    &:hover {
+      background: var(--text-secondary);
+    }
+  }
+}
+
+.languageList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.languageSection {
+  margin-bottom: 16px;
+
+  @media screen and (max-width: 1023px) {
+    margin-bottom: 20px;
+  }
+}
+
+.languageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--bdr14);
+  margin-bottom: 8px;
+
+  @media screen and (max-width: 1023px) {
+    padding: 12px 0;
+    margin-bottom: 12px;
+  }
+}
+
+.languageName {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--txt12);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  @media screen and (max-width: 1023px) {
+    font-size: 16px;
+  }
+}
+
+.translationList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  @media screen and (max-width: 1023px) {
+    gap: 8px;
+  }
+}
+
+.translationItem {
+  display: flex;
+  align-items: center;
+  padding: 4px 0px;
+  border-radius: 4px;
+
+  @media screen and (max-width: 1023px) {
+    padding: 8px 0;
+  }
+
+  &:hover {
+    background-color: var(--bg22);
+  }
+}
+
+.formControlLabel {
+  margin: 0 !important;
+  flex: 1;
+
+  .MuiCheckbox-root {
+    padding: 8px !important;
+    color: var(--txt12) !important;
+
+    @media screen and (max-width: 1023px) {
+      padding: 12px !important;
+    }
+
+    &.Mui-checked {
+      color: var(--main-color) !important;
+    }
+  }
+}
+
+.translationInfo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 4px;
+
+  @media screen and (max-width: 1023px) {
+    margin-left: 8px;
+  }
+}
+
+.translationName {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--txt11);
+  line-height: 1.2;
+
+  @media screen and (max-width: 1023px) {
+    font-size: 16px;
+  }
+}
+
+.translationDescription {
+  font-size: 12px;
+  color: var(--txt12);
+  margin-top: 2px;
+  line-height: 1.2;
+
+  @media screen and (max-width: 1023px) {
+    font-size: 14px;
+  }
+}
+
+.checkbox {
+  color: var(--txt12) !important;
+}
+
+/* For the unchecked state */
+.checkbox .MuiIconButton-root {
+  border-radius: 4px !important;
+}
+
+/* For the checked state */
+.checkbox .MuiSvgIcon-root {
+  border-radius: 4px !important;
+}
+
+// Mobile responsive
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  .modalContent {
+    max-height: 100vh;
+    height: 100vh;
+  }
+
+  .title h2 {
+    font-size: 18px !important;
+  }
+
+  .content {
+    max-height: none;
+    flex: 1;
+  }
+
+  .search {
+    left: 1rem;
+    right: 1rem;
+  }
+}
+
+/* Fix for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  .modalOverlay {
+    height: -webkit-fill-available;
+  }
+
+  .content {
+    -webkit-overflow-scrolling: touch;
+  }
+}

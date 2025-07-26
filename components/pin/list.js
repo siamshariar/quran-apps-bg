@@ -3,6 +3,7 @@ import { PinContext } from "../../contexts/PinContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { useRouter } from "next/router";
 import PinIcon from "../icons/PinOutline";
+import { t } from "../../lib/config";
 import styles from "../bookmark/list.module.scss";
 
 export default function PinList({ controller }) {
@@ -51,7 +52,7 @@ export default function PinList({ controller }) {
       </div>
 
       {pin && pin.length == 0 && (
-        <h2 className={styles.no_record}>No records found</h2>
+        <h2 className={styles.no_record}>{t("No records found")}</h2>
       )}
     </div>
   );

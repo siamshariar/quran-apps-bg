@@ -4,6 +4,7 @@ import { SettingsContext } from "../../../contexts/SettingsContext";
 import Link from "next/link";
 import AutoStoriesIcon from "../../icons/AutoStories";
 import styles from "../../bookmark/list.module.scss";
+import { t } from "../../../lib/config";
 
 export default function LastReadList() {
   const { lastRead } = useContext(PinContext);
@@ -72,7 +73,7 @@ export default function LastReadList() {
       </div>
 
       {lastRead && lastRead.length == 0 && (
-        <h2 className={styles.no_record}>No records found</h2>
+        <h2 className={styles.no_record}>{t("No records found")}</h2>
       )}
     </div>
   );

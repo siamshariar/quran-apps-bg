@@ -67,23 +67,38 @@ export default function Sidenav({ chapters, headerVisible = true, scrollDirectio
       }
     };
 
+    const handleOpenSidenavSettings = (event) => {
+      console.log("handleOpenSidenavSettings event received:", event.detail)
+      const { open, expandedSetting } = event.detail
+      if (open) {
+        updateChapterListOpen(false)
+        changeBookmarkOpen(false)
+      }
+      updateSettingsOpen(open)
+      if (expandedSetting) {
+        setExpandedSetting(expandedSetting)
+      }
+    }
+
     if (typeof window !== 'undefined') {
-    document.addEventListener("openSettings", handleOpenSettings);
-    document.body.addEventListener("mousedown", handler);
-    document.addEventListener("keydown", escapeHandler);
-    return () => {
-      document.removeEventListener("openSettings", handleOpenSettings);
-      document.body.removeEventListener("mousedown", handler);
-      document.removeEventListener("keydown", escapeHandler);
-    };
+      document.addEventListener("openSettings", handleOpenSettings);
+      document.addEventListener("openSidenavSettings", handleOpenSidenavSettings);
+      document.body.addEventListener("mousedown", handler);
+      document.addEventListener("keydown", escapeHandler);
+      return () => {
+        document.removeEventListener("openSettings", handleOpenSettings);
+        document.removeEventListener("openSidenavSettings", handleOpenSidenavSettings);
+        document.body.removeEventListener("mousedown", handler);
+        document.removeEventListener("keydown", escapeHandler);
+      };
     }
   }, [refChapters, refSettings, refSave]);
 
   const controlChapterListNav = (open) => (event) => {
     if (
       event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
+       (event.key === "Tab" || event.key === "Shift")
+      ) {
       return;
     }
     if (open) {
@@ -96,8 +111,8 @@ export default function Sidenav({ chapters, headerVisible = true, scrollDirectio
   const controlSettingsNav = (open) => (event) => {
     if (
       event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
+       (event.key === "Tab" || event.key === "Shift")
+      ) {
       return;
     }
     if (open) {

@@ -4,6 +4,7 @@ import { SettingsContext } from "../../../contexts/SettingsContext";
 import Link from "next/link";
 import PinIcon from "../../icons/PinOutline";
 import styles from "../../bookmark/list.module.scss";
+import { t } from "../../../lib/config";
 
 export default function PinList() {
   const { pin } = useContext(PinContext);
@@ -43,7 +44,7 @@ export default function PinList() {
       </div>
 
       {pin && pin.length == 0 && (
-        <h2 className={styles.no_record}>No records found</h2>
+        <h2 className={styles.no_record}>{t("No records found")}</h2>
       )}
     </div>
   );

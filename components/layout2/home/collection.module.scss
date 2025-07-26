@@ -1,0 +1,367 @@
+.collection {
+  padding-top: 40px;
+}
+
+.container {
+  max-width: 1280px;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--txt11);
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+}
+
+.tabs {
+  display: flex;
+  // gap: 8px;
+  background: var(--bg22);
+  border-radius: 8px;
+}
+
+.tab, .tab1, .tab2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  background: transparent;
+  color: var(--txt12);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: "Montserrat", sans-serif;
+}
+
+.tab svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+.tab1 svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+.tab2 svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+
+
+.tab.active {
+  background: var(--bg11);
+    border-radius: 8px 0px 0px 8px;
+}
+.tab1.active {
+  background: var(--bg11);
+    border-radius: 0px;
+}
+.tab2.active {
+  background: var(--bg11);
+    border-radius: 0px 8px 8px 0px;
+}
+
+.content {
+  position: relative;
+}
+
+.slider_container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.slider {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex: 1;
+}
+
+.slider::-webkit-scrollbar {
+  display: none;
+}
+
+.card {
+  min-width: 280px;
+  background: var(--bg11);
+  border-radius: 12px;
+  padding: 26px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid var(--bg22);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.card_icon {
+  width: 48px;
+  height: 48px;
+  background: var(--bg22);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card_icon svg {
+  width: 22px;
+  height: 22px;
+
+}
+.folder_card_icon {
+  width: 48px;
+  height: 48px;
+  background: var(--bg22);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.folder_card_icon svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--txt11);
+}
+
+.card_content {
+  flex: 1;
+  min-width: 0;
+}
+
+.card_title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--txt11);
+  margin: 0 0 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: "Montserrat", sans-serif;
+}
+
+.card_subtitle {
+  font-size: 14px;
+  color: var(--txt12);
+  margin: 0;
+  opacity: 0.8;
+  font-family: "Montserrat", sans-serif;
+}
+
+.nav_button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: var(--bg22);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.nav_button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.nav_left {
+  left: -20px;
+}
+
+.nav_right {
+  right: -20px;
+}
+
+.time {
+  color: inherit;
+  font-size: 14px;
+  //font-weight: bold;
+  text-align: right;
+  opacity: 0.6;
+  font-family: "Montserrat", sans-serif;
+}
+
+.no_data {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--txt13);
+  font-size: 16px;
+  border-radius: 12px;
+  border: 1px dashed var(--bdr12);
+  font-family: "Montserrat", sans-serif;
+}
+
+
+@media (max-width: 768px) {
+  .collection {
+    padding-top: 20px;
+    display: none;
+  }
+  
+  .container {
+    width: calc(100% + 10px) !important;
+    margin: -5px !important;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin: 0 auto;
+  }
+
+  .slider {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex: 1;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+  
+  .tabs {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .tab {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 13px;
+    justify-content: center;
+  }
+  .tab1 {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 13px;
+    justify-content: center;
+  }
+  .tab2 {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 13px;
+    justify-content: center;
+  }
+  
+  .card {
+    min-width: 250px;
+    padding: 16px;
+  }
+  
+  .nav_button {
+    display: none;
+  }
+  
+  .slider {
+    padding-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  
+  .tabs {
+    flex-direction: column;
+  }
+  
+  .tab {
+    justify-content: center;
+    width: 100%;
+  }
+  .tab1 {
+    justify-content: center;
+    width: 100%;
+  }
+  .tab2 {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .tab.active {
+  background: var(--bg22);
+    border-radius: 8px 8px 0px 0px;
+}
+.tab1.active {
+  background: var(--bg22);
+    border-radius: 0px;
+}
+.tab2.active {
+  background: var(--bg22);
+    border-radius: 0px 0px 8px 8px;
+}
+  
+  .card {
+    min-width: 220px;
+    gap: 12px;
+  }
+  
+  
+  .card_title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+}
+
+
+@media only screen and (min-width: 1023px) {
+  .collection {
+    padding-top: 60px;
+  }
+  .container {
+    padding-left: 80px;
+    padding-right: 80px;
+    margin: 0 auto;
+  }
+  .slider {
+    gap: 15px;
+  }
+  .card {
+  min-width: 300px;
+
+}
+
+}

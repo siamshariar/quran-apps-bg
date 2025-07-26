@@ -5,7 +5,6 @@ import AudioPlayerContextProvider from "../../contexts/AudioPlayerContext";
 import PinContextProvider from "../../contexts/PinContext";
 import BookmarkContextProvider from "../../contexts/BookmarkContext";
 import SidenavContextProvider from "../../contexts/SidenavContext";
-//import SearchModal from '../../../components/core/search-modal'
 import HeaderWeb from "../../components/layout2/web/header";
 import HeaderMobile from "../../components/mobile/header-subjective";
 import FooterWeb from "../../components/web/footer";
@@ -24,11 +23,6 @@ const Layout = ({ children }) => {
   const [isScrolling, setIsScrolling] = useState(false)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [scrollDirection, setScrollDirection] = useState("up")
-  // const [searchModalOpen, updateSearchModalOpen] = useState(false)
-
-  // const searchModalController = open => {
-  //     updateSearchModalOpen(open)
-  // }
   const theme = useTheme();
 
   useEffect(() => {
@@ -39,9 +33,7 @@ const Layout = ({ children }) => {
         setShowScrollButton(currentScrollY > 300)
       }
 
-      if (Math.abs(currentScrollY - lastScrollY) < 5) {
-        return
-      }
+      if (Math.abs(currentScrollY - lastScrollY) < 5) return
 
       if (currentScrollY > lastScrollY && currentScrollY > 80) {
         if (headerVisible) {
@@ -55,32 +47,23 @@ const Layout = ({ children }) => {
         }
       }
 
-      if (currentScrollY <= 80) {
-        setHeaderVisible(true)
-      }
+      if (currentScrollY <= 80) setHeaderVisible(true)
 
       setLastScrollY(currentScrollY)
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isScrolling, lastScrollY, headerVisible]);
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [isScrolling, lastScrollY, headerVisible])
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
-    const getSidenavMarginTop = () => {
-    if (headerVisible) {
-      return 90 
-    } else if (scrollDirection === "up") {
-      return 100
-    } else {
-      return 24
-    }
+  const getSidenavMarginTop = () => {
+    if (headerVisible) return 90
+    else if (scrollDirection === "up") return 100
+    else return 24
   }
 
   return (
@@ -89,37 +72,20 @@ const Layout = ({ children }) => {
         <BookmarkContextProvider>
           <AudioPlayerContextProvider>
             <SidenavContextProvider>
-              {/* <SearchModal
-                open={searchModalOpen}
-                searchModalController={searchModalController}
-            /> */}
-
               {children.props.mode === "verse" && <ArabicDialog />}
 
               <HeaderWeb
                 page="surah"
                 chapters={children.props.chapters}
                 isChapterPage={true}
-                // searchModalController={searchModalController}
                 hasSidenav={true}
                 headerVisible={headerVisible}
               />
 
-              {/* TODO: Fix redirect */}
               <HeaderMobile
                 title={children.props.title}
                 backLink={children.props.backLink}
               />
-
-              {/* TODO: fix for subjective verses page */}
-              {/* <HeaderMobile
-                title={children.props.title}
-                backLink={
-                  subjective.parentSlug == null
-                    ? "/subjective"
-                    : `/subjective/${subjective.parentSlug}`
-                }
-              /> */}
 
               <main
                 id="viewport"
@@ -130,12 +96,16 @@ const Layout = ({ children }) => {
                 )}
               >
                 <div className={styles.content}>
-                  <Sidenav chapters={children.props.chapters} headerVisible={headerVisible} marginTop={getSidenavMarginTop()}/>
+                  <Sidenav
+                    chapters={children.props.chapters}
+                    headerVisible={headerVisible}
+                    marginTop={getSidenavMarginTop()}
+                  />
                   {children}
                 </div>
               </main>
 
-              {/* Scroll to Top Button - Web */}
+              {/* Scroll to Top Button - Desktop */}
               {showScrollButton && (
                 <IconButton
                   onClick={scrollToTop}
@@ -158,8 +128,8 @@ const Layout = ({ children }) => {
                 </IconButton>
               )}
 
-              {/* Scroll to Top Button - Mobile */}
-              {showScrollButton && (
+              {/* Scroll to Top Button - Mobile (Only on verse mode) */}
+              {showScrollButton && children.props.mode === "verse" && (
                 <IconButton
                   onClick={scrollToTop}
                   sx={{
@@ -182,9 +152,7 @@ const Layout = ({ children }) => {
               )}
 
               {children.props.mode === "verse" && <AudioPlayer />}
-
               <FooterWeb />
-
               {children.props.mode === "list" && <FooterMobile />}
             </SidenavContextProvider>
           </AudioPlayerContextProvider>

@@ -11,9 +11,10 @@ import TuneIcon from '../icons/Tune'
 //import PlayIcon from '../icons/PlayArrow'
 //import PauseIcon from '../icons/Pause'
 import styles from './header.module.scss'
+import { useRouter } from "next/router"
 
-export default function HeaderMobile({ contentTitle, chapterNo, chapters }) {
-    // const { playing, play, pause, audioType } = useContext(AudioPlayerContext)
+export default function HeaderMobile({ contentTitle, chapterNo, chapters, onSettingsClick, isSearchPage = false, searchQuery = "", }) {
+      // const { playing, play, pause, audioType } = useContext(AudioPlayerContext)
     // const playingThisChapter = playing && audioType === 'chapter'
 
     // const controlPlay = () => {
@@ -24,18 +25,22 @@ export default function HeaderMobile({ contentTitle, chapterNo, chapters }) {
     //     pause()
     // }
 
-
-    const [goToVerseOpen, setGoToVerseOpen] = useState(false)
+  const router = useRouter()
+  const [goToVerseOpen, setGoToVerseOpen] = useState(false)
     // const [goToVerseInit, setGoToVerseInit] = useState(false)
     // const [goToVerseData, setGoToVerseData] = useState([])
 
-    const handleGoToVerseModal = open => event => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return
-        }
-
-        setGoToVerseOpen(open)
-
+  const isMultiTranslationPage = router.pathname.includes("/multi-translation")
+  const handleGoToVerseModal = (open) => (event) => {
+    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return
+    }
+    if (event) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    setGoToVerseOpen(open)
+    
         // if (!goToVerseInit) {
         //     getChaptersInfo().then(res => {
         //         setGoToVerseData(res)
@@ -45,26 +50,30 @@ export default function HeaderMobile({ contentTitle, chapterNo, chapters }) {
         //         }, 0)
         //     })
         // }
+  }
+
+
+  const handleSettingsClick = (event) => {
+    event.preventDefault()
+    if (onSettingsClick) {
+      onSettingsClick(event)
     }
-
-
-    // settings modal
-    const [settingsOpen, setSettingsOpen] = useState(false)
-
-    const handleSettingsModal = open => event => {
-        event.preventDefault()
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return
-        }
-        setSettingsOpen(open)
-    }
-
+  }
+  
 
     // show hide appbar on scroll
-    const header = useRef(null)
-    const [lastScrollTop, setLastScrollTop] = useState(0)
-    const [scrollTop, setScrollTop] = useState(0)
-    const [didMount, setDidMount] = useState(false)
+  const header = useRef(null)
+  const [lastScrollTop, setLastScrollTop] = useState(0)
+  const [scrollTop, setScrollTop] = useState(0)
+  const [didMount, setDidMount] = useState(false)
+
+  const handleBackNavigation = () => {
+    if (window.history.length > 1) {
+      router.back()
+    } else {
+      router.push("/")
+    }
+  }
 
     // useEffect(() => {
     //     setDidMount(true)
@@ -86,68 +95,64 @@ export default function HeaderMobile({ contentTitle, chapterNo, chapters }) {
     // }, [scrollTop])
 
 
-    return (
-        <>
-            <div className={styles.header} ref={header}>
-                <Container>
-                    <div className={styles.wrapper}>
-                        <div className={styles.left}>
-                            <Link href="/" legacyBehavior>
-                                <a className={styles.back_icon}>
-                                    <BackIcon />
-                                </a>
-                            </Link>
-                        </div>
-
-                        <div
-                            className={styles.center}
-                            onClick={handleGoToVerseModal(true)}
-                        >
-                            {/* <span>{chapterNo}. </span> */}
-                            <span>{contentTitle} </span>
-                            <span className={styles.icon}><DropDownIcon /></span>
-
-
-                            {/* {playingThisChapter && (
-                                <span
-                                    className={styles.audio_icon}
-                                    onClick={controlPause}
-                                >
-                                    <PauseIcon />
-                                </span>
-                            )}
-                            {!playingThisChapter && (
-                                <span
-                                    className={styles.audio_icon}
-                                    onClick={controlPlay}
-                                >
-                                    <PlayIcon />
-                                </span>
-                            )} */}
-
-                        </div>
-
-                        <div className={styles.right}>
-                            <Link href="/settings" legacyBehavior>
-                                <a className={styles.icon} onClick={handleSettingsModal(true)}>
-                                    <TuneIcon />
-                                </a>
-                            </Link>
-                        </div>
-                    </div>
-                </Container>
+  return (
+    <>
+      <div className={styles.header} ref={header}>
+        <Container>
+          <div className={styles.wrapper}>
+            <div className={styles.left}>
+              <div className={styles.back_icon} onClick={handleBackNavigation}>
+                <BackIcon />
+              </div>
             </div>
 
-            <GoToVerse
-                open={goToVerseOpen}
-                controller={handleGoToVerseModal}
-                chapters={chapters}
-            />
+            <div
+             className={styles.center}
+              onClick={isMultiTranslationPage ? undefined : handleGoToVerseModal(true)}
+              >
+              <span>{isMultiTranslationPage ? "Multi Translation" : contentTitle}</span>
+              {!isMultiTranslationPage && (
+                <span className={styles.icon}>
+                  <DropDownIcon />
 
-            <SettingsModal
-                open={settingsOpen}
-                controller={handleSettingsModal}
-            />
-        </>
-    )
+                   {/* {playingThisChapter && (
+                          <span
+                              className={styles.audio_icon}
+                              onClick={controlPause}
+                          >
+                              <PauseIcon />
+                          </span>
+                      )}
+                      {!playingThisChapter && (
+                          <span
+                              className={styles.audio_icon}
+                              onClick={controlPlay}
+                          >
+                              <PlayIcon />
+                          </span>
+                      )} */}
+                </span>
+              )}
+              
+            </div>
+
+            <div className={styles.right}>
+              <a className={styles.icon} onClick={handleSettingsClick}>
+                <TuneIcon />
+              </a>
+            </div>
+          </div>
+        </Container>
+      </div>
+      {!isMultiTranslationPage && (
+        <GoToVerse
+          open={goToVerseOpen}
+          onClose={handleGoToVerseModal(false)}
+          controller={handleGoToVerseModal}
+          chapters={chapters}
+        />
+      )}
+
+    </>
+  )
 }

@@ -35,7 +35,8 @@
   font-size: 14px;
 }
 
-.btn {}
+.btn {
+}
 
 .note_text {
   font-size: 12px;
@@ -56,7 +57,7 @@
 }
 
 .message {
-  color: #FF0000;
+  color: #ff0000;
   font-size: 12px;
   overflow: hidden;
   line-height: 0;
@@ -81,7 +82,7 @@
   margin-top: 5px !important;
   font-weight: 600 !important;
   text-transform: capitalize !important;
-  background-color: rgba(28,157,234,0.25) !important;
+  background-color: rgba(28, 157, 234, 0.25) !important;
   color: #1c9dea !important;
   border: none !important;
   font-size: 14px !important;
@@ -119,7 +120,7 @@
   width: 14px;
   height: 14px;
   stroke: var(--txt13);
-  stroke-width: 3px
+  stroke-width: 3px;
 }
 
 .sizer_text {
@@ -180,7 +181,6 @@
   padding: 0 0 0 41px !important;
 }
 
-
 .themes {
   width: 100%;
   display: flex;
@@ -226,7 +226,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  
+
   &:hover {
     background-color: var(--bg22);
   }
@@ -272,7 +272,6 @@
   justify-content: space-between;
 }
 
-
 .block.theme,
 .block.auto_scroll,
 .block.notification {
@@ -285,7 +284,6 @@
   justify-content: space-between;
   align-items: flex-start;
 }
-
 
 .block.view .item {
   padding: 8px 0;
@@ -332,7 +330,7 @@
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    
+
     &:hover {
       background-color: var(--bg22);
     }
@@ -362,7 +360,7 @@
   .btn {
     margin-left: 8px;
     color: var(--txt12);
-    
+
     svg {
       width: 20px;
       height: 20px;

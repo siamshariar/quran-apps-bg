@@ -1,13 +1,11 @@
 "use client"
-
 import { useState, useContext } from "react"
 import { SettingsContext } from "../../contexts/SettingsContext"
-import Checkbox from "@mui/material/Checkbox"
+import { Checkbox } from "@mui/material"
 import FormControlLabel from "@mui/material/FormControlLabel"
 import IconButton from "@mui/material/IconButton"
 import SearchIcon from "../icons/Search"
 import ChevronLeftIcon from "../icons/ChevronLeft"
-import CloseIcon from "../icons/Close"
 import styles from "./translation-modal.module.scss"
 import { t } from "../../lib/config"
 
@@ -61,14 +59,10 @@ const translationData = {
   ],
 }
 
-export default function TranslationModalContent({ onBack }) {
-  const {
-    translation,
-    changeTranslation,
-    selectedTranslations = [translation],
-    changeSelectedTranslations,
-  } = useContext(SettingsContext)
+export default function TranslationModalContent({ onBack, isOpen = true }) {
+  const { translation, changeTranslation } = useContext(SettingsContext)
   const [searchQuery, setSearchQuery] = useState("")
+  const [isClosing, setIsClosing] = useState(false)
 
   // Filter translations based on search query
   const filteredTranslations = Object.entries(translationData).reduce((acc, [language, translations]) => {
@@ -85,27 +79,36 @@ export default function TranslationModalContent({ onBack }) {
   }, {})
 
   const handleTranslationToggle = (translationCode) => {
-    // Single selection: when a translation is selected, it becomes the only selected one
-    const newSelections = [translationCode]
-
-    // Update selected translations to only include the new selection
-    if (changeSelectedTranslations) {
-      changeSelectedTranslations(newSelections)
-    }
-
-    // Set the selected translation as the main translation
+    // Only update the primary translation
     changeTranslation(translationCode)
   }
 
+  const handleBack = (event) => {
+    // Prevent event propagation to avoid double triggers
+    if (event) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+
+    if (isClosing) return // Prevent multiple calls
+
+    setIsClosing(true)
+    setTimeout(() => {
+      setIsClosing(false)
+      if (onBack) {
+        onBack()
+      }
+    }, 300)
+  }
+
   return (
-    <div className={styles.translationModal}>
+    <div className={`${styles.translationModal} ${isClosing ? styles.closing : ""}`}>
       <div className={styles.header}>
-        <IconButton onClick={onBack} className={styles.btn}>
+        <IconButton onClick={handleBack} className={styles.btn} disabled={isClosing}>
           <ChevronLeftIcon />
         </IconButton>
-        <h2 className={styles.title}>{t("Translations")}</h2>
+        <h2 className={styles.title}>{t("Translation")}</h2>
       </div>
-
       <div className={styles.searchContainer}>
         <div className={styles.searchWrapper}>
           <SearchIcon className={styles.searchIcon} />
@@ -118,7 +121,6 @@ export default function TranslationModalContent({ onBack }) {
           />
         </div>
       </div>
-
       <div className={styles.content}>
         <div className={styles.languageList}>
           {Object.entries(filteredTranslations).map(([language, translations]) => (
@@ -135,11 +137,13 @@ export default function TranslationModalContent({ onBack }) {
                           checked={translation === trans.code}
                           onChange={() => handleTranslationToggle(trans.code)}
                           className={styles.checkbox}
+                          name="translation-selection"
                         />
                       }
                       label={
                         <div className={styles.translationInfo}>
                           <span className={styles.translationName}>{trans.name}</span>
+                          {/* <span className={styles.translationDescription}>{trans.description}</span> */}
                         </div>
                       }
                       className={styles.formControlLabel}

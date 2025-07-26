@@ -1,0 +1,293 @@
+.searchPageContent {
+  min-height: calc(100vh - 120px);
+  padding: 40px 0;
+  background: var(--bg00);
+}
+
+.searchContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.searchHeader {
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--bdr11);
+}
+
+.searchForm {
+  width: 100%;
+  max-width: 600px;
+}
+
+.searchInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--txt13);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 18px 60px 18px 50px;
+  font-size: 16px;
+  border: 2px solid var(--bdr11);
+  border-radius: 12px;
+  background: var(--bg11);
+  color: var(--txt11);
+  outline: none;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: var(--main-color);
+    box-shadow: 0 0 0 3px rgba(var(--main-color-rgb), 0.1);
+  }
+
+  &::placeholder {
+    color: var(--txt13);
+  }
+}
+
+.closeButton {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--txt13);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  z-index: 2;
+
+  &:hover {
+    background: var(--bg22);
+    color: var(--txt11);
+  }
+}
+
+.loading {
+  text-align: center;
+  padding: 80px 0;
+  color: var(--txt13);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--bdr11);
+  border-top: 4px solid var(--main-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.resultsInfo {
+  margin-bottom: 32px;
+  padding: 0 20px;
+}
+
+.resultsCount {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--txt11);
+  margin: 0;
+}
+
+.searchResults {
+  margin-bottom: 50px;
+  padding: 0 20px;
+}
+
+.resultItem {
+  background: var(--bg11);
+  border: 1px solid var(--bdr11);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    border-color: var(--main-color);
+    transform: translateY(-2px);
+  }
+}
+
+.resultHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.resultIcon {
+  color: var(--txt13);
+  flex-shrink: 0;
+}
+
+.chapterInfo {
+  font-size: 15px;
+  color: var(--main-color);
+  font-weight: 600;
+}
+
+.resultText {
+  font-size: 16px;
+  color: var(--txt11);
+  line-height: 1.7;
+  
+  :global(mark) {
+    background: var(--main-color);
+    color: white;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+}
+
+.noResults {
+  text-align: center;
+  padding: 80px 0;
+  color: var(--txt13);
+
+  h2 {
+    font-size: 28px;
+    margin-bottom: 16px;
+    color: var(--txt11);
+  }
+
+  p {
+    font-size: 16px;
+  }
+}
+
+.paginationWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 50px;
+  padding: 0 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.paginationButton {
+  min-width: 44px;
+  height: 44px;
+  padding: 10px 14px;
+  background: var(--bg11);
+  border: 1px solid var(--bdr11);
+  border-radius: 8px;
+  color: var(--txt11);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: var(--bg22);
+    border-color: var(--main-color);
+    transform: translateY(-1px);
+  }
+
+  &.active {
+    background: var(--main-color);
+    color: white;
+    border-color: var(--main-color);
+    font-weight: 600;
+  }
+}
+
+.paginationInfo {
+  font-size: 15px;
+  color: var(--txt13);
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 1024px) {
+  .searchContainer {
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .searchPageContent {
+    padding: 20px 0;
+  }
+
+  .searchContainer {
+    padding: 0 10px;
+  }
+
+  .searchInput {
+    font-size: 14px;
+    padding: 16px 50px 16px 45px;
+  }
+
+  .resultItem {
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+
+  .resultsInfo,
+  .searchResults,
+  .paginationWrapper {
+    padding: 0 10px;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .paginationButton {
+    min-width: 40px;
+    height: 40px;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .paginationInfo {
+    font-size: 13px;
+  }
+
+  .resultsCount {
+    font-size: 18px;
+  }
+
+  .resultText {
+    font-size: 15px;
+  }
+}

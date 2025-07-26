@@ -5,6 +5,7 @@ import { BookmarkContext } from "../../contexts/BookmarkContext";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import { config, server, t } from "../../lib/config";
 import Popover from "@mui/material/Popover";
+import Drawer from "@mui/material/Drawer";
 import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
@@ -25,6 +26,7 @@ import PinIcon from "../icons/PinOutline";
 import Share from "../core/share";
 import { useReactToPrint } from 'react-to-print';
 import styles from "./verse-options.module.scss";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 export default function VerseOptions({
   index,
@@ -39,6 +41,9 @@ export default function VerseOptions({
   updateBookmarksData,
   isBookmarkPage
 }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  
   const { playing, currentIndex, play, pause, audioType } =
     useContext(AudioPlayerContext);
   const { translation: currentTranslation } = useContext(SettingsContext);
@@ -48,25 +53,32 @@ export default function VerseOptions({
 
   const controlPlay = () => {
     play(index, "verse");
-    handlePopoverClose();
+    handleClose();
   };
 
   const controlPause = () => {
     pause();
-    handlePopoverClose();
+    handleClose();
   };
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const popoverOpen = Boolean(anchorEl);
 
-  const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const handleOpen = (event) => {
+    if (isMobile) {
+      setDrawerOpen(true);
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
   };
 
-  const handlePopoverClose = () => {
+  const handleClose = () => {
     setAnchorEl(null);
+    setDrawerOpen(false);
   };
-
-  const open = Boolean(anchorEl);
+  
 
   //snackbar
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -79,23 +91,23 @@ export default function VerseOptions({
   };
 
   const buildVerseUrl = () => {
-  if (typeof window === "undefined") return `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
-  
-  let path = window.location.pathname;
-  let parts = path.split("/");
-  let url = `${server}`;
-  
-  const hasTranslation = parts.length > 1 && 
-    parts[1] !== "chapters" && 
-    parts[1] !== "" && 
-    !parts[1].includes(".");
-  
-  if (hasTranslation) {
-    url += `/${parts[1]}`;
-  }
-  
-  url += `/chapters/${chapterSlug}/verses/${verseNumber}`;
-  return url;
+    if (typeof window === "undefined") return `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
+    
+    let path = window.location.pathname;
+    let parts = path.split("/");
+    let url = `${server}`;
+    
+    const hasTranslation = parts.length > 1 && 
+      parts[1] !== "chapters" && 
+      parts[1] !== "" && 
+      !parts[1].includes(".");
+    
+    if (hasTranslation) {
+      url += `/${parts[1]}`;
+    }
+    
+    url += `/chapters/${chapterSlug}/verses/${verseNumber}`;
+    return url;
   };
 
   const handleCopyLink = () => {
@@ -113,30 +125,17 @@ export default function VerseOptions({
       //   url = `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
       // }
 
-      navigator.clipboard.writeText(url);
-      handlePopoverClose();
-      setSnackbarOpen(true);
+    navigator.clipboard.writeText(url);
+    handleClose();
+    setSnackbarOpen(true);
   };
 
   const handleCopyFile = () => {
     const url = buildVerseUrl();
-      let file = `[Chapter ${chapterName} : Verse ${verseNumber}]\n\n${ayaArabic}\n\n${translation}\n\n${footnotes}\n\n${url}`;
-      // if (parts.length === 3 && parts[1] === "chapters") {
-      //   url = `${server}/chapters/${chapterSlug}#verse-${verseNumber}`;
-      // } else if (
-      //   parts.length === 5 &&
-      //   parts[1] === "chapters" &&
-      //   parts[3] === "verses"
-      // ) {
-      //   url = `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
-      // } else {
-      //   url = `${server}/chapters/${chapterSlug}/verses/${verseNumber}`;
-      // }
-
-
-      navigator.clipboard.writeText(file);
-      handlePopoverClose();
-      setSnackbarOpen(true);
+    let file = `[Chapter ${chapterName} : Verse ${verseNumber}]\n\n${ayaArabic}\n\n${translation}\n\n${footnotes}\n\n${url}`;
+    navigator.clipboard.writeText(file);
+    handleClose();
+    setSnackbarOpen(true);
   };
 
   // share option
@@ -155,7 +154,7 @@ export default function VerseOptions({
   };
 
   const handleWebShare = () => {
-    handlePopoverClose();
+    handleClose();
 
     const url = buildVerseUrl();
     const title = `Chapter ${chapterName} : Verse ${verseNumber} | ${config?.quranInLocal} | ${config?.metaDescription} | ${config?.metaTitle}`;
@@ -166,7 +165,7 @@ export default function VerseOptions({
   };
 
   const handleMobileShare = () => {
-    handlePopoverClose();
+    handleClose();
 
     const url = buildVerseUrl();
     const title = `Chapter ${chapterName} : Verse ${verseNumber} | ${config?.quranInLocal} | ${config?.metaDescription} | ${config?.metaTitle}`;
@@ -176,12 +175,7 @@ export default function VerseOptions({
         title: title,
         url: url,
       });
-      // .then(() => {
-      //     console.log('thanks for sharing')
-      // })
-      // .catch(console.error)
     } else {
-      //console.log('not supported')
       setShareUrl(url);
       setShareTitle(title);
       setShareOpen(true);
@@ -217,12 +211,12 @@ export default function VerseOptions({
   const [removeBookmarkOpen, setRemoveBookmarkOpen] = useState(false);
 
   const handleAddBookmark = () => {
-    handlePopoverClose();
+    handleClose();
     setAddBookmarkOpen(true);
   };
 
   const handleRemoveBookmark = () => {
-    handlePopoverClose();
+    handleClose();
     setRemoveBookmarkOpen(true);
   };
 
@@ -253,12 +247,12 @@ export default function VerseOptions({
 
   const handleAddPin = () => {
     addPin(chapterNumber, chapterName, chapterSlug, verseNumber);
-    handlePopoverClose();
+    handleClose();
   };
 
   const handleRemovePin = () => {
     removePin(chapterNumber, verseNumber);
-    handlePopoverClose();
+    handleClose();
   };
 
   // print option
@@ -273,9 +267,105 @@ export default function VerseOptions({
     content: () => printRef,
     documentTitle: chapterName,
     pageStyle: pageStyle,
-    onBeforeGetContent: () => handlePopoverClose(),
+    onBeforeGetContent: () => handleClose(),
     removeAfterPrint: true
   });
+
+  const renderMenuItems = () => (
+    <MenuList>
+      {playingThisVerse && (
+        <MenuItem onClick={controlPause}>
+          <span className={styles.icon}>
+            <PauseIcon />
+          </span>
+          <span className={styles.text}>Pause</span>
+        </MenuItem>
+      )}
+
+      {!playingThisVerse && (
+        <MenuItem onClick={controlPlay}>
+          <span className={styles.icon}>
+            <PlayIcon />
+          </span>
+          <span className={styles.text}>{t('Play')}</span>
+        </MenuItem>
+      )}
+
+      <MenuItem
+        classes={{
+          root: styles.mobile_share,
+        }}
+        onClick={() => handleMobileShare()}
+      >
+        <span className={styles.icon}>
+          <ShareIcon />
+        </span>
+        <span className={styles.text}>{t('Share')}</span>
+      </MenuItem>
+
+      <MenuItem
+        classes={{
+          root: styles.web_share,
+        }}
+        onClick={() => handleWebShare()}
+      >
+        <span className={styles.icon}>
+          <ShareIcon />
+        </span>
+        <span className={styles.text}>{t('Share')}</span>
+      </MenuItem>
+
+      {isBookmarked && (
+        <MenuItem onClick={handleRemoveBookmark}>
+          <span className={styles.icon}>
+            <BookmarkIcon />
+          </span>
+          <span className={styles.text}>{t('Remove bookmark')}</span>
+        </MenuItem>
+      )}
+
+      {!isBookmarked && (
+        <MenuItem onClick={handleAddBookmark}>
+          <span className={styles.icon}>
+            <BookmarkBorder />
+          </span>
+          <span className={styles.text}>{t('Bookmark')}</span>
+        </MenuItem>
+      )}
+
+      {!isPinned && (
+        <MenuItem onClick={() => handleAddPin()}>
+          <span className={styles.icon}>
+            <PinIcon />
+          </span>
+          <span className={styles.text}>{t('Pin')}</span>
+        </MenuItem>
+      )}
+
+      {isPinned && (
+        <MenuItem onClick={() => handleRemovePin()}>
+          <span className={styles.icon}>
+            <UnpinIcon />
+          </span>
+          <span className={styles.text}>{t('Unpin')}</span>
+        </MenuItem>
+      )}
+
+      <MenuItem onClick={handleCopyFile}>
+        <span className={styles.icon}>
+          <FileCopyIcon />
+        </span>
+        <span className={styles.text}>{t('Copy Verse')}</span>
+      </MenuItem>
+
+      <MenuItem onClick={handleCopyLink}>
+        <span className={styles.icon}>
+          <LinkIcon />
+        </span>
+        <span className={styles.text}>{t('Copy Link')}</span>
+      </MenuItem>
+    </MenuList>
+  );
 
   return (
     <>
@@ -297,128 +387,46 @@ export default function VerseOptions({
           <div className={styles.action}>
             <IconButton
               className={styles.more_icon}
-              onClick={handlePopoverOpen}
+              onClick={handleOpen}
               focusRipple={false}
             >
               <MoreIcon />
             </IconButton>
 
-            <Popover
-              open={open}
-              anchorEl={anchorEl}
-              onClose={handlePopoverClose}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              disableScrollLock={true}
-              classes={{ paper: styles.custom_paper }}
-            >
-              <MenuList>
-                {playingThisVerse && (
-                  <MenuItem onClick={controlPause}>
-                    <span className={styles.icon}>
-                      <PauseIcon />
-                    </span>
-                    <span className={styles.text}>Pause</span>
-                  </MenuItem>
-                )}
+            {/* Popover for desktop */}
+            {!isMobile && (
+              <Popover
+                open={popoverOpen}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                disableScrollLock={true}
+                classes={{ paper: styles.custom_paper }}
+              >
+                {renderMenuItems()}
+              </Popover>
+            )}
 
-                {!playingThisVerse && (
-                  <MenuItem onClick={controlPlay}>
-                    <span className={styles.icon}>
-                      <PlayIcon />
-                    </span>
-                    <span className={styles.text}>{t('Play')}</span>
-                  </MenuItem>
-                )}
-
-                <MenuItem
-                  classes={{
-                    root: styles.mobile_share,
-                  }}
-                  onClick={() => handleMobileShare()}
-                >
-                  <span className={styles.icon}>
-                    <ShareIcon />
-                  </span>
-                  <span className={styles.text}>{t('Share')}</span>
-                </MenuItem>
-
-                <MenuItem
-                  classes={{
-                    root: styles.web_share,
-                  }}
-                  onClick={() => handleWebShare()}
-                >
-                  <span className={styles.icon}>
-                    <ShareIcon />
-                  </span>
-                  <span className={styles.text}>{t('Share')}</span>
-                </MenuItem>
-
-                {isBookmarked && (
-                  <MenuItem onClick={handleRemoveBookmark}>
-                    <span className={styles.icon}>
-                      <BookmarkIcon />
-                    </span>
-                    <span className={styles.text}>{t('Remove bookmark')}</span>
-                  </MenuItem>
-                )}
-
-                {!isBookmarked && (
-                  <MenuItem onClick={handleAddBookmark}>
-                    <span className={styles.icon}>
-                      <BookmarkBorder />
-                    </span>
-                    <span className={styles.text}>{t('Bookmark')}</span>
-                  </MenuItem>
-                )}
-
-                {!isPinned && (
-                  <MenuItem onClick={() => handleAddPin()}>
-                    <span className={styles.icon}>
-                      <PinIcon />
-                    </span>
-                    <span className={styles.text}>{t('Pin')}</span>
-                  </MenuItem>
-                )}
-
-                {isPinned && (
-                  <MenuItem onClick={() => handleRemovePin()}>
-                    <span className={styles.icon}>
-                      <UnpinIcon />
-                    </span>
-                    <span className={styles.text}>{t('Unpin')}</span>
-                  </MenuItem>
-                )}
-
-                <MenuItem onClick={handleCopyFile}>
-                  <span className={styles.icon}>
-                    <FileCopyIcon />
-                  </span>
-                  <span className={styles.text}>{t('Copy Verse')}</span>
-                </MenuItem>
-
-                <MenuItem onClick={handleCopyLink}>
-                  <span className={styles.icon}>
-                    <LinkIcon />
-                  </span>
-                  <span className={styles.text}>{t('Copy Link')}</span>
-                </MenuItem>
-
-                {/*<MenuItem onClick={handlePrint}>*/}
-                {/*  <span className={styles.icon}>*/}
-                {/*    <PrintIcon />*/}
-                {/*  </span>*/}
-                {/*  <span className={styles.text}>Print</span>*/}
-                {/*</MenuItem>*/}
-              </MenuList>
-            </Popover>
+            {/* Drawer for mobile */}
+            {isMobile && (
+              <Drawer
+                anchor="bottom"
+                open={drawerOpen}
+                onClose={handleClose}
+                classes={{
+                  paper: styles.drawer_paper
+                }}
+              >
+                {renderMenuItems()}
+              </Drawer>
+            )}
           </div>
         </div>
       </div>

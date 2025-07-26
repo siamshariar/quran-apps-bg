@@ -23,6 +23,7 @@ import AdminIcon from '../icons/AdminPanelSettings'
 import Names99Icon from '../icons/Names99'
 import PinIcon from '../icons/PinOutline'
 import AutoStoriesIcon from '../icons/AutoStories'
+import MultiTranslation from '../icons/MultiTranslation'
 import { SidenavContext } from '../../contexts/SidenavContext'
 import { useRouter } from 'next/router'
 import { t } from '../../lib/config'
@@ -37,27 +38,29 @@ import styles from './mobile-nav.module.scss'
 import {config, server} from '../../lib/config'
 import {SettingsContext} from "../../contexts/SettingsContext";
 import Share from "../core/share";
+import { navigateToMultiTranslation } from "../../lib/multi-translation-storage"
 
 export default function MobileNav({ navOpen, navControl, chapters }) {
-	// go to verse modal
-	const [goToVerseOpen, setGoToVerseOpen] = useState(false)
-	// const [goToVerseInit, setGoToVerseInit] = useState(false)
+  // go to verse modal
+  const [goToVerseOpen, setGoToVerseOpen] = useState(false)
+  // const [goToVerseInit, setGoToVerseInit] = useState(false)
 	// const [goToVerseData, setGoToVerseData] = useState([])
-	const { theme } = useContext(SettingsContext);
-	const backgroundColor = theme === "light"
-		? config.bannerBackground
-		: "linear-gradient(90deg,#2b395d 0,#909090 50%,#909090 50%,#2b395d 100%)"
+  const { theme } = useContext(SettingsContext);
+  const backgroundColor = theme === "light"
+      ? config.bannerBackground
+      : "linear-gradient(90deg,#2b395d 0,#909090 50%,#909090 50%,#2b395d 100%)"
 
-	const handleGoToVerseModal = open => event => {
-		event.preventDefault()
+  const handleGoToVerseModal = (open) => (event) => {
+    if (event) {
+      event.preventDefault()
 
 		if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-			return
-		}
-
-		navControl(false)(event)
-		setGoToVerseOpen(open)
-
+        return
+      }
+    }
+    navControl(false)(event)
+    setGoToVerseOpen(open)
+    
 		// if (!goToVerseInit) {
 		// 	getChaptersInfo().then(res => {
 		// 		setGoToVerseData(res)
@@ -67,22 +70,25 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 		// 		}, 0)
 		// 	})
 		// }
-	}
+  }
+  const handleNavLinkClick = (e) => {
+    navControl(false)(e)
+  }
 
-	// settings modal
-	const [settingsOpen, setSettingsOpen] = useState(false)
-
-	const handleSettingsModal = open => event => {
-		event.preventDefault()
+  // settings modal
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  
+  const handleSettingsModal = (open) => (event) => {
+    event.preventDefault()
 		if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-			return
-		}
-		setSettingsOpen(open)
-		setTimeout(() => {
-			navControl(false)(event)
-		}, 300)
-	}
-
+      return
+    }
+    setSettingsOpen(open)
+    setTimeout(() => {
+      navControl(false)(event)
+    }, 300)
+  }
+  
 	// // pin modal
 	// const [pinOpen, setPinOpen] = useState(false)
 
@@ -123,76 +129,76 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
   }
 
   	// TODO: Make common share component
-	// share option
-	const [shareOpen, setShareOpen] = useState(false);
-	const [shareUrl, setShareUrl] = useState("");
-	const [shareTitle, setShareTitle] = useState("");
+  // share option
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
+  const [shareTitle, setShareTitle] = useState("");
 
-	const handleShareClose = (open) => (event) => {
+  const handleShareClose = (open) => (event) => {
 		if (
 			event.type === "keydown" &&
 			(event.key === "Tab" || event.key === "Shift")
 		) {
-			return;
-		}
-		setShareOpen(open);
-	};
+      return;
+    }
+    setShareOpen(open);
+  };
 
-	const handleMobileShare = () => {
+  const handleMobileShare = () => {
 		// handlePopoverClose();
 
-		const url = server;
-		const title = `${config?.metaTitle} | ${config?.metaDescription}`;
+    const url = server;
+    const title = `${config?.metaTitle} | ${config?.metaDescription}`;
 
-		if (navigator.share) {
-			navigator.share({
-				title: title,
-				url: url,
-			});
+    if (navigator.share) {
+      navigator.share({
+        title: title,
+        url: url,
+      });
 			// .then(() => {
 			//     console.log('thanks for sharing')
 			// })
 			// .catch(console.error)
-		} else {
+    } else {
 			//console.log('not supported')
-			setShareUrl(url);
-			setShareTitle(title);
-			setShareOpen(true);
-		}
-	};
+      setShareUrl(url);
+      setShareTitle(title);
+      setShareOpen(true);
+    }
+  };
 	// TODO: Make common share component
 
-	return (
-		<>
-			<Drawer
-				anchor="left"
-				open={navOpen}
-				onClose={navControl(false)}
+  return (
+    <>
+      <Drawer
+        anchor="left"
+        open={navOpen}
+        onClose={navControl(false)}
         classes={{
           root: styles.menu_root,
           paper: styles.paper
         }}
-			>
-				<div className={styles.wrapper}>
-					<div className={styles.menu_ctn}>
-						<div style={{background: backgroundColor}} className={styles.menu_top}>
-							<Link href="/" legacyBehavior>
-								<a className={styles.logo}>
+      >
+        <div className={styles.wrapper}>
+          <div className={styles.menu_ctn}>
+            <div style={{ background: backgroundColor }} className={styles.menu_top}>
+              <Link href="/" legacyBehavior>
+                <a className={styles.logo}>
                   <Image
-					src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
+                    src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                     alt=""
                     width={122}
                     height={26}
                     loading="eager"
-					objectFit="contain"
-          unoptimized
+                    objectFit="contain"
+                    unoptimized
                   />
 									<span>{config.domain}<br/>v1.0.1</span>
-								</a>
-							</Link>
-						</div>
+                </a>
+              </Link>
+            </div>
 
-						<ul className={styles.menu}>
+            <ul className={styles.menu}>
 							{/*<li>*/}
 							{/*	<Link href="/">*/}
 							{/*		<a>*/}
@@ -201,56 +207,73 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 							{/*		</a>*/}
 							{/*	</Link>*/}
 							{/*</li>*/}
-							<li>
-								<Link href="/" legacyBehavior>
-									<a onClick={handleGoToVerseModal(true)}>
+              <li>
+                <Link href="/" legacyBehavior>
+                  <a onClick={handleGoToVerseModal(true)}>
 										<span className={styles.icon}><NearMeIcon /></span>
 										<span className={styles.text}>{t('Go To Verse')}</span>
-									</a>
-								</Link>
-							</li>
-							<li>
-								<Link href="/settings" legacyBehavior>
-									<a onClick={handleSettingsModal(true)}>
-										<span className={styles.icon}><SettingsIcon /></span>
+                  </a>
+                </Link>
+              </li>
+              <li>
+                {config.showMultiTranslation && (
+                  <a
+                    onClick={(e) => {
+                      e.preventDefault()
+                      navControl(false)(e)
+                      navigateToMultiTranslation(router, chapters)
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <span className={styles.icon}>
+                      <MultiTranslation />
+                    </span>
+                    <span className={styles.text}>{t("Multi Translation")}</span>
+                  </a>
+                )}
+              </li>
+              <li>
+                <Link href="/settings" legacyBehavior>
+                  <a onClick={handleSettingsModal(true)}>
+                    <span className={styles.icon}><SettingsIcon /></span>
 										<span className={styles.text}>{t('Settings')}</span>
-									</a>
-								</Link>
-							</li>
+                  </a>
+                </Link>
+              </li>
 
-							<li>
-								<Link href="/bookmarks" legacyBehavior>
-									<a onClick={e => handleBookmarkPage(e, 2)}>
-										<span className={styles.icon}><PinIcon /></span>
+              <li>
+                <Link href="/bookmarks" legacyBehavior>
+                  <a onClick={(e) => handleBookmarkPage(e, 2)}>
+                    <span className={styles.icon}><PinIcon /></span>
 										<span className={styles.text}>{t('Pin')}</span>
-									</a>
-								</Link>
-							</li>
-              				<li>
-								<Link href="/bookmarks" legacyBehavior>
-									<a onClick={e => handleBookmarkPage(e, 3)}>
-										<span className={styles.icon}><AutoStoriesIcon /></span>
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/bookmarks" legacyBehavior>
+                  <a onClick={(e) => handleBookmarkPage(e, 3)}>
+                    <span className={styles.icon}><AutoStoriesIcon /></span>
 										<span className={styles.text}>{t('Last Read')}</span>
-									</a>
-								</Link>
-							</li>
-							<li>
-								<Link href="/download" legacyBehavior>
-									<a>
-										<span className={styles.icon}><DownloadIcon /></span>
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/download" legacyBehavior>
+                  <a onClick={handleNavLinkClick}>
+                    <span className={styles.icon}><DownloadIcon /></span>
 										<span className={styles.text}>{t('Download')}</span>
-									</a>
-								</Link>
-							</li>
-							<li>
-								<Link href="/names-of-allah" legacyBehavior>
-									<a>
-										<span className={styles.icon}><Names99Icon /></span>
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/names-of-allah" legacyBehavior>
+                  <a onClick={handleNavLinkClick}>
+                    <span className={styles.icon}><Names99Icon /></span>
 										<span className={styles.text}>{t('Names of Allah')}</span>
-									</a>
-								</Link>
-							</li>
-
+                  </a>
+                </Link>
+              </li>
+              
 
               {/* <li>
 								<Link href="/pin">
@@ -268,11 +291,11 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 									</a>
 								</Link>
 							</li> */}
-						</ul>
+            </ul>
 
-						<hr className={styles.menu_hr} />
+            <hr className={styles.menu_hr} />
 
-						<ul className={styles.menu}>
+            <ul className={styles.menu}>
 							{/*<li>*/}
 							{/*	<Link href="/">*/}
 							{/*		<a>*/}
@@ -290,22 +313,20 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 							{/*		</a>*/}
 							{/*	</Link>*/}
 							{/*</li>*/}
-							<li>
-								<Link href="/install-app" legacyBehavior>
-									<a>
-										<span className={styles.icon}><InstallAppIcon /></span>
-										<span className={styles.text}>Install App</span>
-									</a>
-								</Link>
-							</li>
-							<li>
-								<a onClick={() => handleMobileShare()} style={{cursor: `pointer`}}>
-									<a>
-										<span className={styles.icon}><ShareIcon /></span>
-										<span className={styles.text}>Share</span>
-									</a>
-								</a>
-							</li>
+              <li>
+                <Link href="/install-app" legacyBehavior>
+                  <a onClick={handleNavLinkClick}>
+                    <span className={styles.icon}><InstallAppIcon /></span>
+                    <span className={styles.text}>Install App</span>
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <a onClick={() => handleMobileShare()} style={{cursor: `pointer`}}>
+                  <span className={styles.icon}><ShareIcon /></span>
+                  <span className={styles.text}>Share</span>
+                </a>
+              </li>
 							{/*<li>*/}
 							{/*	<Link href="/grateful">*/}
 							{/*		<a>*/}
@@ -314,35 +335,33 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 							{/*		</a>*/}
 							{/*	</Link>*/}
 							{/*</li>*/}
-						</ul>
+            </ul>
 
-						<hr className={styles.menu_hr} />
-
-						<ul className={styles.menu}>
-							<li>
-								<Link href="/about" legacyBehavior>
-									<a>
-										<span className={styles.icon}><InfoIcon /></span>
-										<span className={styles.text}>About</span>
-									</a>
-								</Link>
-							</li>
-							<li>
-								<Link href="/contact" legacyBehavior>
-									<a>
-										<span className={styles.icon}><ContactIcon /></span>
-										<span className={styles.text}>Contact</span>
-									</a>
-								</Link>
-							</li>
-							<li>
-								<a href="https://www.deeniinfotech.com/donate#donation-form" target="_blank">
-									<a>
-										<span className={styles.icon}><DonateIcon /></span>
-										<span className={styles.text}>Donate</span>
-									</a>
-								</a>
-							</li>
+            <hr className={styles.menu_hr} />
+            
+            <ul className={styles.menu}>
+              <li>
+                <Link href="/about" legacyBehavior>
+                  <a onClick={handleNavLinkClick}>
+                    <span className={styles.icon}><InfoIcon /></span>
+                    <span className={styles.text}>About</span>
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" legacyBehavior>
+                  <a onClick={handleNavLinkClick}>
+                    <span className={styles.icon}><ContactIcon /></span>
+                    <span className={styles.text}>Contact</span>
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <a href="https://www.deeniinfotech.com/donate#donation-form" target="_blank" rel="noreferrer">
+                  <span className={styles.icon}><DonateIcon /></span>
+                  <span className={styles.text}>Donate</span>
+                </a>
+              </li>
 							{/*<li>*/}
 							{/*	<Link href="/deeniinfotech">*/}
 							{/*		<a>*/}
@@ -359,24 +378,25 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 							{/*		</a>*/}
 							{/*	</Link>*/}
 							{/*</li>*/}
-						</ul>
-					</div>
-				</div>
-			</Drawer>
+            </ul>
+          </div>
+        </div>
+      </Drawer>
 
-			<Share
-				open={shareOpen}
-				closer={handleShareClose}
-				url={shareUrl}
-				title={shareTitle}
-			/>
+      <Share
+       open={shareOpen}
+        closer={handleShareClose}
+         url={shareUrl}
+          title={shareTitle}
+          />
 
-			<GoToVerse
-				open={goToVerseOpen}
-				controller={handleGoToVerseModal}
-        		chapters={chapters}
-			/>
-
+      <GoToVerse
+        open={goToVerseOpen}
+        onClose={() => setGoToVerseOpen(false)}
+        controller={handleGoToVerseModal}
+        chapters={chapters}
+      />
+      
 			<SettingsModal
 				open={settingsOpen}
 				controller={handleSettingsModal}
@@ -391,6 +411,6 @@ export default function MobileNav({ navOpen, navControl, chapters }) {
 				open={bookmarkOpen}
 				controller={handleBookmarkModal}
 			/> */}
-		</>
-	)
+    </>
+  )
 }

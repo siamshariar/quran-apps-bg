@@ -2,6 +2,30 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--background-secondary);
+  @media screen and (max-width: 1023px) {
+    max-height: none;
+    flex: 1;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--background-secondary);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+
+    &:hover {
+      background: var(--text-secondary);
+    }
+  }
 }
 
 .header {
@@ -132,7 +156,7 @@
 .languageList {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
 }
 
 .languageSection {
@@ -195,6 +219,7 @@
 }
 
 .translationName {
+  font-family: "Montserrat", sans-serif;
   font-weight: 500;
   font-size: 14px;
   color: var(--txt11);
@@ -230,5 +255,16 @@
   svg {
     width: 20px;
     height: 20px;
+  }
+}
+
+/* Fix for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  .modalOverlay {
+    height: -webkit-fill-available;
+  }
+
+  .content {
+    -webkit-overflow-scrolling: touch;
   }
 }

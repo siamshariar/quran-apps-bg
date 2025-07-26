@@ -17,6 +17,11 @@ class CustomDocument extends Document {
       <Html lang="en">
           <Head>
               {/* Global Site Tag (gtag.js) - Google Analytics */}
+              <meta
+                name="google-site-verification"
+                content="LEx8rJVc6ZIjSJTWAAx7rkuPBTxgvrMIEgGoVoKuVww"
+              />
+
               <script
                   async
                   src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}

@@ -26,11 +26,7 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.pageYOffset > 300) {
-        setShowScrollButton(true);
-      } else {
-        setShowScrollButton(false);
-      }
+      setShowScrollButton(window.pageYOffset > 300);
     };
     
     window.addEventListener('scroll', handleScroll);
@@ -103,29 +99,7 @@ const Layout = ({ children }) => {
                 <KeyboardArrowUpIcon />
               </IconButton>
             )}
-
-            {/* Scroll to Top Button - Mobile */}
-            {showScrollButton && (
-              <IconButton
-                onClick={scrollToTop}
-                sx={{
-                  position: 'fixed',
-                  bottom: 20,
-                  right: 16,
-                  backgroundColor: 'var(--bg22)',
-                  color: 'var(--main-color)',
-                  boxShadow: 'var(--bs11)',
-                  transition: 'all 0.5s ease',
-                  display: { xs: 'flex', sm: 'none' },
-                  width: 40,
-                  height: 40,
-                  zIndex: 1000
-                }}
-                aria-label="scroll to top"
-              >
-                <KeyboardArrowUpIcon fontSize="small" />
-              </IconButton>
-            )}
+            
 
             <FooterWeb />
 

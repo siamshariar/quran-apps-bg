@@ -1,35 +1,35 @@
 .wrapper {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 28px;
-	width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  width: 100%;
 }
 
 .left {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .id {
-	width: auto;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background: #737C84;
-	color: #fff;
-	font-size: 14px;
-	border-radius: 2px;
-	padding: 1px 5px;
-	font-weight: 400;
-	position: relative;
-	line-height: 1.5;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #737C84;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 2px;
+  padding: 1px 5px;
+  font-weight: 400;
+  position: relative;
+  line-height: 1.5;
 }
 
 .id span {
-	margin-left: 4px;
-	margin-right: 4px;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 .pinned {
@@ -47,11 +47,11 @@
 .right {}
 
 .action {
-	position: relative;
+  position: relative;
 }
 
 .more_icon {
-	justify-content: center !important;
+  justify-content: center !important;
   width: 36px;
   height: 36px;
   z-index: 9;
@@ -59,7 +59,7 @@
 }
 
 .more_icon svg {
-	fill: var(--txt12);
+  fill: var(--txt12);
   cursor: pointer;
   width: 24px;
   height: 24px;
@@ -73,6 +73,11 @@
 }
 
 
+.drawer_paper {
+  background-color: var(--bg11) !important;
+  border-radius: 16px 16px 0 0 !important;
+  padding: 16px 0;
+}
 
 .icon {
   margin-right: 11px;

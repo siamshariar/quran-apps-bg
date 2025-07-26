@@ -1,4 +1,4 @@
-export const chapters = [
+const chapters = [
   {
     chapterNo: "1",
     nameArabic: "سُورَةُ ٱلْفَاتِحَةِ",
@@ -1710,3 +1710,4 @@ export const chapters = [
     slug: "114-an-nas",
   },
 ];
+module.exports = chapters;

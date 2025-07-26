@@ -75,6 +75,24 @@ export default function Save({ open, controller }) {
             root: styles.tab,
             wrapper: styles.tab_wrapper,
             selected: styles.tab_selected,
+          }}
+          label={
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <AutoStoriesIcon style={{ marginRight: "6px" }} />
+              {t('Last Read')}
+            </span>
+          }
+          disableRipple
+          disableFocusRipple
+          {...a11yProps(0)}
+        />
+
+        <Tab
+          sx={{ textTransform: "capitalize" }}
+          classes={{
+            root: styles.tab,
+            wrapper: styles.tab_wrapper,
+            selected: styles.tab_selected,
          }}
           label={
             <span style={{ display: "flex", alignItems: "center" }}>
@@ -85,7 +103,7 @@ export default function Save({ open, controller }) {
           disableRipple
           iconPosition="start"
           disableFocusRipple
-          {...a11yProps(0)}
+          {...a11yProps(1)}
         />
 
         <Tab
@@ -104,38 +122,20 @@ export default function Save({ open, controller }) {
           disableRipple
           iconPosition="start"
           disableFocusRipple
-          {...a11yProps(1)}
-        />
-
-        <Tab
-          sx={{ textTransform: "capitalize" }}
-          classes={{
-            root: styles.tab,
-            wrapper: styles.tab_wrapper,
-            selected: styles.tab_selected,
-          }}
-          label={
-            <span style={{ display: "flex", alignItems: "center" }}>
-              <AutoStoriesIcon style={{ marginRight: "6px" }} />
-              {t('Last Read')}
-            </span>
-          }
-          disableRipple
-          disableFocusRipple
           {...a11yProps(2)}
         />
       </Tabs>
 
       <TabPanel value={value} index={0}>
+        <LastReadList controller={controller} />
+      </TabPanel>
+      
+      <TabPanel value={value} index={1}>
         <BookmarkList controller={controller} />
       </TabPanel>
 
-      <TabPanel value={value} index={1}>
-        <PinList controller={controller} />
-      </TabPanel>
-
       <TabPanel value={value} index={2}>
-        <LastReadList controller={controller} />
+        <PinList controller={controller} />
       </TabPanel>
     </Scrollbar>
   );

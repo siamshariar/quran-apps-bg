@@ -1,0 +1,504 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  overflow-y: auto;
+  // Full screen on mobile
+  @media screen and (max-width: 1023px) {
+    padding: 0;
+    align-items: flex-start;
+  }
+}
+
+.modalContent {
+  background: var(--bg11);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 80vh;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  position: relative;
+  border: 1px solid var(--bdr11);
+  transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
+  
+  // Full screen on mobile - direct open, no animation
+  @media screen and (max-width: 1023px) {
+    max-width: 100%;
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
+    margin: 0;
+    // Remove opening animation - modal opens directly
+  }
+
+  // Desktop fade in
+  @media screen and (min-width: 1024px) {
+    animation: fadeIn 0.2s ease-out forwards;
+  }
+
+  // When closing, apply closing animation
+  &.closing {
+    @media screen and (max-width: 1023px) {
+      animation: slideDown 0.3s ease-in forwards;
+    }
+    
+    @media screen and (min-width: 1024px) {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+  }
+
+  &.dark {
+    --text-primary: var(--txt11);
+    --text-secondary: var(--txt12);
+    --background-primary: var(--bg11);
+    --background-secondary: var(--bg22);
+    --border-color: var(--bdr11);
+    --accent-color: var(--clr11);
+    --hover-color: var(--bg22);
+  }
+
+  &.light {
+    --text-primary: var(--txt11);
+    --text-secondary: var(--txt12);
+    --background-primary: var(--bg11);
+    --background-secondary: var(--bg22);
+    --border-color: var(--bdr11);
+    --accent-color: var(--clr11);
+    --hover-color: var(--bg22);
+  }
+}
+
+// Add fadeIn animation for desktop
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Remove slideUp animation and keep only slideDown
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+.header {
+  border-bottom: 1px solid var(--border-color);
+
+  @media screen and (max-width: 1023px) {
+    border-bottom: 1px solid var(--bdr14);
+  }
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  padding: 24px 24px 18px 24px;
+  // Mobile specific styles (under 1024px)
+  @media screen and (max-width: 1023px) {
+    padding: 1.5rem;
+  }
+}
+
+.left {
+}
+
+.title {
+}
+
+.title h2 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  color: var(--txt11) !important;
+  margin: 0 !important;
+  @media screen and (max-width: 1023px) {
+    font-size: 1.25rem !important;
+  }
+}
+
+.right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  right: -6px;
+}
+
+.icon {
+  height: 34px;
+  width: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: var(--bg22);
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-left: 7px;
+  @media screen and (max-width: 1023px) {
+    height: 40px;
+    width: 40px;
+  }
+
+  &:hover {
+    background-color: var(--bg22);
+  }
+}
+
+.icon svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--txt12);
+  @media screen and (max-width: 1023px) {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.search {
+  display: block;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  right: 10px;
+  height: 48px;
+  background: var(--bg11);
+  transform: scaleX(0);
+  transition: transform 250ms ease;
+  transform-origin: center;
+  // Mobile specific styles (under 1024px)
+  @media screen and (max-width: 1023px) {
+    left: 0.5rem;
+    right: 0.5rem;
+    top: 1rem;
+    height: 52px;
+  }
+
+  &.open {
+    transform: scaleX(1);
+  }
+}
+
+.search input[type=text] {
+  padding-left: 20px;
+  padding-right: 48px;
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  margin: 0;
+  border: none;
+  display: block;
+  background: var(--bg12);
+  color: var(--txt11);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  // Mobile specific styles (under 1024px)
+  @media screen and (max-width: 1023px) {
+    font-size: 16px;
+    padding-left: 24px;
+    padding-right: 52px;
+  }
+
+  &::placeholder {
+    color: var(--txt12);
+    opacity: 0.8;
+  }
+}
+
+.search span {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  width: 22px;
+  height: 22px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  // Mobile specific styles (under 1024px)
+  @media screen and (max-width: 1023px) {
+    right: 24px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.search span svg {
+  width: 22px;
+  height: 22px;
+  opacity: 0.7;
+  fill: var(--txt11);
+  // Mobile specific styles (under 1024px)
+  @media screen and (max-width: 1023px) {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 24px 24px 24px;
+  max-height: 400px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--background-secondary);
+  @media screen and (max-width: 1023px) {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    max-height: none;
+    flex: 1;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--background-secondary);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+
+    &:hover {
+      background: var(--text-secondary);
+    }
+  }
+}
+
+.languageList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.languageSection {
+  margin-bottom: 16px;
+  @media screen and (max-width: 1023px) {
+    margin-bottom: 20px;
+  }
+}
+
+.languageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--bdr14);
+  margin-bottom: 8px;
+  @media screen and (max-width: 1023px) {
+    padding: 12px 0;
+    margin-bottom: 12px;
+  }
+}
+
+.languageName {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--txt12);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  @media screen and (max-width: 1023px) {
+    font-size: 16px;
+  }
+}
+
+.translationList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  @media screen and (max-width: 1023px) {
+    gap: 8px;
+  }
+}
+
+.translationItem {
+  display: flex;
+  align-items: center;
+  padding: 4px 0px;
+  border-radius: 4px;
+  @media screen and (max-width: 1023px) {
+    padding: 8px 0;
+  }
+
+  &:hover {
+    background-color: var(--bg22);
+  }
+}
+
+.formControlLabel {
+  margin: 0 !important;
+  flex: 1;
+  .MuiCheckbox-root {
+    padding: 8px !important;
+    color: var(--txt12) !important;
+    @media screen and (max-width: 1023px) {
+      padding: 12px !important;
+    }
+
+    &.Mui-checked {
+      color: var(--main-color) !important;
+    }
+  }
+}
+
+.translationInfo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 4px;
+  @media screen and (max-width: 1023px) {
+    margin-left: 8px;
+  }
+}
+
+.translationName {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--txt11);
+  line-height: 1.2;
+  @media screen and (max-width: 1023px) {
+    font-size: 16px;
+  }
+}
+
+.translationDescription {
+  font-size: 12px;
+  color: var(--txt12);
+  margin-top: 2px;
+  line-height: 1.2;
+  @media screen and (max-width: 1023px) {
+    font-size: 14px;
+  }
+}
+
+.checkbox {
+  color: var(--txt12) !important;
+}
+
+/* For the unchecked state */
+.checkbox .MuiIconButton-root {
+  border-radius: 4px !important;
+}
+
+/* For the checked state */
+.checkbox .MuiSvgIcon-root {
+  border-radius: 4px !important;
+}
+
+// Mobile responsive
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  .modalContent {
+    max-height: 100vh;
+    height: 100vh;
+  }
+
+  .title h2 {
+    font-size: 18px !important;
+  }
+
+  .content {
+    max-height: none;
+    flex: 1;
+  }
+
+  .search {
+    left: 1rem;
+    right: 1rem;
+  }
+}
+
+/* Fix for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  .modalOverlay {
+    height: -webkit-fill-available;
+  }
+
+  .content {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+
+
+// ...existing styles...
+
+.toastMessage {
+  position: fixed;
+  z-index: 12000;
+  right: 32px;
+  bottom: 32px;
+  background: var(--bg11);
+  color: var(--text-color);
+  font-size: 16px;
+  border-radius: 8px;
+  padding: 14px 28px 14px 18px;
+  box-shadow: 0 6px 32px 0 rgba(0,0,0,0.18), 0 1.5px 4px 0 rgba(0,0,0,0.15);
+  opacity: 0.95;
+  pointer-events: none;
+  animation: fadeInToast 0.22s;
+  transition: opacity 0.2s, box-shadow 0.22s;
+  max-width: 90vw;
+  word-break: break-word;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+  outline: none;
+}
+
+
+@media screen and (max-width: 700px) {
+  .toastMessage {
+    right: 16px;
+    bottom: 16px;
+    padding: 12px 18px;
+    font-size: 14px;
+    border-radius: 6px;
+    max-width: 96vw;
+  }
+}
+
+// Toast message stays bottom right even on fullscreen modal (mobile)
+.toastMobile {
+  right: 16px !important;
+  bottom: 16px !important;
+  left: unset !important;
+  top: unset !important;
+}
+
+@keyframes fadeInToast {
+  from { opacity: 0; transform: translateY(20px) scale(0.98);}
+  to { opacity: 0.95; transform: translateY(0) scale(1);}
+}
+
+// ...rest of your styles...

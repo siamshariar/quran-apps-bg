@@ -53,7 +53,7 @@ export default function AllahName({ chapters, names, contentTitle }) {
         </div>
 
         {(!namesList || !namesList.length) && (
-          <h2 className={styles.empty}>No records found!</h2>
+          <h2 className={styles.empty}>{t("No records found")}!</h2>
         )}
 
         <Audio names={names} />

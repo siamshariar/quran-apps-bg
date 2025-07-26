@@ -9,8 +9,8 @@
   overflow: hidden;
   background: var(--bg12);
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   opacity: 0;
   visibility: hidden;
   transform: scale(0.75);
@@ -24,20 +24,32 @@
   transition: all 0.25s ease-in-out;
 }
 
+.resultDescription {
+  font-size: 13px;
+  color: var(--txt11);
+  line-height: 1.4;
+  opacity: 0.8;
+}
 
 // close icon
 .close {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  height: 24px;
-  width: 24px;
+  width: 22px;
+  height: 22px;
+  fill: var(--txt12);
+  position: fixed;
+  top: 15px;
+  left: 15px;
   cursor: pointer;
   opacity: 0.65;
-  z-index: 9;
+  z-index: 999999;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: manipulation;
 }
 
-.close:hover {
+.close:hover,
+.close:active,
+.close:focus {
   opacity: 1;
 }
 
@@ -45,9 +57,9 @@
   content: "";
   position: absolute;
   top: 0;
-  left: 11px;
+  left: 10px;
   width: 2px;
-  height: 24px;
+  height: 22px;
   background-color: var(--txt11);
 }
 
@@ -59,66 +71,278 @@
   transform: rotate(-45deg);
 }
 
+// search container
+.searchContainer {
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  z-index: 9;
+  padding-top: 60px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.closeIconArea {
+  position: relative;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--bdr11);
+  margin-bottom: 20px;
+}
 
 // search form
 form.search {
-  width: 90%;
-  max-width: 740px;
-  z-index: 9;
+  width: 100%;
   position: relative;
 }
 
-form.search input[type="text"] {
-  width: 100%;
-  margin-bottom: 12px;
-  border-bottom: 1px solid var(--bdr12);
-  height: auto;
-  font-size: 38px;
-  font-weight: bold;
-  color: var(--txt11);
-  background: none;
-  line-height: 1.6;
-  font-family: "Roboto", sans-serif;
+// search input wrapper
+.searchInputWrapper {
+  display: flex;
+  align-items: center;
+  padding: 12px 12px;
+  height: 49px;
+  gap: 12px;
 }
 
-form.search p {
+.searchIcon {
+  color: var(--txt13);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  background: none;
+  color: var(--txt11);
+  font-size: 16px;
+  outline: none;
+  font-family: inherit;
+}
+
+.searchInput::placeholder {
+  color: var(--txt13);
+  opacity: 1;
+}
+
+.microphoneIcon {
+  position: relative;
+  color: var(--txt13);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.microphoneIcon:hover {
+  background: var(--bg13);
+  color: var(--main-color);
+}
+
+.microphoneIcon.listening {
+  color: var(--main-color);
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+// search results container
+.searchResultsContainer {
+  padding: 0 20px 10px;
+}
+
+.sectionHeader {
+  padding: 16px 0 8px;
+  border-bottom: 1px solid var(--bdr11);
+  margin-bottom: 8px;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--txt13);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.searchResultsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 8px;
+  border-bottom: 1px solid var(--bdr11);
+  margin-bottom: 8px;
+}
+
+.searchResultsTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--txt13);
+  font-family: "Montserrat", sans-serif;
+}
+
+.moreResults {
+  background: none;
+  border: none;
+  color: var(--txt13);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-family: "Montserrat", sans-serif;
+}
+
+.moreResults:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.resultsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.resultItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-radius: 50px;
+  position: relative;
+  background: transparent;
+}
+
+.resultItem:hover,
+.resultItem.selected {
+  background: var(--bg22) !important;
+}
+
+.resultIcon {
+  color: var(--txt13);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resultContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.resultTitle {
+  font-size: 16px;
+  color: var(--txt11);
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  color: var(--txt13);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resultItem:hover .removeButton {
+  opacity: 1;
+}
+
+.removeButton:hover {
+  background: var(--bg14);
+  color: var(--txt11);
+}
+
+.noResults {
+  padding: 20px 0;
+  text-align: center;
   color: var(--txt13);
   font-size: 14px;
+  font-weight: 400;
+  font-family: "Montserrat", sans-serif;
 }
 
-
-form.search input[type="text"]::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: var(--txt11);
-  opacity: 1; /* Firefox */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
-form.search input[type="text"]:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: var(--txt11);
+@media only screen and (max-width: 1023px) {
+  .close {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    height: 22px;
+    width: 22px;
+    padding: 0;
+  }
+  
+  .close::before, .close::after {
+    left: 10px;
+    height: 22px;
+  }
+  
+  .closeIconArea {
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .searchContainer {
+    padding-top: 50px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
-
-form.search input[type="text"]::-ms-input-placeholder { /* Microsoft Edge */
-  color: var(--txt11);
-}
-
 
 @media only screen and (min-width: 1024px) {
   .close {
+    position: fixed;
     top: 30px;
-    right: 30px;
-    height: 30px;
-    width: 30px;
+    left: 30px;
+    height: 24px;
+    width: 24px;
   }
   .close::before, .close::after {
     top: 1px;
-    left: 13px;
-    height: 28px;
+    left: 11px;
+    height: 22px;
   }
-  form.search input[type="text"] {
-    margin-bottom: 24px;
-    font-size: 60px;
-    line-height: 1.8;
+  
+  .closeIconArea {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
   }
-  form.search p {
+  
+  .searchContainer {
+    padding-top: 70px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  
+  .searchInput {
     font-size: 18px;
   }
 }

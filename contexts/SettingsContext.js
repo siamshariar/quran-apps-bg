@@ -16,16 +16,45 @@ const SettingsContextProvider = ({ children }) => {
     console.log("Initializing settings...")
     try {
       const savedSettings = localStorage.getItem("settings")
-      let newSettings = savedSettings === null ? defaultSettings : JSON.parse(savedSettings)
+      const newSettings = savedSettings === null ? defaultSettings : JSON.parse(savedSettings)
 
-      // Check if we're on a translation-specific URL and update settings accordingly
+      if (!newSettings.view) {
+        newSettings.view = {
+          arabic: true,
+          translation: true,
+          tafseer: true,
+          transliteration: false,
+        }
+      } else {
+        if (newSettings.view.tafseer === undefined) {
+          newSettings.view.tafseer = true
+        }
+        if (newSettings.view.transliteration === undefined) {
+          newSettings.view.transliteration = false
+        }
+      }
+
+      if (!newSettings.selectedTranslations) {
+        newSettings.selectedTranslations = [newSettings.translation]
+      }
+
+      const savedSelectedTranslations = localStorage.getItem("selectedTranslations")
+      if (savedSelectedTranslations) {
+        try {
+          const parsedTranslations = JSON.parse(savedSelectedTranslations)
+          if (Array.isArray(parsedTranslations) && parsedTranslations.length > 0) {
+            newSettings.selectedTranslations = parsedTranslations
+          }
+        } catch (error) {}
+      }
+
       if (typeof window !== "undefined") {
         const currentPath = window.location.pathname
         if (currentPath.startsWith("/vietnamese_rwwad/subjective/")) {
-          newSettings = { ...newSettings, translation: "vietnamese_rwwad" }
+          newSettings.translation = "vietnamese_rwwad"
           localStorage.setItem("settings", JSON.stringify(newSettings))
         } else if (currentPath.includes("/subjective/")) {
-          newSettings = { ...newSettings, translation: "vietnamese_hassan" }
+          newSettings.translation = "vietnamese_hassan"
           localStorage.setItem("settings", JSON.stringify(newSettings))
         }
       }
@@ -34,7 +63,6 @@ const SettingsContextProvider = ({ children }) => {
       initSettings(newSettings)
       setSettings(newSettings)
       setIsReady(true)
-      console.log("Settings initialized with translation:", newSettings.translation)
     } catch (error) {
       console.error("Error initializing settings:", error)
       initSettings(defaultSettings)
@@ -47,16 +75,13 @@ const SettingsContextProvider = ({ children }) => {
     if (isReady && typeof window !== "undefined") {
       const handlePopState = () => {
         const currentPath = window.location.pathname
-
         if (currentPath.includes("/subjective/")) {
           let newTranslation = settings.translation
-
           if (currentPath.startsWith("/vietnamese_rwwad/subjective/")) {
             newTranslation = "vietnamese_rwwad"
           } else if (currentPath.includes("/subjective/")) {
             newTranslation = "vietnamese_hassan"
           }
-
           if (newTranslation !== settings.translation) {
             console.log("Subjective URL changed, updating translation to:", newTranslation)
             const newSettings = { ...settings, translation: newTranslation }
@@ -70,14 +95,11 @@ const SettingsContextProvider = ({ children }) => {
 
       const checkCurrentPath = () => {
         const currentPath = window.location.pathname
-
         if (currentPath.includes("/subjective/")) {
           let expectedTranslation = "vietnamese_hassan"
-
           if (currentPath.startsWith("/vietnamese_rwwad/subjective/")) {
             expectedTranslation = "vietnamese_rwwad"
           }
-
           if (expectedTranslation !== settings.translation) {
             console.log("Subjective path changed, updating translation to:", expectedTranslation)
             const newSettings = { ...settings, translation: expectedTranslation }
@@ -93,28 +115,29 @@ const SettingsContextProvider = ({ children }) => {
         window.removeEventListener("popstate", handlePopState)
       }
     }
-  }, [isReady])
+  }, [isReady, settings])
 
-    // helper functions
+  // helper functions
   const saveToLocalStorage = (settings) => {
     localStorage.setItem("settings", JSON.stringify(settings))
   }
 
-    const initSettings = (settings) => {
-        // init theme
-        document.body.setAttribute('class', `${process.env.NEXT_PUBLIC_LOCALIZATION_CODE || ''} ${settings.theme}`)
+  const initSettings = (settings) => {
+    // init theme
+    document.body.setAttribute("class", `${process.env.NEXT_PUBLIC_LOCALIZATION_CODE || ""} ${settings.theme}`)
 
     const initFontStyles = () => {
-        const elemsArabic = document.querySelectorAll(".text_arabic")
-        const elemsTrans = document.querySelectorAll(".text_trans")
+      const elemsArabic = document.querySelectorAll(".text_arabic")
+      const elemsTrans = document.querySelectorAll(".text_trans")
 
       elemsArabic.forEach((elem) => {
-            elem.style.fontSize = settings.fontSize.arabic + "px"
-            elem.style.fontFamily = settings.fontFamily.arabic
-        })
+        elem.style.fontSize = settings.fontSize.arabic + "px"
+        elem.style.fontFamily = settings.fontFamily.arabic
+      })
+
       elemsTrans.forEach((elem) => {
-            elem.style.fontSize = settings.fontSize.translation + "px"
-            elem.style.fontFamily = settings.fontFamily.translation
+        elem.style.fontSize = settings.fontSize.translation + "px"
+        elem.style.fontFamily = settings.fontFamily.translation
       })
     }
 
@@ -135,6 +158,9 @@ const SettingsContextProvider = ({ children }) => {
 
     if (typeof window !== "undefined") {
       const path = window.location.pathname
+      if (path.includes("/multi-translation/")) {
+        return
+      }
 
       if (path.includes("/chapters/")) {
         let remainingPath
@@ -149,7 +175,6 @@ const SettingsContextProvider = ({ children }) => {
             ? `/chapters/${remainingPath}`
             : `/vietnamese_rwwad/chapters/${remainingPath}`
 
-        console.log("Updating chapter URL to:", newPath)
         window.history.replaceState({}, "", newPath)
       } else if (path.includes("/subjective/")) {
         let remainingPath
@@ -165,142 +190,152 @@ const SettingsContextProvider = ({ children }) => {
             : `/vietnamese_rwwad/subjective/${remainingPath}`
 
         window.history.replaceState({}, "", newPath)
-        }
       }
     }
+  }
 
-  const changeActiveTranslations = (translations) => {
+  const changeSelectedMultiTranslations = (translations) => {
     const newSettings = {
       ...settings,
-      activeTranslations: translations,
-      translation: translations.includes(settings.translation) ? settings.translation : translations[0],
+      selectedTranslations: translations,
     }
-    localStorage.setItem("settings", JSON.stringify(newSettings))
+    saveToLocalStorage(newSettings)
+    localStorage.setItem("selectedTranslations", JSON.stringify(translations))
+    setSettings(newSettings)
+
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("translationsChanged", {
+          detail: { translations },
+        }),
+      )
+    }
+  }
+
+  // View settings
+  const changeView = (view) => {
+    const newSettings = { ...settings, view }
+    saveToLocalStorage(newSettings)
     setSettings(newSettings)
   }
 
-  const selectedTranslations = [settings.translation]
+  const changeFontSizeArabic = (value) => {
+    if (value > 100 || value < 10) return
 
-  const changeSelectedTranslations = (translations) => {
-    const singleTranslation = Array.isArray(translations) ? translations[0] : translations
-    changeTranslation(singleTranslation)
+    const elems = document.querySelectorAll(".text_arabic")
+    for (const elem of elems) {
+      elem.style.fontSize = value + "px"
+    }
+
+    const newSettings = {
+      ...settings,
+      fontSize: {
+        ...settings.fontSize,
+        arabic: value,
+      },
+    }
+    saveToLocalStorage(newSettings)
+    setSettings(newSettings)
   }
 
-    // change settings functions
-    const changeView = (view) => {
-        const newSettings = { ...settings, ['view']: view }
-        saveToLocalStorage(newSettings)
-        setSettings(newSettings)
+  const changeFontSizeTranslation = (value) => {
+    if (value > 60 || value < 6) return
+
+    const elems = document.querySelectorAll(".text_trans")
+    for (const elem of elems) {
+      elem.style.fontSize = value + "px"
     }
 
-    const changeFontSizeArabic = (value) => {
-        if (value > 100 || value < 10) return
+    const newSettings = {
+      ...settings,
+      fontSize: {
+        ...settings.fontSize,
+        translation: value,
+      },
+    }
+    saveToLocalStorage(newSettings)
+    setSettings(newSettings)
+  }
 
-        const elems = document.querySelectorAll('.text_arabic')
-        for (const elem of elems) {
-            elem.style.fontSize = value + 'px'
-        }
-
-        const obj = {
-            arabic: value,
-            translation: settings.fontSize.translation
-        }
-        const newSettings = { ...settings, ['fontSize']: obj }
-        saveToLocalStorage(newSettings)
-        setSettings(newSettings)
+  const changeFontFamilyArabic = (value) => {
+    const elems = document.querySelectorAll(".text_arabic")
+    for (const elem of elems) {
+      elem.style.fontFamily = value
     }
 
-    const changeFontSizeTranslation = (value) => {
-        if (value > 60 || value < 6) return
+    const newSettings = {
+      ...settings,
+      fontFamily: {
+        ...settings.fontFamily,
+        arabic: value,
+      },
+    }
+    saveToLocalStorage(newSettings)
+    setSettings(newSettings)
+  }
 
-        const elems = document.querySelectorAll('.text_trans')
-        for (const elem of elems) {
-            elem.style.fontSize = value + 'px'
-        }
-
-        const obj = {
-            arabic: settings.fontSize.arabic,
-            translation: value
-        }
-        const newSettings = { ...settings, ['fontSize']: obj }
-        saveToLocalStorage(newSettings)
-        setSettings(newSettings)
+  const changeFontFamilyTranslation = (value) => {
+    const elems = document.querySelectorAll(".text_trans")
+    for (const elem of elems) {
+      elem.style.fontFamily = value
     }
 
-    const changeFontFamilyArabic = (value) => {
-        const elems = document.querySelectorAll('.text_arabic')
-        for (const elem of elems) {
-            elem.style.fontFamily = value
-        }
-
-        const obj = {
-            arabic: value,
-            translation: settings.fontFamily.translation
-        }
-        const newSettings = { ...settings, ['fontFamily']: obj }
-        saveToLocalStorage(newSettings)
-        setSettings(newSettings)
+    const newSettings = {
+      ...settings,
+      fontFamily: {
+        ...settings.fontFamily,
+        translation: value,
+      },
     }
+    saveToLocalStorage(newSettings)
+    setSettings(newSettings)
+  }
 
-    const changeFontFamilyTranslation = (value) => {
-        const elems = document.querySelectorAll('.text_trans')
-        for (const elem of elems) {
-            elem.style.fontFamily = value
-        }
+  const changeTheme = (theme) => {
+    document.body.setAttribute("class", `${process.env.NEXT_PUBLIC_LOCALIZATION_CODE || ""} ${theme}`)
+    const newSettings = { ...settings, theme }
+    saveToLocalStorage(newSettings)
+    setSettings(newSettings)
+  }
 
-        const obj = {
-            arabic: settings.fontFamily.arabic,
-            translation: value
-        }
-        const newSettings = { ...settings, ['fontFamily']: obj }
-        saveToLocalStorage(newSettings)
-        setSettings(newSettings)
-    }
+  const changeVerseMode = (mode) => {
+    const newSettings = { ...settings, verseMode: mode }
+    saveToLocalStorage(newSettings)
+    setSettings(newSettings)
+    redirectAfterChangeVerseMode(mode)
+  }
 
-    const changeTheme = (theme) => {
-        document.body.setAttribute('class', `${process.env.NEXT_PUBLIC_LOCALIZATION_CODE || ''} ${theme}`)
-        const newSettings = { ...settings, ['theme']: theme }
-        saveToLocalStorage(newSettings)
-        setSettings(newSettings)
-    }
+  const changeActiveVerse = (verseNo) => {
+    const newSettings = { ...settings, activeVerse: verseNo }
+    saveToLocalStorage(newSettings)
+    setSettings(newSettings)
+  }
 
-    const changeVerseMode = (mode) => {
-        const newSettings = { ...settings, ['verseMode']: mode }
-        saveToLocalStorage(newSettings)
-        setSettings(newSettings)
-        redirectAfterChangeVerseMode(mode)
-    }
+  const changeAutoScroll = (status) => {
+    const newSettings = { ...settings, autoScroll: status }
+    saveToLocalStorage(newSettings)
+    setSettings(newSettings)
+  }
 
-    const changeActiveVerse = (verseNo) => {
-        const newSettings = { ...settings, ['activeVerse']: verseNo }
-        saveToLocalStorage(newSettings)
-        setSettings(newSettings)
-    }
+  const changeNotification = (status) => {
+    const newSettings = { ...settings, notification: status }
+    saveToLocalStorage(newSettings)
+    setSettings(newSettings)
+  }
 
-    const changeAutoScroll = (status) => {
-        const newSettings = { ...settings, ['autoScroll']: status }
-        saveToLocalStorage(newSettings)
-        setSettings(newSettings)
-    }
+  const changePlaybackRate = (rate) => {
+    const newSettings = { ...settings, playbackRate: rate }
+    saveToLocalStorage(newSettings)
+    setSettings(newSettings)
+  }
 
-    const changeNotification = (status) => {
-        const newSettings = { ...settings, ['notification']: status }
-        saveToLocalStorage(newSettings)
-        setSettings(newSettings)
-    }
-
-    const changePlaybackRate = (rate) => {
-        const newSettings = { ...settings, ["playbackRate"]: rate };
-        saveToLocalStorage(newSettings);
-        setSettings(newSettings);
-    };
-
-    const resetSettings = () => {
-        initSettings(defaultSettings)
-        saveToLocalStorage(defaultSettings)
-        setSettings(defaultSettings)
-        redirectAfterChangeVerseMode(defaultSettings.verseMode)
-    }
+  const resetSettings = () => {
+    initSettings(defaultSettings)
+    saveToLocalStorage(defaultSettings)
+    setSettings(defaultSettings)
+    localStorage.removeItem("selectedTranslations")
+    redirectAfterChangeVerseMode(defaultSettings.verseMode)
+  }
 
   const redirectAfterChangeVerseMode = (mode) => {
     if (typeof window !== "undefined") {
@@ -314,47 +349,50 @@ const SettingsContextProvider = ({ children }) => {
         router.push(`/chapters/${parts[2]}/verses/${activeVerse}`)
       }
     }
-    }
+  }
 
-    return (
-        <SettingsContext.Provider
-            value={{
-                isReady,
-                settings,
-                translation: settings.translation,
-                changeTranslation,
-                activeTranslations: settings.activeTranslations || [settings.translation],
-                changeActiveTranslations,
-                selectedTranslations,
-                changeSelectedTranslations,
-                view: settings.view,
-                changeView,
-                theme: settings.theme,
-                changeTheme,
-                fontSizeArabic: settings.fontSize.arabic,
-                changeFontSizeArabic,
-                fontSizeTranslation: settings.fontSize.translation,
-                changeFontSizeTranslation,
-                fontFamilyArabic: settings.fontFamily.arabic,
-                changeFontFamilyArabic,
-                fontFamilyTranslation: settings.fontFamily.translation,
-                changeFontFamilyTranslation,
-                verseMode: settings.verseMode,
-                changeVerseMode,
-                activeVerse: settings.activeVerse,
-                changeActiveVerse,
-                autoScroll: settings.autoScroll,
-                changeAutoScroll,
-                notification: settings.notification,
-                changeNotification,
-                playbackRate: settings.playbackRate || 1,
-                changePlaybackRate,
-                resetSettings,
-            }}
-        >
-            { children }
-        </SettingsContext.Provider>
-    )
+  const getSelectedTranslation = () => settings.translation
+  const getSelectedMultiTranslations = () => settings.selectedTranslations || [settings.translation]
+
+  return (
+    <SettingsContext.Provider
+      value={{
+        isReady,
+        settings,
+        translation: getSelectedTranslation(),
+        changeTranslation,
+        selectedTranslations: getSelectedMultiTranslations(),
+        changeSelectedTranslations: changeSelectedMultiTranslations,
+        selectedMultiTranslations: getSelectedMultiTranslations(),
+        activeTranslations: [getSelectedTranslation()],
+        view: settings.view,
+        changeView,
+        theme: settings.theme,
+        changeTheme,
+        fontSizeArabic: settings.fontSize.arabic,
+        changeFontSizeArabic,
+        fontSizeTranslation: settings.fontSize.translation,
+        changeFontSizeTranslation,
+        fontFamilyArabic: settings.fontFamily.arabic,
+        changeFontFamilyArabic,
+        fontFamilyTranslation: settings.fontFamily.translation,
+        changeFontFamilyTranslation,
+        verseMode: settings.verseMode,
+        changeVerseMode,
+        activeVerse: settings.activeVerse,
+        changeActiveVerse,
+        autoScroll: settings.autoScroll,
+        changeAutoScroll,
+        notification: settings.notification,
+        changeNotification,
+        playbackRate: settings.playbackRate || 1,
+        changePlaybackRate,
+        resetSettings,
+      }}
+    >
+      {children}
+    </SettingsContext.Provider>
+  )
 }
 
 export default SettingsContextProvider

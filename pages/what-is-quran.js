@@ -3,6 +3,7 @@ import { getChaptersInfo } from "../lib/fetch";
 import Layout from "../components/layouts/layout-content";
 import Meta from "../components/core/meta";
 import WIQContent from "../components/pages/what-is-quran";
+import { t } from "../lib/config";
 
 export default function WhatIsQuranPage({ pageTitle }) {
   return (
@@ -37,7 +38,7 @@ export async function getStaticProps(context) {
   return {
     props: {
       chapters,
-      pageTitle: "Know more about the Quran",
+      pageTitle: t('Know more about the Quran'),
       bgColor: "primary",
     },
   };

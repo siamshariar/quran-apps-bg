@@ -45,7 +45,7 @@ const PrimaryModal = ({ open, closer, title, content }) => {
           <div className={classNames(css.scrollbar, styles.scrollbar)}>
             <Typography variant="h6" component="div">
               <div className={styles.header}>
-                {title && title !== t("Translations") && <p className={styles.title}>{title}</p>}
+                {title && title !== t("Translation") && <p className={styles.title}>{title}</p>}
                 <button
                   className={styles.close}
                   onClick={(e) => handleClose(e)}

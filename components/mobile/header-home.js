@@ -1,34 +1,39 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { SettingsContext } from '../../contexts/SettingsContext'
-import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import Container from '../core/container'
 import IconButton from '@mui/material/IconButton'
 import MobileNav from './mobile-nav'
+import SearchModal from '../core/search-modal'
 import MenuIcon from '../icons/Menu'
 //import SearchIcon from '../icons/Search'
-import Brightness4Icon from '../icons/Brightness4'
-import Brightness7Icon from '../icons/Brightness7'
 import styles from './header.module.scss'
 import { config } from '../../lib/config'
 
 export default function HeaderMobile({ chapters }) {
-    const { theme, changeTheme } = useContext(SettingsContext)
+    const { theme } = useContext(SettingsContext)
+    
+    const [mobileNavOpen, setMobileNavOpen] = useState(false)
+    
+    const [searchModalOpen, setSearchModalOpen] = useState(false)
 
-    const modeSwitcher = () => {
-        const newTheme = (theme === 'light') ? 'dark' : 'light'
-        changeTheme(newTheme)
+    const handleSearchModal = (open) => (event) => {
+        if (event) {
+            event.preventDefault()
+            if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+                return
+            }
+        }
+        setSearchModalOpen(open)
     }
 
-    const [mobileNavOpen, setMobileNavOpen] = useState(false)
-
     const controlMobileNav = (open) => (event) => {
-		if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-			return
-		}
-		setMobileNavOpen(open)
-	}
+        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+        setMobileNavOpen(open)
+    }
 
     return (
         <>
@@ -52,7 +57,7 @@ export default function HeaderMobile({ chapters }) {
                                         <Image
                                             src={`/img/logo/${config?.localizationCode}/logo.png`}
                                             alt=""
-                                            width={182}
+                                            width={122}
                                             height={26}
                                             loading="eager"
                                             objectFit='contain'
@@ -67,7 +72,7 @@ export default function HeaderMobile({ chapters }) {
                                         <Image
                                             src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                                             alt=""
-                                            width={142}
+                                            width={122}
                                             height={26}
                                             loading="eager"
                                             objectFit='contain'
@@ -79,22 +84,18 @@ export default function HeaderMobile({ chapters }) {
 
 
                         <div className={styles.right}>
-                            {/* <IconButton
+                                                      {/* <IconButton
                                 className={styles.icon}
                                 onClick={() => searchModalController(true)}
                                 focusRipple={false}
                             >
                                 <SearchIcon />
                             </IconButton> */}
-
-                            <IconButton
-                                className={styles.icon}
-                                onClick={() => modeSwitcher()}
-                                focusRipple={false}
-                            >
-                                {theme === 'light' && <Brightness4Icon />}
-                                {theme !== 'light' && <Brightness7Icon />}
-                            </IconButton>
+                            <span className={styles.icon} onClick={handleSearchModal(true)}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="m23.5 21.466-7.01-7.01a9.07 9.07 0 0 0 1.736-5.343C18.226 4.088 14.138 0 9.113 0S0 4.088 0 9.113s4.088 9.113 9.113 9.113a9.07 9.07 0 0 0 5.343-1.735l7.01 7.009zM9.113 15.348a6.236 6.236 0 1 1 6.235-6.235 6.243 6.243 0 0 1-6.235 6.235"></path>
+                                </svg>
+                            </span>
                         </div>
                     </div>
                 </Container>
@@ -103,6 +104,12 @@ export default function HeaderMobile({ chapters }) {
             <MobileNav
                 navOpen={mobileNavOpen}
                 navControl={controlMobileNav}
+                chapters={chapters}
+            />
+
+            <SearchModal
+                open={searchModalOpen}
+                searchModalController={handleSearchModal}
                 chapters={chapters}
             />
         </>

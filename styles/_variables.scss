@@ -1,81 +1,104 @@
 :root {
-	--clr11: #1DB296;
-	--bg21: #eff1f2;
-	--bdr12: #eff1f2;
-	--cbg: #fff;
-	--snib: #e7e7e9;
-	--snbs: #1db296;
+  --clr11: #1DB296;
+  --bg21: #eff1f2;
+  --bdr12: #eff1f2;
+  --cbg: #fff;
+  --snib: #e7e7e9;
+  --snbs: #1db296;
 
 
 
-	--theme-color: #1F7EF9;
+  --theme-color: #466548;
+  --main-color: #466548;
+  --audio-player-color: #466548;
+  --bsc11: #466548;
 
 	--main-color: #1F7EF9; // main theme color
-    --txt00: #000000; // arabic text color
-	--txt11: #2e3031; // bold text
-	--txt12: #666666; // normal text
-	--txt13: #9EABBE; // light text
+  --txt00: #000000; // arabic text color
+  --txt11: #2e3031; // bold text
+  --txt12: #666666; // normal text
+  --txt13: #9EABBE; // light text
 
-	--bg11: #ffffff; // main bg
-	--bg12: #F4F4F4; // main bg rev
-	--bg21: #444444;
-	--bg22: #eeeeee; // icon bg
+  --bg11: #ffffff; // main bg
+  --bg12: #F4F4F4; // main bg rev
+  --bg21: #444444;
+  --bg22: #eeeeee; // icon bg
 
-	--bdr11: #E8E8EA;
-	--bdr12: #E8E8EA;
-	--bdr13: #CFCFCF;
-	--bdr14: #eff1f2;
+  --bdr11: #E8E8EA;
+  --bdr12: #E8E8EA;
+  --bdr13: #CFCFCF;
+  --bdr14: #eff1f2;
 
-	--bs11: 0 5px 30px rgba(0,0,0,.2); // card shadow 1
-	--bs21: 0 2px 4px -2px rgba(0, 0, 0, 0.06); // header, footer etc.
+  --bs11: 0 5px 30px rgba(0,0,0,.2); // card shadow 1
+  --bs21: 0 2px 4px -2px rgba(0, 0, 0, 0.06); // header, footer etc.
 
-	--scrollbar-thumb: #A8A8A8;
+  --scrollbar-thumb: #A8A8A8;
 
-	--hbnc1: #E80013;
-	--hbnc2: #FCE802;
+  --hbnc1: #E80013;
+  --hbnc2: #FCE802;
 
 	// update
 	--theme-color: #466548;
 	--main-color: #466548;
 	--audio-player-color: #466548;
 	--bsc11: #466548;
-
+  
   // skeleton
   --skeleton-base-color: #eeeeee;
   --skeleton-highlight-color: #f5f5f5;
 
-	.light {
-		&.vn {
-			--hbnc1: #E80013;
-			--hbnc2: #FCE802;
-		}
+  --gtv-border-bottom-color: #e0e0e0;
 
-		&.kh {
-			--hbnc1: #032EA1;
-			--hbnc2: #E00025;
-		}
-	}
+  --gtv-modal-bg: #fff;
+  --gtv-content-bg: #fff;
+  --gtv-header-bg: #f4f4f4;
+  --gtv-footer-bg: #f4f4f4;
+  --gtv-selection-bg: rgba(70,101,72,0.10);
+  --gtv-hover-bg: rgba(70,101,72,0.03);
+  --gtv-primary-text: #2e3031;
+  --gtv-secondary-text: #666666;
+  --gtv-light-text: #9EABBE;
+  --gtv-border-color: #e0e0e0;
+  --gtv-accent-color: #466548;
+  --gtv-accent-hover: #38523b;
+  --gtv-button-bg: #466548;
+  --gtv-button-text: #fff;
+  --gtv-button-hover: #38523b;
+  --gtv-button-disabled: #E0E0E0;
+  --gtv-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13);
 
+  .light {
+    &.vn {
+      --hbnc1: #E80013;
+      --hbnc2: #FCE802;
+    }
+
+    &.kh {
+      --hbnc1: #032EA1;
+      --hbnc2: #E00025;
+    }
+  }
+  
 }
 
 .dark {
-	--bg11: #232A3B;
-	--bg12: #293145;
-	--bg21: #25262c;
-    --bg22: #313a55;
-    --txt00: #ffffff;
-	--txt11: rgba(226, 232, 240, 1);
-	--txt12: #ffffff;
-	--bdr11: #313a55;
-	--bdr12: #313a55;
-	--bs11: 0px 3px 15px #293145;
-	--cbg: #33363c;
-	--snib: #888888;
-	--snbs: #737c84;
+  --bg11: #232A3B;
+  --bg12: #293145;
+  --bg21: #25262c;
+  --bg22: #313a55;
+  --txt00: #ffffff;
+  --txt11: rgba(226, 232, 240, 1);
+  --txt12: #ffffff;
+  --bdr11: #313a55;
+  --bdr12: #313a55;
+  --bs11: 0px 3px 15px #293145;
+  --cbg: #33363c;
+  --snib: #888888;
+  --snbs: #737c84;
 
-	--hbnc1: #2b395d;
+  --hbnc1: #2b395d;
 	// --hbnc2: #2b395d;
-	--hbnc2: #909090;
+  --hbnc2: #909090;
 
   // update
   --main-color: #ffffff;
@@ -85,19 +108,38 @@
   // skeleton
   --skeleton-base-color: #12192A;
   --skeleton-highlight-color: #192031;
+  --gtv-border-bottom-color: #313a55;
+  --multi-banner-light: var(--multi-banner-dark);
+  --gtv-modal-bg: #232A3B;
+  --gtv-content-bg: #232A3B;
+  --gtv-header-bg: #293145;
+  --gtv-footer-bg: #293145;
+  --gtv-selection-bg: rgba(70,101,72,0.16); 
+  --gtv-hover-bg: rgba(255,255,255,0.04);
+  --gtv-primary-text: #fff;
+  --gtv-secondary-text: #b0b0b0;
+  --gtv-light-text: #888888;
+  --gtv-border-color: #313a55;
+  --gtv-accent-color: #8de470;
+  --gtv-accent-hover: #466548;
+  --gtv-button-bg: #466548;
+  --gtv-button-text: #fff;
+  --gtv-button-hover: #38523b;
+  --gtv-button-disabled: #2D3748;
+  --gtv-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
 }
 
 .blue {
   --clr11: #1DB296;
-	--bg21: #eff1f2;
-	--bdr12: #eff1f2;
-	--cbg: #fff;
-	--snib: #e7e7e9;
-	--snbs: #1db296;
+  --bg21: #eff1f2;
+  --bdr12: #eff1f2;
+  --cbg: #fff;
+  --snib: #e7e7e9;
+  --snbs: #1db296;
 
 
 
-	--theme-color: #1F7EF9;
+  --theme-color: #1F7EF9;
 
 	--main-color: #1F7EF9; // main theme color
   --txt00: #000000; // arabic text color
@@ -107,45 +149,45 @@
 
 	--bg11: #ffffff; // main bg
 	--bg12: #F4F4F4; // main bg rev
-	--bg21: #444444;
+  --bg21: #444444;
 	--bg22: #eeeeee; // icon bg
 
-	--bdr11: #E8E8EA;
-	--bdr12: #E8E8EA;
-	--bdr13: #CFCFCF;
-	--bdr14: #eff1f2;
+  --bdr11: #E8E8EA;
+  --bdr12: #E8E8EA;
+  --bdr13: #CFCFCF;
+  --bdr14: #eff1f2;
 
 	--bs11: 0 5px 30px rgba(0,0,0,.2); // card shadow 1
 	--bs21: 0 2px 4px -2px rgba(0, 0, 0, 0.06); // header, footer etc.
 
-	--scrollbar-thumb: #A8A8A8;
+  --scrollbar-thumb: #A8A8A8;
 }
 .orange {
   --bg11: #232A3B;
-	--bg12: #293145;
-	--bg21: #25262c;
+  --bg12: #293145;
+  --bg21: #25262c;
   --bg22: #313a55;
   --txt00: #ffffff;
-	--txt11: rgba(226, 232, 240, 1);
-	--txt12: #ffffff;
-	--bdr11: #313a55;
-	--bdr12: #313a55;
-	--bs11: 0px 3px 15px #293145;
-	--cbg: #33363c;
-	--snib: #888888;
-	--snbs: #737c84;
+  --txt11: rgba(226, 232, 240, 1);
+  --txt12: #ffffff;
+  --bdr11: #313a55;
+  --bdr12: #313a55;
+  --bs11: 0px 3px 15px #293145;
+  --cbg: #33363c;
+  --snib: #888888;
+  --snbs: #737c84;
 }
 .red {
   --clr11: #1DB296;
-	--bg21: #eff1f2;
-	--bdr12: #eff1f2;
-	--cbg: #fff;
-	--snib: #e7e7e9;
-	--snbs: #1db296;
+  --bg21: #eff1f2;
+  --bdr12: #eff1f2;
+  --cbg: #fff;
+  --snib: #e7e7e9;
+  --snbs: #1db296;
 
 
 
-	--theme-color: #1F7EF9;
+  --theme-color: #1F7EF9;
 
 	--main-color: #1F7EF9; // main theme color
   	--txt00: #000000; // arabic text color
@@ -155,18 +197,18 @@
 
 	--bg11: #ffffff; // main bg
 	--bg12: #F4F4F4; // main bg rev
-	--bg21: #444444;
+  --bg21: #444444;
 	--bg22: #eeeeee; // icon bg
 
-	--bdr11: #E8E8EA;
-	--bdr12: #E8E8EA;
-	--bdr13: #CFCFCF;
-	--bdr14: #eff1f2;
+  --bdr11: #E8E8EA;
+  --bdr12: #E8E8EA;
+  --bdr13: #CFCFCF;
+  --bdr14: #eff1f2;
 
 	--bs11: 0 5px 30px rgba(0,0,0,.2); // card shadow 1
 	--bs21: 0 2px 4px -2px rgba(0, 0, 0, 0.06); // header, footer etc.
 
-	--scrollbar-thumb: #A8A8A8;
+  --scrollbar-thumb: #A8A8A8;
 }
 
 :root {
