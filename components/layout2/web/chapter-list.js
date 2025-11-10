@@ -1,6 +1,7 @@
 import { useState, useRef, useContext } from "react";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import Link from "next/link";
+import { isFirstTranslation } from "../../../lib/config";
 // import Scrollbar from "../../core/scrollbar";
 import CloseIcon from "../../icons/Close";
 import SearchIcon from "../../icons/Search";
@@ -83,7 +84,7 @@ export default function ChapterList({ chapterList, controller }) {
             //     : `/chapters/${chapter.slug}`
             // }
             href={
-              translation === "vietnamese_hassan"
+              isFirstTranslation(translation)
                 ? `/chapters/${chapter.slug}`
                 : `/${translation}/chapters/${chapter.slug}`
             }

@@ -9,7 +9,7 @@ import VerseCard from "../../surah/verse-card"
 import Pagination from "../../surah/pagination"
 import Bismillah from "../../icons/Bismillah"
 import styles from "./content.module.scss"
-import { config } from "../../../lib/config"
+import { config, isFirstTranslation, buildChapterUrl } from "../../../lib/config"
 import { SettingsContext } from "../../../contexts/SettingsContext"
 import { t } from "../../../lib/config"
 
@@ -47,25 +47,53 @@ export default function ChapterContent({
   const printRef = useRef(null)
   const { translation, activeTranslations = [translation] } = useContext(SettingsContext)
   const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } = useContext(AudioPlayerContext)
-  const currentVerses = allTranslations?.[translation] || verses
+  
+  // Better fallback logic for currentVerses
+  // If translation exists in allTranslations, use it; otherwise use verses prop
+  const currentVerses = (allTranslations && translation && allTranslations[translation]) 
+    ? allTranslations[translation] 
+    : verses
+  
   const [modalOpen, setModalOpen] = useState(false)
   const [modalTitle, setModalTitle] = useState(null)
   const [modalContent, setModalContent] = useState(null)
   const [expandedSetting, setExpandedSetting] = useState(null)
   const [showMultiTranslationModal, setShowMultiTranslationModal] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const translationPrefix = translation !== "vietnamese_hassan" ? `/${translation}` : ""
+  
+  // Use dynamic first translation check instead of hardcoded vietnamese_hassan
+  const translationPrefix = isFirstTranslation(translation) ? "" : `/${translation}`
+  
   const lastScrolledVerseRef = useRef(null)
+  
+  // Calculate shouldShowLoading before useEffects
+  // Safety check: if we have verses, don't show loading
+  // Show loading ONLY if loading prop is true AND we have no data
+  const shouldShowLoading = loading && (!currentVerses || currentVerses.length === 0)
+  
+  // Emergency fallback - if we have verses but shouldShowLoading is true, force it to false
+  const finalShouldShowLoading = shouldShowLoading && (!verses || verses.length === 0)
 
   // Debug logging
   useEffect(() => {
-    console.log("ChapterContent Debug:", {
-      chapterNo,
-      allTranslations,
-      hasTransliteration: !!allTranslations?.english_transliteration,
-      transliterationLength: allTranslations?.english_transliteration?.length,
-    })
-  }, [allTranslations, chapterNo])
+    console.log("=== CHAPTER CONTENT DEBUG ===")
+    console.log("Translation from context:", translation)
+    console.log("Available translations in allTranslations:", allTranslations ? Object.keys(allTranslations) : 'NONE')
+    console.log("Verses prop:", verses ? `${verses.length} verses` : 'NO VERSES')
+    console.log("Current verses (computed):", currentVerses ? `${currentVerses.length} verses` : 'NO CURRENT VERSES')
+    console.log("Loading prop:", loading)
+    console.log("Should show loading:", shouldShowLoading)
+    console.log("Final should show loading:", finalShouldShowLoading)
+    
+    // Critical check
+    if (!currentVerses || currentVerses.length === 0) {
+      console.error("⚠️ CRITICAL: No verses to display!")
+      console.error("Translation:", translation)
+      console.error("AllTranslations keys:", allTranslations ? Object.keys(allTranslations) : 'null')
+      console.error("Verses prop:", verses ? `${verses.length} items` : 'null')
+    }
+    console.log("============================")
+  }, [translation, allTranslations, verses, currentVerses, loading, shouldShowLoading, finalShouldShowLoading])
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -197,24 +225,19 @@ export default function ChapterContent({
   useEffect(() => {
     if (contentType === "chapter" && chapters[chapterNo - 2]) {
       setPrev({
-        link:
-          translation === "vietnamese_hassan"
-            ? `/chapters/${chapters[chapterNo - 2].slug}`
-            : `/${translation}/chapters/${chapters[chapterNo - 2].slug}`,
+        link: buildChapterUrl(chapters[chapterNo - 2].slug, translation),
         name: chapters[chapterNo - 2].name,
       })
     } else if (contentType === "verse" && Number(verses[0]?.verseNo) > 1) {
       setPrev({
-        link:
-          translation === "vietnamese_hassan"
+        link: isFirstTranslation(translation)
             ? `/chapters/${chapters[chapterNo - 1].slug}/verses/${Number(verses[0].verseNo) - 1}`
             : `/${translation}/chapters/${chapters[chapterNo - 1].slug}/verses/${Number(verses[0].verseNo) - 1}`,
         name: "Prev verse",
       })
     } else if (contentType === "verse" && Number(verses[0]?.verseNo) == 1 && chapterNo > 1) {
       setPrev({
-        link:
-          translation === "vietnamese_hassan"
+        link: isFirstTranslation(translation)
             ? `/chapters/${chapters[chapterNo - 2].slug}/verses/1`
             : `/${translation}/chapters/${chapters[chapterNo - 2].slug}/verses/1`,
         name: "Prev chapter",
@@ -222,16 +245,12 @@ export default function ChapterContent({
     }
     if (contentType === "chapter" && chapters[chapterNo]) {
       setNext({
-        link:
-          translation === "vietnamese_hassan"
-            ? `/chapters/${chapters[chapterNo].slug}`
-            : `/${translation}/chapters/${chapters[chapterNo].slug}`,
+        link: buildChapterUrl(chapters[chapterNo].slug, translation),
         name: chapters[chapterNo].name,
       })
     } else if (contentType === "verse" && Number(verses[0]?.verseNo) < chapters[chapterNo - 1]?.totalVerse) {
       setNext({
-        link:
-          translation === "vietnamese_hassan"
+        link: isFirstTranslation(translation)
             ? `/chapters/${chapters[chapterNo - 1].slug}/verses/${Number(verses[0].verseNo) + 1}`
             : `/${translation}/chapters/${chapters[chapterNo - 1].slug}/verses/${Number(verses[0].verseNo) + 1}`,
         name: "Next verse",
@@ -242,8 +261,7 @@ export default function ChapterContent({
       chapterNo < chapters.length
     ) {
       setNext({
-        link:
-          translation === "vietnamese_hassan"
+        link: isFirstTranslation(translation)
             ? `/chapters/${chapters[chapterNo].slug}/verses/1`
             : `/${translation}/chapters/${chapters[chapterNo].slug}/verses/1`,
         name: "Next chapter",
@@ -458,11 +476,29 @@ export default function ChapterContent({
   )
 
   const availableTranslations = allTranslations ? Object.keys(allTranslations) : []
+  
+  console.log("🔍 Render check:", { 
+    loadingProp: loading, 
+    hasCurrentVerses: !!currentVerses, 
+    currentVersesLength: currentVerses?.length,
+    shouldShowLoading,
+    finalShouldShowLoading,
+    translation,
+    allTranslationsKeys: allTranslations ? Object.keys(allTranslations) : []
+  })
+  
+  if (shouldShowLoading !== finalShouldShowLoading) {
+    console.warn("⚠️ Loading state override:", {
+      shouldShowLoading,
+      finalShouldShowLoading,
+      reason: "Have verses prop but loading was true"
+    })
+  }
 
   return (
     <div className={styles.chapter}>
       <div className={styles.chapter_tab} ref={printRef}>
-        {loading ? (
+        {finalShouldShowLoading ? (
           <>
             <Skeleton style={{ marginBottom: "24px" }} count={1} height={49} width={`100%`} className="skeleton" />
             <Skeleton count={7} height={150} width={`100%`} className="skeleton" />
@@ -512,7 +548,7 @@ export default function ChapterContent({
           </>
         )}
       </div>
-      {!loading && (
+      {!finalShouldShowLoading && (
         <MemoizedPagination
           prev={prev}
           next={next}

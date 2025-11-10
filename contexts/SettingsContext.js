@@ -3,6 +3,7 @@
 import { useState, useEffect, createContext } from "react"
 import { useRouter } from "next/router"
 import { settings as defaultSettings } from "../lib/settings"
+import { getFirstAvailableTranslation, isFirstTranslation } from "../lib/config"
 
 export const SettingsContext = createContext()
 
@@ -48,14 +49,37 @@ const SettingsContextProvider = ({ children }) => {
         } catch (error) {}
       }
 
+      // Extract translation from URL if present
       if (typeof window !== "undefined") {
         const currentPath = window.location.pathname
-        if (currentPath.startsWith("/vietnamese_rwwad/subjective/")) {
-          newSettings.translation = "vietnamese_rwwad"
-          localStorage.setItem("settings", JSON.stringify(newSettings))
-        } else if (currentPath.includes("/subjective/")) {
-          newSettings.translation = "vietnamese_hassan"
-          localStorage.setItem("settings", JSON.stringify(newSettings))
+        
+        // Pattern: /[translation_code]/chapters/[slug] or /[translation_code]/subjective/...
+        const translationMatch = currentPath.match(/^\/([^\/]+)\/(chapters|subjective)/)
+        
+        if (translationMatch && translationMatch[1]) {
+          const urlSegment = translationMatch[1]
+          // Check if it's a valid translation code (contains underscore or hyphen)
+          if (urlSegment.includes('_') || urlSegment.includes('-')) {
+            console.log("Detected translation from URL:", urlSegment)
+            newSettings.translation = urlSegment
+            localStorage.setItem("settings", JSON.stringify(newSettings))
+          }
+        } else {
+          // Check if it's a base route like /chapters/[slug] or /subjective/[slug]
+          const baseRouteMatch = currentPath.match(/^\/(chapters|subjective)\//)
+          if (baseRouteMatch) {
+            // Base route uses first available translation
+            const firstTranslation = getFirstAvailableTranslation()
+            console.log("Base route detected, using first translation:", firstTranslation)
+            newSettings.translation = firstTranslation
+            localStorage.setItem("settings", JSON.stringify(newSettings))
+          } else if (currentPath.startsWith("/vietnamese_rwwad/subjective/")) {
+            newSettings.translation = "vietnamese_rwwad"
+            localStorage.setItem("settings", JSON.stringify(newSettings))
+          } else if (currentPath.includes("/subjective/")) {
+            newSettings.translation = "vietnamese_hassan"
+            localStorage.setItem("settings", JSON.stringify(newSettings))
+          }
         }
       }
 
@@ -158,38 +182,61 @@ const SettingsContextProvider = ({ children }) => {
 
     if (typeof window !== "undefined") {
       const path = window.location.pathname
+      
+      // Skip multi-translation routes
       if (path.includes("/multi-translation/")) {
         return
       }
 
-      if (path.includes("/chapters/")) {
-        let remainingPath
-        if (path.startsWith("/vietnamese_rwwad/chapters/")) {
-          remainingPath = path.replace("/vietnamese_rwwad/chapters/", "")
-        } else {
-          remainingPath = path.replace("/chapters/", "")
+      // Dispatch translation change event for components to listen
+      window.dispatchEvent(new CustomEvent('translationChanged', {
+        detail: { translation: newTranslation }
+      }))
+
+      // Determine if new translation is the first available translation
+      const isNewTranslationFirst = isFirstTranslation(newTranslation)
+
+      // Handle dynamic translation routes: /[translationCode]/chapters/[slug]
+      const dynamicMatch = path.match(/^\/([^\/]+)\/(chapters|subjective)\/(.+)$/)
+      
+      if (dynamicMatch) {
+        const [, currentTranslation, routeType, remainingPath] = dynamicMatch
+        
+        // Check if current path has translation code (contains _ or -)
+        if (currentTranslation.includes('_') || currentTranslation.includes('-')) {
+          // Switching from a translation-specific route
+          if (isNewTranslationFirst) {
+            // Going back to first translation - use base route
+            const newPath = `/${routeType}/${remainingPath}`
+            console.log(`Switching to first translation: ${path} → ${newPath}`)
+            router.push(newPath, newPath, { shallow: true })
+          } else {
+            // Switching to another non-first translation
+            const newPath = `/${newTranslation}/${routeType}/${remainingPath}`
+            console.log(`Switching translations: ${path} → ${newPath}`)
+            router.push(newPath, newPath, { shallow: true })
+          }
+          return
         }
+      }
 
-        const newPath =
-          newTranslation === "vietnamese_hassan"
-            ? `/chapters/${remainingPath}`
-            : `/vietnamese_rwwad/chapters/${remainingPath}`
-
-        window.history.replaceState({}, "", newPath)
-      } else if (path.includes("/subjective/")) {
-        let remainingPath
-        if (path.startsWith("/vietnamese_rwwad/subjective/")) {
-          remainingPath = path.replace("/vietnamese_rwwad/subjective/", "")
+      // Handle base routes: /chapters/[slug] or /subjective/[slug]
+      const baseMatch = path.match(/^\/(chapters|subjective)\/(.+)$/)
+      
+      if (baseMatch) {
+        const [, routeType, remainingPath] = baseMatch
+        
+        if (isNewTranslationFirst) {
+          // Already on base route and switching to first translation - no URL change needed
+          console.log(`Already on base route, staying: ${path}`)
+          return
         } else {
-          remainingPath = path.replace("/subjective/", "")
+          // Switching from base route (first translation) to another translation
+          const newPath = `/${newTranslation}/${routeType}/${remainingPath}`
+          console.log(`Switching from first translation: ${path} → ${newPath}`)
+          router.push(newPath, newPath, { shallow: true })
+          return
         }
-
-        const newPath =
-          newTranslation === "vietnamese_hassan"
-            ? `/subjective/${remainingPath}`
-            : `/vietnamese_rwwad/subjective/${remainingPath}`
-
-        window.history.replaceState({}, "", newPath)
       }
     }
   }

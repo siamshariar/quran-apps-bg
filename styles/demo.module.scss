@@ -1,0 +1,277 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.header p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
+
+.section {
+  margin-bottom: 3rem;
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.section h2 {
+  font-size: 1.8rem;
+  color: #34495e;
+  margin-bottom: 1.5rem;
+}
+
+.infoBox {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.infoItem {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.infoItem:last-child {
+  border-bottom: none;
+}
+
+.infoItem strong {
+  color: #2c3e50;
+  margin-right: 0.5rem;
+}
+
+.translationList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.translationCard {
+  background: white;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.translationCard strong {
+  color: #2c3e50;
+}
+
+.translationCard code {
+  background: #f0f0f0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: #e74c3c;
+  font-family: 'Courier New', monospace;
+}
+
+.demo {
+  background: white;
+  padding: 2rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.select:hover {
+  border-color: #3498db;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.button {
+  padding: 0.875rem 1.5rem;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.button:hover {
+  background: #2980b9;
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.urlPreview {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 6px;
+  border: 2px dashed #3498db;
+}
+
+.urlPreview h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.urlBox {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 4px;
+}
+
+.urlBox:last-child {
+  margin-bottom: 0;
+}
+
+.urlBox strong {
+  display: block;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.urlBox code {
+  display: block;
+  background: #2c3e50;
+  color: #2ecc71;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.codeBlock {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.codeBlock p {
+  margin-bottom: 0.75rem;
+}
+
+.codeBlock code {
+  background: #f0f0f0;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  color: #e74c3c;
+}
+
+.codeBlock pre {
+  background: #2c3e50;
+  color: #ecf0f1;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 1rem 0;
+  font-family: 'Courier New', monospace;
+  line-height: 1.6;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.feature {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.feature h3 {
+  color: #27ae60;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.feature p {
+  color: #7f8c8d;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .section {
+    padding: 1rem;
+  }
+
+  .section h2 {
+    font-size: 1.5rem;
+  }
+
+  .translationList,
+  .features {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+  }
+}

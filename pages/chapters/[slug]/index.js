@@ -1,8 +1,10 @@
-import { server, config, t } from "../../../lib/config"
+import { server, config, t, getFirstAvailableTranslation, getAvailableTranslations, translationData } from "../../../lib/config"
 import { getChaptersInfo, getChapterDetails, getChapterTransliteration } from "../../../lib/fetch"
 import Layout from "../../../components/layouts/layout-chapter"
 import Meta from "../../../components/core/meta"
 import ChapterContent from "../../../components/layout2/surah/content"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
 
 export default function Chapter({
   chapters,
@@ -10,19 +12,149 @@ export default function Chapter({
   chapterName,
   chapterSlug,
   chapterMp3Url,
-  verses,
-  allTranslations,
+  verses: initialVerses,
+  allTranslations: initialAllTranslations,
   contentTitle,
   mode,
-  loading,
-  translation,
+  loading: initialLoading = false,
+  translationCode: initialTranslationCode,
+  availableTranslations: initialAvailableTranslations,
 }) {
+  const router = useRouter()
+  const [verses, setVerses] = useState(initialVerses)
+  const [allTranslations, setAllTranslations] = useState(initialAllTranslations)
+  const [translationCode, setTranslationCode] = useState(initialTranslationCode)
+  const [availableTranslations, setAvailableTranslations] = useState(initialAvailableTranslations)
+  const [loading, setLoading] = useState(initialLoading)
+
+  // Handle router loading state
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
+
+  // Debug: Log the props
+  useEffect(() => {
+    console.log('=== BASE ROUTE COMPONENT DEBUG ===')
+    console.log('Chapter No:', chapterNo)
+    console.log('Chapter Name:', chapterName)
+    console.log('Translation Code:', translationCode)
+    console.log('Verses:', verses ? `${verses.length} verses` : 'NO VERSES')
+    console.log('All Translations:', allTranslations ? Object.keys(allTranslations) : 'NO TRANSLATIONS')
+    console.log('Chapters:', chapters ? `${chapters.length} chapters` : 'NO CHAPTERS')
+    console.log('Loading:', loading)
+    console.log('================================')
+  }, [chapterNo, verses, allTranslations, chapters])
+
+  // Listen for translation changes from settings
+  useEffect(() => {
+    const handleTranslationChange = async (event) => {
+      const newTranslation = event.detail.translation
+      
+      if (newTranslation === translationCode) {
+        return // Already showing this translation
+      }
+
+      console.log(`Base route: Translation changed from ${translationCode} to ${newTranslation}`)
+      
+      setLoading(true)
+      setTranslationCode(newTranslation)
+
+      try {
+        // Fetch new translation data
+        const chapterDetails = await getChapterDetails(chapterNo, newTranslation)
+        
+        if (chapterDetails && chapterDetails.verses) {
+          setVerses(chapterDetails.verses)
+
+          // Get available translations for the new translation's language
+          const currentLanguage = Object.keys(translationData).find(lang => 
+            translationData[lang].some(t => t.code === newTranslation)
+          )
+          
+          const newAvailableTranslations = currentLanguage 
+            ? translationData[currentLanguage] 
+            : [{ code: newTranslation, name: newTranslation }]
+          
+          setAvailableTranslations(newAvailableTranslations)
+
+          // Update allTranslations object
+          const newAllTranslations = {
+            [newTranslation]: chapterDetails.verses,
+          }
+
+          // Fetch additional translations for this language
+          const otherTranslations = newAvailableTranslations.filter(t => t.code !== newTranslation)
+          
+          if (otherTranslations.length > 0) {
+            try {
+              const otherTranslationData = await Promise.all(
+                otherTranslations.slice(0, 2).map(t =>
+                  getChapterDetails(chapterNo, t.code).catch(() => null)
+                )
+              )
+
+              otherTranslations.slice(0, 2).forEach((trans, index) => {
+                if (otherTranslationData[index] && otherTranslationData[index].verses) {
+                  newAllTranslations[trans.code] = otherTranslationData[index].verses
+                }
+              })
+            } catch (error) {
+              console.error('Error loading additional translations:', error)
+            }
+          }
+
+          setAllTranslations(newAllTranslations)
+        }
+      } catch (error) {
+        console.error('Error fetching new translation:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    window.addEventListener('translationChanged', handleTranslationChange)
+    
+    return () => {
+      window.removeEventListener('translationChanged', handleTranslationChange)
+    }
+  }, [translationCode, chapterNo])
+
+  // Safeguard: Show error if critical data is missing
+  if (!verses || !allTranslations || !chapters) {
+    console.error('=== CRITICAL DATA MISSING ===')
+    console.error('Verses:', !!verses, verses?.length)
+    console.error('AllTranslations:', !!allTranslations, allTranslations ? Object.keys(allTranslations) : 'null')
+    console.error('Chapters:', !!chapters, chapters?.length)
+    console.error('============================')
+    
+    return (
+      <Layout>
+        <div style={{ padding: '2rem', textAlign: 'center', backgroundColor: '#fff', minHeight: '100vh' }}>
+          <h2 style={{ color: 'red' }}>Error: Critical data missing</h2>
+          <p>Some required data is not available:</p>
+          <pre style={{ textAlign: 'left', backgroundColor: '#f5f5f5', padding: '1rem' }}>
+{`Verses: ${!!verses} (${verses?.length || 0} items)
+All Translations: ${!!allTranslations} (keys: ${allTranslations ? Object.keys(allTranslations).join(', ') : 'none'})
+Chapters: ${!!chapters} (${chapters?.length || 0} items)
+Translation Code: ${translationCode}
+Chapter No: ${chapterNo}`}
+          </pre>
+          <button onClick={() => window.location.reload()} style={{ padding: '10px 20px', fontSize: '16px' }}>
+            Reload Page
+          </button>
+        </div>
+      </Layout>
+    )
+  }
+
+  console.log('=== RENDERING CHAPTER CONTENT ===')
+
   return (
     <>
       <Meta
         title={`${t("Chapter")} ${chapterName} | ${config?.metaTitle}`}
         description={`Chapter ${chapterName}. ${config?.metaDescription}`}
-        url={`${server}/${translation}/chapters/${chapterSlug}`}
+        url={`${server}/chapters/${chapterSlug}`}
         image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
         type="website"
       />
@@ -37,6 +169,8 @@ export default function Chapter({
         allTranslations={allTranslations}
         chapters={chapters}
         loading={loading}
+        currentTranslation={translationCode}
+        availableTranslations={availableTranslations}
       />
     </>
   )
@@ -47,47 +181,59 @@ Chapter.getLayout = function getLayout(page) {
 }
 
 export async function getStaticProps(context) {
-  const translation = context.params.translation || "vietnamese_hassan"
   const slug = encodeURI(context.params.slug)
   const chapterNo = Number.parseInt(slug)
 
+  // Use the first available translation for base route
+  const translationCode = getFirstAvailableTranslation()
+  const availableTranslations = getAvailableTranslations()
+
   try {
-    console.log(`Fetching data for chapter ${chapterNo}`)
+    console.log(`Base route: Fetching chapter ${chapterNo} with first translation: ${translationCode}`)
 
-    const [chapterDetails, defaultTranslation, rwwadTranslation, transliterationData, chaptersInfo] = await Promise.all(
-      [
-        getChapterDetails(chapterNo, translation),
-        getChapterDetails(chapterNo, "vietnamese_hassan"),
-        getChapterDetails(chapterNo, "vietnamese_rwwad"),
-        getChapterTransliteration(chapterNo), // This now uses enhanced fallback
-        getChaptersInfo(),
-      ],
-    )
+    const chaptersInfo = await getChaptersInfo()
 
-    if (!chapterDetails || !chaptersInfo || !chaptersInfo[chapterNo - 1]) {
+    if (!chaptersInfo || !chaptersInfo[chapterNo - 1]) {
       return {
         notFound: true,
       }
     }
 
-    // Prepare all translations object
-    const allTranslations = {
-      vietnamese_hassan: defaultTranslation?.verses || [],
-      vietnamese_rwwad: rwwadTranslation?.verses || [],
+    // Fetch the primary (first) translation
+    const chapterDetails = await getChapterDetails(chapterNo, translationCode)
+    
+    if (!chapterDetails || !chapterDetails.verses) {
+      console.error(`Failed to load first translation ${translationCode} for chapter ${chapterNo}`)
+      return { notFound: true }
     }
 
-    // Add transliteration if available (API or fallback)
-    if (transliterationData && transliterationData.verses) {
-      allTranslations.english_transliteration = transliterationData.verses
-      console.log(`Transliteration loaded for chapter ${chapterNo}:`, transliterationData.verses.length, "verses")
+    // Prepare allTranslations object
+    const allTranslationsObj = {
+      [translationCode]: chapterDetails.verses,
     }
 
-    console.log("Final allTranslations:", {
-      hasVietnameseHassan: !!allTranslations.vietnamese_hassan?.length,
-      hasVietnameseRwwad: !!allTranslations.vietnamese_rwwad?.length,
-      hasTransliteration: !!allTranslations.english_transliteration?.length,
-      transliterationCount: allTranslations.english_transliteration?.length || 0,
-    })
+    // Fetch other available translations for this language (up to 2 more)
+    const otherTranslations = availableTranslations.filter(t => t.code !== translationCode)
+    
+    if (otherTranslations.length > 0) {
+      try {
+        const otherTranslationData = await Promise.all(
+          otherTranslations.slice(0, 2).map(t =>
+            getChapterDetails(chapterNo, t.code).catch(() => null)
+          )
+        )
+
+        otherTranslations.slice(0, 2).forEach((trans, index) => {
+          if (otherTranslationData[index] && otherTranslationData[index].verses) {
+            allTranslationsObj[trans.code] = otherTranslationData[index].verses
+          }
+        })
+      } catch (error) {
+        console.error('Error loading additional translations:', error)
+      }
+    }
+
+    console.log(`Base route loaded translations:`, Object.keys(allTranslationsObj))
 
     return {
       props: {
@@ -96,12 +242,13 @@ export async function getStaticProps(context) {
         chapterSlug: chaptersInfo[chapterNo - 1].slug,
         chapterMp3Url: chapterDetails.mp3Url,
         verses: chapterDetails.verses,
-        allTranslations,
+        allTranslations: allTranslationsObj,
         chapters: chaptersInfo,
         contentTitle: chaptersInfo[chapterNo - 1].name,
         mode: "chapter",
-        key: chapterDetails.chapterNo,
-        translation: translation,
+        loading: false,
+        translationCode,
+        availableTranslations,
       },
       revalidate: 86400,
     }
@@ -115,16 +262,12 @@ export async function getStaticProps(context) {
 
 export async function getStaticPaths() {
   const chapters = await getChaptersInfo()
-  const translations = ["vietnamese_rwwad"]
 
-  const paths = chapters.flatMap((chapter) =>
-    translations.map((translation) => ({
-      params: {
-        slug: chapter.slug,
-        translation: translation,
-      },
-    })),
-  )
+  const paths = chapters.map((chapter) => ({
+    params: {
+      slug: chapter.slug,
+    },
+  }))
 
   return {
     paths,

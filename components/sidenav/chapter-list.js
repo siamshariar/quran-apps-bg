@@ -5,7 +5,7 @@ import Scrollbar from '../core/scrollbar'
 import Close from '../icons/Close'
 import Search from '../icons/Search'
 import SettingsContextProvider from '../../contexts/SettingsContext'
-import { t } from '../../lib/config'
+import { t, isFirstTranslation } from '../../lib/config'
 import styles from './chapter-list.module.scss'
 import css from './style.module.scss'
 
@@ -20,7 +20,8 @@ export default function ChapterList({ chapterList, open, controller }) {
 		setChapters(filtered)
 	}
 
-  const translationPrefix = translation !== "vietnamese_hassan" ? `/${translation}` : ""
+  // Use dynamic first translation check
+  const translationPrefix = isFirstTranslation(translation) ? "" : `/${translation}`
 
 	return (
 		<Drawer
@@ -59,7 +60,7 @@ export default function ChapterList({ chapterList, open, controller }) {
             {/* To Do: update link with verse mode */}
 						<Link
                 href={
-                  translation === "vietnamese_hassan"
+                  isFirstTranslation(translation)
                     ? `/chapters/${chapter.slug}`
                     : `/${translation}/chapters/${chapter.slug}`
                 }
