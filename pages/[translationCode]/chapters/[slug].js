@@ -10,7 +10,7 @@
  * - etc.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { server, config, t, translationData, getAvailableTranslations } from "../../../lib/config";
 import { getChaptersInfo, getChapterDetails } from "../../../lib/fetch";
@@ -38,6 +38,31 @@ export default function DynamicTranslationChapter({
   const [translationCode, setTranslationCode] = useState(initialTranslationCode);
   const [availableTranslations, setAvailableTranslations] = useState(initialAvailableTranslations);
   const [loading, setLoading] = useState(initialLoading);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [isFetching, setIsFetching] = useState(false); // Prevent duplicate fetches
+  const [currentChapterSlug, setCurrentChapterSlug] = useState(chapterSlug); // Track current chapter
+  const lastFetchKey = useRef(`${initialTranslationCode}-${chapterNo}`); // Track last fetch to prevent duplicates
+
+  // Detect when slug changes (navigating to different chapter)
+  useEffect(() => {
+    if (router.query.slug && router.query.slug !== currentChapterSlug) {
+      console.log(`Chapter changed from ${currentChapterSlug} to ${router.query.slug}`);
+      setCurrentChapterSlug(router.query.slug);
+      setIsInitialLoad(false);
+      // This will be handled by full page navigation, not shallow routing
+      // So this effect is just for logging
+    }
+  }, [router.query.slug, currentChapterSlug]);
+
+  // Sync translationCode with URL when route changes (shallow routing)
+  useEffect(() => {
+    if (router.query.translationCode && router.query.translationCode !== translationCode) {
+      console.log(`🔄 URL changed: updating translationCode from ${translationCode} to ${router.query.translationCode}`);
+      console.log(`📊 Stack trace:`, new Error().stack);
+      setTranslationCode(router.query.translationCode);
+      setIsInitialLoad(false);
+    }
+  }, [router.query.translationCode, translationCode]);
 
   // Update context translation when URL changes
   useEffect(() => {
@@ -49,79 +74,82 @@ export default function DynamicTranslationChapter({
     }
   }, [translationCode]);
 
-  // Listen for translation changes from settings
+  // Fetch new data when translationCode OR chapterNo changes
   useEffect(() => {
-    const handleTranslationChange = async (event) => {
-      const newTranslation = event.detail.translation;
-      
-      if (newTranslation === translationCode) {
-        return; // Already showing this translation
-      }
+    const fetchKey = `${translationCode}-${chapterNo}`;
+    console.log(`📡 Fetch Effect Triggered - fetchKey: ${fetchKey}, lastFetchKey: ${lastFetchKey.current}`);
+    console.log(`   isInitialLoad: ${isInitialLoad}, isFetching: ${isFetching}`);
+    
+    // Always skip on initial mount - we already have data from getStaticProps
+    if (isInitialLoad) {
+      console.log('⏭️ Skipping fetch - initial load');
+      setIsInitialLoad(false);
+      lastFetchKey.current = fetchKey; // Mark this as already fetched
+      return;
+    }
 
-      console.log(`Translation changed from ${translationCode} to ${newTranslation}`);
-      
+    // Skip if we already fetched this exact combination
+    if (lastFetchKey.current === fetchKey) {
+      console.log('⏭️ Skipping fetch - already have this data');
+      return;
+    }
+
+    // Prevent duplicate fetches
+    if (isFetching) {
+      console.log('⏸️ Already fetching, skipping duplicate request');
+      return;
+    }
+
+    const fetchTranslationData = async () => {
+      console.log(`🔄 Fetching ONLY translation data: ${translationCode}, chapter: ${chapterNo}`);
+      lastFetchKey.current = fetchKey; // Mark as fetching this combination
+      setIsFetching(true);
       setLoading(true);
-      setTranslationCode(newTranslation);
 
       try {
-        // Get available translations for the new translation's language
+        // Get available translations for this translation's language
         const currentLanguage = Object.keys(translationData).find(lang => 
-          translationData[lang].some(t => t.code === newTranslation)
+          translationData[lang].some(t => t.code === translationCode)
         );
         
         const newAvailableTranslations = currentLanguage 
           ? translationData[currentLanguage] 
-          : [{ code: newTranslation, name: newTranslation }];
+          : [{ code: translationCode, name: translationCode }];
         
         setAvailableTranslations(newAvailableTranslations);
 
-        // Fetch new translation data
-        const chapterDetails = await getChapterDetails(chapterNo, newTranslation);
+        // Fetch ONLY the translation data (Arabic is already in verses from initial load)
+        const chapterDetails = await getChapterDetails(chapterNo, translationCode);
         
         if (chapterDetails && chapterDetails.verses) {
-          setVerses(chapterDetails.verses);
-
-          // Update allTranslations object
-          const newAllTranslations = {
-            [newTranslation]: chapterDetails.verses,
-          };
-
-          // Fetch additional translations for this language
-          const otherTranslations = newAvailableTranslations.filter(t => t.code !== newTranslation);
-          
-          if (otherTranslations.length > 0) {
-            try {
-              const otherTranslationData = await Promise.all(
-                otherTranslations.slice(0, 2).map(t =>
-                  getChapterDetails(chapterNo, t.code).catch(() => null)
-                )
-              );
-
-              otherTranslations.slice(0, 2).forEach((trans, index) => {
-                if (otherTranslationData[index] && otherTranslationData[index].verses) {
-                  newAllTranslations[trans.code] = otherTranslationData[index].verses;
-                }
-              });
-            } catch (error) {
-              console.error('Error loading additional translations:', error);
-            }
+          // Keep existing verses if we have them (they contain Arabic)
+          // Only update if this is a new chapter or we don't have verses yet
+          if (!verses || verses.length === 0) {
+            setVerses(chapterDetails.verses);
           }
 
+          // Update allTranslations - preserve existing Arabic, just update translation
+          const newAllTranslations = {
+            ...allTranslations, // Keep existing data (including Arabic from previous translations)
+            [translationCode]: chapterDetails.verses,
+          };
+
           setAllTranslations(newAllTranslations);
+          
+          console.log(`✅ Updated translation: ${translationCode} (Arabic preserved from initial load)`);
+        } else {
+          console.error(`No data returned for translation ${translationCode}`);
         }
       } catch (error) {
-        console.error('Error fetching new translation:', error);
+        console.error('Error fetching translation data:', error);
       } finally {
         setLoading(false);
+        setIsFetching(false);
       }
     };
 
-    window.addEventListener('translationChanged', handleTranslationChange);
-    
-    return () => {
-      window.removeEventListener('translationChanged', handleTranslationChange);
-    };
-  }, [translationCode, chapterNo]);
+    fetchTranslationData();
+  }, [translationCode, chapterNo]); // Re-fetch whenever translation or chapter changes
 
   return (
     <>
@@ -201,26 +229,9 @@ export async function getStaticProps(context) {
       [translationCode]: chapterDetails.verses,
     };
 
-    // Fetch other available translations for this language
-    const otherTranslations = availableTranslations.filter(t => t.code !== translationCode);
-    
-    if (otherTranslations.length > 0) {
-      try {
-        const otherTranslationData = await Promise.all(
-          otherTranslations.slice(0, 2).map(t => // Load max 2 additional translations
-            getChapterDetails(chapterNo, t.code).catch(() => null)
-          )
-        );
-
-        otherTranslations.slice(0, 2).forEach((trans, index) => {
-          if (otherTranslationData[index] && otherTranslationData[index].verses) {
-            allTranslationsObj[trans.code] = otherTranslationData[index].verses;
-          }
-        });
-      } catch (error) {
-        console.error('Error loading additional translations:', error);
-      }
-    }
+    // Skip loading additional translations during build to avoid 500 errors
+    // Additional translations will be loaded on-demand in the client
+    console.log(`✅ Built static page for ${translationCode}/chapters/${chapter.slug}`);
 
     return {
       props: {
@@ -246,29 +257,49 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
-  // Get all translation codes
-  const allTranslationCodes = Object.values(translationData)
-    .flat()
-    .map(t => t.code);
-  
-  const chaptersInfo = await getChaptersInfo();
-  
-  // Generate paths for all translation codes and chapters
-  const paths = [];
-  
-  allTranslationCodes.forEach(translationCode => {
-    chaptersInfo.forEach(chapter => {
-      paths.push({
-        params: {
-          translationCode,
-          slug: encodeURIComponent(chapter.slug),
-        },
+  try {
+    // ONLY get translation codes for the current locale (from env)
+    const availableTranslations = getAvailableTranslations();
+    const localeTranslationCodes = availableTranslations.map(t => t.code);
+    
+    console.log(`📦 Building static paths for locale: ${config.localizationCode}`);
+    console.log(`📝 Translation codes to build: ${localeTranslationCodes.join(', ')}`);
+    
+    const chaptersInfo = await getChaptersInfo();
+    
+    if (!chaptersInfo || !Array.isArray(chaptersInfo)) {
+      console.error('Failed to load chapters info for static paths')
+      return {
+        paths: [],
+        fallback: 'blocking',
+      }
+    }
+    
+    // Generate paths ONLY for translations in the current locale
+    const paths = [];
+    
+    localeTranslationCodes.forEach(translationCode => {
+      chaptersInfo.forEach(chapter => {
+        paths.push({
+          params: {
+            translationCode,
+            slug: chapter.slug,
+          },
+        });
       });
     });
-  });
 
-  return {
-    paths,
-    fallback: 'blocking', // Generate pages on-demand if not pre-rendered
-  };
+    console.log(`✅ Generated ${paths.length} static paths (${localeTranslationCodes.length} translations × ${chaptersInfo.length} chapters)`);
+
+    return {
+      paths,
+      fallback: 'blocking', // Generate pages on-demand if not pre-rendered
+    };
+  } catch (error) {
+    console.error("Error in getStaticPaths:", error);
+    return {
+      paths: [],
+      fallback: 'blocking',
+    };
+  }
 }

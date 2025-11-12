@@ -17,7 +17,10 @@ const SettingsContextProvider = ({ children }) => {
     console.log("Initializing settings...")
     try {
       const savedSettings = localStorage.getItem("settings")
-      const newSettings = savedSettings === null ? defaultSettings : JSON.parse(savedSettings)
+      const isFirstTimeUser = savedSettings === null
+      const newSettings = isFirstTimeUser ? defaultSettings : JSON.parse(savedSettings)
+
+      console.log(`🆕 First time user: ${isFirstTimeUser}`)
 
       if (!newSettings.view) {
         newSettings.view = {
@@ -49,36 +52,44 @@ const SettingsContextProvider = ({ children }) => {
         } catch (error) {}
       }
 
-      // Extract translation from URL if present
-      if (typeof window !== "undefined") {
-        const currentPath = window.location.pathname
-        
-        // Pattern: /[translation_code]/chapters/[slug] or /[translation_code]/subjective/...
-        const translationMatch = currentPath.match(/^\/([^\/]+)\/(chapters|subjective)/)
-        
-        if (translationMatch && translationMatch[1]) {
-          const urlSegment = translationMatch[1]
-          // Check if it's a valid translation code (contains underscore or hyphen)
-          if (urlSegment.includes('_') || urlSegment.includes('-')) {
-            console.log("Detected translation from URL:", urlSegment)
-            newSettings.translation = urlSegment
-            localStorage.setItem("settings", JSON.stringify(newSettings))
-          }
-        } else {
-          // Check if it's a base route like /chapters/[slug] or /subjective/[slug]
-          const baseRouteMatch = currentPath.match(/^\/(chapters|subjective)\//)
-          if (baseRouteMatch) {
-            // Base route uses first available translation
-            const firstTranslation = getFirstAvailableTranslation()
-            console.log("Base route detected, using first translation:", firstTranslation)
-            newSettings.translation = firstTranslation
-            localStorage.setItem("settings", JSON.stringify(newSettings))
-          } else if (currentPath.startsWith("/vietnamese_rwwad/subjective/")) {
-            newSettings.translation = "vietnamese_rwwad"
-            localStorage.setItem("settings", JSON.stringify(newSettings))
-          } else if (currentPath.includes("/subjective/")) {
-            newSettings.translation = "vietnamese_hassan"
-            localStorage.setItem("settings", JSON.stringify(newSettings))
+      // For first-time users, always use the first available translation
+      if (isFirstTimeUser) {
+        const firstTranslation = getFirstAvailableTranslation()
+        console.log(`✨ First time user - setting translation to first available: ${firstTranslation}`)
+        newSettings.translation = firstTranslation
+        localStorage.setItem("settings", JSON.stringify(newSettings))
+      } else {
+        // Extract translation from URL if present (for returning users)
+        if (typeof window !== "undefined") {
+          const currentPath = window.location.pathname
+          
+          // Pattern: /[translation_code]/chapters/[slug] or /[translation_code]/subjective/...
+          const translationMatch = currentPath.match(/^\/([^\/]+)\/(chapters|subjective)/)
+          
+          if (translationMatch && translationMatch[1]) {
+            const urlSegment = translationMatch[1]
+            // Check if it's a valid translation code (contains underscore or hyphen)
+            if (urlSegment.includes('_') || urlSegment.includes('-')) {
+              console.log("Detected translation from URL:", urlSegment)
+              newSettings.translation = urlSegment
+              localStorage.setItem("settings", JSON.stringify(newSettings))
+            }
+          } else {
+            // Check if it's a base route like /chapters/[slug] or /subjective/[slug]
+            const baseRouteMatch = currentPath.match(/^\/(chapters|subjective)\//)
+            if (baseRouteMatch) {
+              // Base route uses first available translation
+              const firstTranslation = getFirstAvailableTranslation()
+              console.log("Base route detected, using first translation:", firstTranslation)
+              newSettings.translation = firstTranslation
+              localStorage.setItem("settings", JSON.stringify(newSettings))
+            } else if (currentPath.startsWith("/vietnamese_rwwad/subjective/")) {
+              newSettings.translation = "vietnamese_rwwad"
+              localStorage.setItem("settings", JSON.stringify(newSettings))
+            } else if (currentPath.includes("/subjective/")) {
+              newSettings.translation = "vietnamese_hassan"
+              localStorage.setItem("settings", JSON.stringify(newSettings))
+            }
           }
         }
       }
@@ -176,9 +187,14 @@ const SettingsContextProvider = ({ children }) => {
   }
 
   const changeTranslation = (newTranslation) => {
+    console.log(`🔄 changeTranslation called: ${settings.translation} → ${newTranslation}`)
+    console.log(`📏 Current font sizes: Arabic=${settings.fontSize.arabic}px, Translation=${settings.fontSize.translation}px`)
+    
     const newSettings = { ...settings, translation: newTranslation }
     localStorage.setItem("settings", JSON.stringify(newSettings))
     setSettings(newSettings)
+    
+    console.log(`📏 After setSettings - New font sizes: Arabic=${newSettings.fontSize.arabic}px, Translation=${newSettings.fontSize.translation}px`)
 
     if (typeof window !== "undefined") {
       const path = window.location.pathname

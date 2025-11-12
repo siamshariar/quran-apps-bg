@@ -43,10 +43,23 @@ export default function ChapterContent({
   verses,
   allTranslations,
   loading,
+  currentTranslation, // Translation from URL (for dynamic routes)
+  availableTranslations: propsAvailableTranslations,
 }) {
   const printRef = useRef(null)
-  const { translation, activeTranslations = [translation] } = useContext(SettingsContext)
+  const { 
+    translation: contextTranslation, 
+    activeTranslations = [],
+    fontSizeArabic,
+    fontSizeTranslation,
+    fontFamilyArabic,
+    fontFamilyTranslation,
+  } = useContext(SettingsContext)
   const { setPlaylist, setChapterMp3Url, playing, play, pause, audioType } = useContext(AudioPlayerContext)
+  
+  // Use currentTranslation from props if available (from URL), otherwise use context
+  const translation = currentTranslation || contextTranslation
+  const activeTranslationsList = activeTranslations.length > 0 ? activeTranslations : [translation]
   
   // Better fallback logic for currentVerses
   // If translation exists in allTranslations, use it; otherwise use verses prop
@@ -73,6 +86,56 @@ export default function ChapterContent({
   
   // Emergency fallback - if we have verses but shouldShowLoading is true, force it to false
   const finalShouldShowLoading = shouldShowLoading && (!verses || verses.length === 0)
+
+  // Apply font styles when verses or settings change
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    
+    console.log(`🔍 Font Style Effect Triggered: Arabic=${fontSizeArabic}px, Translation=${fontSizeTranslation}px`)
+    
+    // Wait a bit for DOM to update after verses change
+    const applyFontStyles = () => {
+      const elemsArabic = document.querySelectorAll('.text_arabic')
+      const elemsTrans = document.querySelectorAll('.text_trans')
+
+      if (elemsArabic.length === 0 && elemsTrans.length === 0) {
+        console.log('⏳ No text elements found yet, will retry...')
+        return
+      }
+
+      elemsArabic.forEach((elem) => {
+        if (fontSizeArabic) {
+          elem.style.fontSize = fontSizeArabic + 'px'
+        }
+        if (fontFamilyArabic) {
+          elem.style.fontFamily = fontFamilyArabic
+        }
+      })
+
+      elemsTrans.forEach((elem) => {
+        if (fontSizeTranslation) {
+          elem.style.fontSize = fontSizeTranslation + 'px'
+        }
+        if (fontFamilyTranslation) {
+          elem.style.fontFamily = fontFamilyTranslation
+        }
+      })
+
+      console.log(`✅ Applied font styles to ${elemsArabic.length} Arabic + ${elemsTrans.length} Translation elements: Arabic=${fontSizeArabic}px, Translation=${fontSizeTranslation}px`)
+    }
+
+    // Apply multiple times with increasing delays to ensure all DOM updates are caught
+    applyFontStyles()
+    const timeout1 = setTimeout(applyFontStyles, 100)
+    const timeout2 = setTimeout(applyFontStyles, 300)
+    const timeout3 = setTimeout(applyFontStyles, 500)
+
+    return () => {
+      clearTimeout(timeout1)
+      clearTimeout(timeout2)
+      clearTimeout(timeout3)
+    }
+  }, [currentVerses, fontSizeArabic, fontSizeTranslation, fontFamilyArabic, fontFamilyTranslation])
 
   // Debug logging
   useEffect(() => {
@@ -446,8 +509,8 @@ export default function ChapterContent({
         console.log(`Passing transliteration for verse ${index + 1}:`, verseTranslations["english_transliteration"])
       }
 
-      if (activeTranslations && activeTranslations.length > 0) {
-        activeTranslations.forEach((translationCode) => {
+      if (activeTranslationsList && activeTranslationsList.length > 0) {
+        activeTranslationsList.forEach((translationCode) => {
           if (allTranslations && allTranslations[translationCode] && allTranslations[translationCode][index]) {
             verseTranslations[translationCode] = allTranslations[translationCode][index]
           }
@@ -468,11 +531,11 @@ export default function ChapterContent({
           isLastVerse={index === currentVerses.length - 1}
           translation={translation}
           allTranslations={verseTranslations}
-          activeTranslations={activeTranslations}
+          activeTranslations={activeTranslationsList}
         />
       )
     },
-    [chapterName, chapterNo, chapterSlug, currentVerses, translation, activeTranslations, allTranslations],
+    [chapterName, chapterNo, chapterSlug, currentVerses, translation, activeTranslationsList, allTranslations],
   )
 
   const availableTranslations = allTranslations ? Object.keys(allTranslations) : []

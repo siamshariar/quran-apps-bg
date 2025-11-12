@@ -5,7 +5,7 @@ import Scrollbar from '../core/scrollbar'
 import Close from '../icons/Close'
 import Search from '../icons/Search'
 import SettingsContextProvider from '../../contexts/SettingsContext'
-import { t, isFirstTranslation } from '../../lib/config'
+import { t, buildChapterUrl } from '../../lib/config'
 import styles from './chapter-list.module.scss'
 import css from './style.module.scss'
 
@@ -59,11 +59,7 @@ export default function ChapterList({ chapterList, open, controller }) {
 					>
             {/* To Do: update link with verse mode */}
 						<Link
-                href={
-                  isFirstTranslation(translation)
-                    ? `/chapters/${chapter.slug}`
-                    : `/${translation}/chapters/${chapter.slug}`
-                }
+                href={buildChapterUrl(translation, chapter.slug)}
               legacyBehavior>
 							<a onClick={controller(false)}>
 								<span className={styles.number}>{chapter.chapterNo}</span>

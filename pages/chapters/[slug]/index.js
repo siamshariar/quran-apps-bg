@@ -1,4 +1,4 @@
-import { server, config, t, getFirstAvailableTranslation, getAvailableTranslations, translationData } from "../../../lib/config"
+import { server, config, t, getFirstAvailableTranslation, getAvailableTranslations, translationData, buildChapterUrl, isFirstTranslation } from "../../../lib/config"
 import { getChaptersInfo, getChapterDetails, getChapterTransliteration } from "../../../lib/fetch"
 import Layout from "../../../components/layouts/layout-chapter"
 import Meta from "../../../components/core/meta"
@@ -26,6 +26,93 @@ export default function Chapter({
   const [translationCode, setTranslationCode] = useState(initialTranslationCode)
   const [availableTranslations, setAvailableTranslations] = useState(initialAvailableTranslations)
   const [loading, setLoading] = useState(initialLoading)
+  const [currentSlug, setCurrentSlug] = useState(chapterSlug)
+  const [currentChapterNo, setCurrentChapterNo] = useState(chapterNo)
+  const [currentChapterName, setCurrentChapterName] = useState(chapterName)
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
+
+  // Detect when URL slug changes (navigating to different chapter)
+  useEffect(() => {
+    if (router.query.slug && router.query.slug !== currentSlug) {
+      console.log(`🔄 Base route: Chapter changed from ${currentSlug} to ${router.query.slug}`)
+      
+      // Find the new chapter info
+      const newChapter = chapters.find(ch => ch.slug === router.query.slug)
+      if (newChapter) {
+        setCurrentSlug(router.query.slug)
+        setCurrentChapterNo(newChapter.id || newChapter.chapterNo)
+        setCurrentChapterName(newChapter.name)
+        setIsInitialLoad(false)
+      }
+    }
+  }, [router.query.slug, currentSlug, chapters])
+
+  // Fetch data when chapter changes
+  useEffect(() => {
+    // Skip initial load - we already have data from getStaticProps
+    if (isInitialLoad) {
+      setIsInitialLoad(false)
+      return
+    }
+
+    // Skip if no chapter number
+    if (!currentChapterNo) return
+
+    const fetchChapterData = async () => {
+      console.log(`🔄 Base route: Fetching chapter ${currentChapterNo} (${currentSlug}) with translation: ${translationCode}`)
+      setLoading(true)
+
+      try {
+        // Fetch ONLY the translation data (verses contain both Arabic and translation)
+        const chapterDetails = await getChapterDetails(currentChapterNo, translationCode)
+        
+        if (chapterDetails && chapterDetails.verses) {
+          setVerses(chapterDetails.verses)
+
+          // Update allTranslations - no need to fetch additional translations
+          // Just update the current translation
+          const newAllTranslations = {
+            ...allTranslations,
+            [translationCode]: chapterDetails.verses,
+          }
+
+          setAllTranslations(newAllTranslations)
+          
+          console.log(`✅ Base route: Updated chapter ${currentChapterNo} with translation ${translationCode}`)
+        } else {
+          console.error(`No data returned for chapter ${currentChapterNo}`)
+        }
+      } catch (error) {
+        console.error('Error fetching chapter data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchChapterData()
+  }, [currentChapterNo]) // Only re-fetch when chapter changes (NOT translation, as that redirects)
+
+  // Check if we should redirect to a translation-specific URL
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    
+    try {
+      const savedSettings = localStorage.getItem('settings')
+      if (savedSettings) {
+        const settings = JSON.parse(savedSettings)
+        const savedTranslation = settings.translation
+        
+        // If saved translation is different from first translation, redirect
+        if (savedTranslation && !isFirstTranslation(savedTranslation)) {
+          const newUrl = buildChapterUrl(savedTranslation, chapterSlug)
+          console.log(`Base route: Redirecting to saved translation URL: ${newUrl}`)
+          router.replace(newUrl)
+        }
+      }
+    } catch (error) {
+      console.error('Error checking saved translation:', error)
+    }
+  }, [chapterSlug, router])
 
   // Handle router loading state
   if (router.isFallback) {
@@ -181,23 +268,24 @@ Chapter.getLayout = function getLayout(page) {
 }
 
 export async function getStaticProps(context) {
-  const slug = encodeURI(context.params.slug)
-  const chapterNo = Number.parseInt(slug)
-
+  const slug = context.params.slug
+  
   // Use the first available translation for base route
   const translationCode = getFirstAvailableTranslation()
   const availableTranslations = getAvailableTranslations()
 
   try {
-    console.log(`Base route: Fetching chapter ${chapterNo} with first translation: ${translationCode}`)
-
+    const decodedSlug = decodeURIComponent(slug)
     const chaptersInfo = await getChaptersInfo()
-
-    if (!chaptersInfo || !chaptersInfo[chapterNo - 1]) {
-      return {
-        notFound: true,
-      }
+    const chapter = chaptersInfo.find((ch) => ch.slug === decodedSlug)
+    
+    if (!chapter) {
+      return { notFound: true }
     }
+
+    const chapterNo = chapter.id || chapter.chapterNo
+    
+    console.log(`Base route: Fetching chapter ${chapterNo} (${chapter.slug}) with first translation: ${translationCode}`)
 
     // Fetch the primary (first) translation
     const chapterDetails = await getChapterDetails(chapterNo, translationCode)
@@ -237,14 +325,14 @@ export async function getStaticProps(context) {
 
     return {
       props: {
-        chapterNo: chapterDetails.chapterNo,
-        chapterName: chaptersInfo[chapterNo - 1].name,
-        chapterSlug: chaptersInfo[chapterNo - 1].slug,
+        chapterNo,
+        chapterName: chapter.name,
+        chapterSlug: chapter.slug,
         chapterMp3Url: chapterDetails.mp3Url,
         verses: chapterDetails.verses,
         allTranslations: allTranslationsObj,
         chapters: chaptersInfo,
-        contentTitle: chaptersInfo[chapterNo - 1].name,
+        contentTitle: chapter.name,
         mode: "chapter",
         loading: false,
         translationCode,
@@ -261,16 +349,32 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
-  const chapters = await getChaptersInfo()
+  try {
+    const chapters = await getChaptersInfo()
+    
+    if (!chapters || !Array.isArray(chapters)) {
+      console.error('Failed to load chapters info for static paths')
+      return {
+        paths: [],
+        fallback: 'blocking',
+      }
+    }
 
-  const paths = chapters.map((chapter) => ({
-    params: {
-      slug: chapter.slug,
-    },
-  }))
+    const paths = chapters.map((chapter) => ({
+      params: {
+        slug: chapter.slug,
+      },
+    }))
 
-  return {
-    paths,
-    fallback: false,
+    return {
+      paths,
+      fallback: 'blocking',
+    }
+  } catch (error) {
+    console.error('Error in getStaticPaths:', error)
+    return {
+      paths: [],
+      fallback: 'blocking',
+    }
   }
 }

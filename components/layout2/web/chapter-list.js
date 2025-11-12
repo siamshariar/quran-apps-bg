@@ -1,7 +1,7 @@
 import { useState, useRef, useContext } from "react";
 import { SettingsContext } from "../../../contexts/SettingsContext";
 import Link from "next/link";
-import { isFirstTranslation } from "../../../lib/config";
+import { buildChapterUrl } from "../../../lib/config";
 // import Scrollbar from "../../core/scrollbar";
 import CloseIcon from "../../icons/Close";
 import SearchIcon from "../../icons/Search";
@@ -83,11 +83,7 @@ export default function ChapterList({ chapterList, controller }) {
             //     ? `/chapters/${chapter.slug}/verses/1`
             //     : `/chapters/${chapter.slug}`
             // }
-            href={
-              isFirstTranslation(translation)
-                ? `/chapters/${chapter.slug}`
-                : `/${translation}/chapters/${chapter.slug}`
-            }
+            href={buildChapterUrl(translation, chapter.slug)}
           legacyBehavior>
             <a className={styles.list} onClick={controller(false)}>
               <span className={styles.number}>{chapter.chapterNo}</span>

@@ -5,7 +5,7 @@ import Scrollbar from '../../core/scrollbar'
 import CloseIcon from '../../icons/Close'
 import SearchIcon from '../../icons/Search'
 import styles from './chapter-list.module.scss'
-import { t } from '../../../lib/config'
+import { t, buildChapterUrl } from '../../../lib/config'
 
 export default function ChapterList({ chapterList, open, controller, chapter }) {
   const { verseMode, translation } = useContext(SettingsContext)
@@ -39,9 +39,7 @@ export default function ChapterList({ chapterList, open, controller, chapter }) 
 		setSearchOpen(open)
 	}
   const getChapterLink = (chapterSlug) => {
-    return translation === 'vietnamese_rwwad' 
-      ? `/vietnamese_rwwad/chapters/${chapterSlug}`
-      : `/chapters/${chapterSlug}`
+    return buildChapterUrl(translation, chapterSlug)
 	}
 
 	return (

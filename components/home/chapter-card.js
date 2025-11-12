@@ -1,15 +1,17 @@
 import { useContext } from 'react'
 import { SettingsContext } from '../../contexts/SettingsContext'
 import Link from 'next/link'
-import { isFirstTranslation } from '../../lib/config'
+import { buildChapterUrl } from '../../lib/config'
 import styles from './chapter-card.module.scss'
 
 export default function ChapterCard({ chapter, translation }) {
-  const { verseMode, translation } = useContext(SettingsContext)
+  const { verseMode, translation: contextTranslation } = useContext(SettingsContext)
+  
+  // Use the translation from context
+  const currentTranslation = contextTranslation
 
   // const link = verseMode === "scroll" ? `/chapters/${chapter.slug}` : verseMode === "slide" ? `/chapters/${chapter.slug}/verses/1` : `/chapters/${chapter.slug}`
-  const translationPrefix = isFirstTranslation(translation) ? "" : `/${translation}`
-  const link = `${translationPrefix}/chapters/${chapter.slug}`
+  const link = buildChapterUrl(currentTranslation, chapter.slug)
 
     return (
         <div className={styles.item}>

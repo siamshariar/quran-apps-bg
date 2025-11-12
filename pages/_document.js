@@ -16,6 +16,9 @@ class CustomDocument extends Document {
     return (
       <Html lang="en">
           <Head>
+              {/* Character encoding for proper UTF-8 support (Khmer, Arabic, etc.) */}
+              <meta charSet="UTF-8" />
+              
               {/* Global Site Tag (gtag.js) - Google Analytics */}
               <meta
                 name="google-site-verification"
