@@ -25,7 +25,7 @@ export default function Meta(props) {
 
             <meta name="description" content={props.description || ""} />
             <meta name="author" content="" />
-            <meta name="keywords" content="" />
+            <meta name="keywords" content={config.keywords || ""} />
             <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
 
             {/* Android phone */}
