@@ -33,7 +33,8 @@ Home.getLayout = function getLayout(page) {
 export async function getStaticProps(context) {
   const chapters = await getChaptersInfo();
 
-  if (!chapters) {
+  if (!chapters || chapters.length === 0) {
+    console.error("No chapters data available");
     return {
       notFound: true,
     };

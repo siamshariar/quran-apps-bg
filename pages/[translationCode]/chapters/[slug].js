@@ -151,13 +151,64 @@ export default function DynamicTranslationChapter({
     fetchTranslationData();
   }, [translationCode, chapterNo]); // Re-fetch whenever translation or chapter changes
 
+  // Get localization code for current translation
+  const getLocalizationForTranslation = (transCode) => {
+    // Map translation codes to localization codes
+    const translationToLocale = {
+      // German
+      german_bubenheim: 'de',
+      german_aburida: 'de',
+      german_rwwad: 'de',
+      // Portuguese
+      portuguese_nasr: 'pt',
+      por_samirelhayek: 'pt',
+      // Add other mappings as needed
+      // Vietnamese
+      vietnamese_hassan: 'vn',
+      vietnamese_rwwad: 'vn',
+      vietnamese_mokhtasar: 'vn',
+      // Korean
+      korean_hamid: 'kr',
+      korean_rwwad: 'kr',
+      // Chinese
+      chinese_makin: 'cn',
+      chinese_suliman: 'cn',
+      chinese_mayolong: 'cn',
+      chinese_mokhtasar: 'cn',
+      // Japanese
+      japanese_saeedsato: 'jp',
+      japanese_mokhtasar: 'jp',
+      // Danish
+      'dan-hadiabdollahian': 'dk',
+      'dan-vandetaal': 'dk',
+      // Khmer
+      khmer_cambodia: 'kh',
+      khmer_rwwad: 'kh',
+      khmer_mokhtasar: 'kh',
+      // Filipino
+      tagalog_rwwad: 'ph',
+      bisayan_rwwad: 'ph',
+      iranun_sarro: 'ph',
+      maguindanao_rwwad: 'ph',
+      tagalog_mokhtasar: 'ph',
+      // French
+      french_rashid: 'fr',
+      french_montada: 'fr',
+      french_hameedullah: 'fr',
+      french_mokhtasar: 'fr',
+    };
+    return translationToLocale[transCode] || config?.localizationCode;
+  };
+
+  const currentLocalization = getLocalizationForTranslation(translationCode);
+
   return (
     <>
       <Meta
         title={`${t('Chapter')} ${chapterName} | ${config?.metaTitle}`}
         description={`Chapter ${chapterName}. ${config?.metaDescription}`}
         url={`${server}/${translationCode}/chapters/${chapterSlug}`}
-        image={`${server}/img/logo/${config?.localizationCode}/s_logo.png`}
+        image={`${server}/img/logo/${currentLocalization}/logo.png`}
         type="website"
       />
 
