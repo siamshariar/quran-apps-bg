@@ -26,7 +26,6 @@ export default function HeaderWeb({ page, searchModalController }) {
                             <Link href="/" legacyBehavior>
                                 <a className={styles.logo}>
                                     <Image
-                                        key={theme}
                                         src={`/img/logo/${config?.localizationCode}/logo.png`}
                                         alt=""
                                         width={182}
@@ -42,7 +41,6 @@ export default function HeaderWeb({ page, searchModalController }) {
                             <Link href="/" legacyBehavior>
                                 <a className={styles.logo}>
                                     <Image
-                                        key={theme}
                                         src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                                         alt=""
                                         width={138}

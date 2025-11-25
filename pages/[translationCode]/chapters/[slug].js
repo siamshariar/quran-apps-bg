@@ -196,6 +196,11 @@ export default function DynamicTranslationChapter({
       french_montada: 'fr',
       french_hameedullah: 'fr',
       french_mokhtasar: 'fr',
+      // Turkish
+      turkish_rwwad: 'tr',
+      turkish_shaban: 'tr',
+      turkish_shahin: 'tr',
+
     };
     return translationToLocale[transCode] || config?.localizationCode;
   };
