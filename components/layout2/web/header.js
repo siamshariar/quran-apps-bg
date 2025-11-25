@@ -184,7 +184,7 @@ useEffect(() => {
                     <Image
                       src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                       alt=""
-                      width={122}
+                      width={182}
                       height={26}
                       loading="eager"
                       objectFit="contain"
@@ -198,7 +198,7 @@ useEffect(() => {
                     <Image
                       src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                       alt=""
-                      width={122}
+                      width={182}
                       height={26}
                       loading="eager"
                       objectFit="contain"

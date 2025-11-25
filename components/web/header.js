@@ -26,10 +26,11 @@ export default function HeaderWeb({ page, searchModalController }) {
                             <Link href="/" legacyBehavior>
                                 <a className={styles.logo}>
                                     <Image
+                                        key={theme}
                                         src={`/img/logo/${config?.localizationCode}/logo.png`}
                                         alt=""
-                                        width={122}
-                                        height={26}
+                                        width={182}
+                                        height={28}
                                         loading="eager"
                                         objectFit="contain"
                                     />
@@ -41,10 +42,11 @@ export default function HeaderWeb({ page, searchModalController }) {
                             <Link href="/" legacyBehavior>
                                 <a className={styles.logo}>
                                     <Image
+                                        key={theme}
                                         src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                                         alt=""
-                                        width={122}
-                                        height={26}
+                                        width={138}
+                                        height={28}
                                         loading="eager"
                                         objectFit="contain"
                                     />
