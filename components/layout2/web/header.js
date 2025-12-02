@@ -174,6 +174,7 @@ useEffect(() => {
                       height={26}
                       loading="eager"
                       objectFit="contain"
+                      unoptimized
                     />
                   </a>
                 </Link>
@@ -182,12 +183,13 @@ useEffect(() => {
                 <Link href="/" legacyBehavior>
                   <a className={`${styles.logo} ${styles.logo_white}`}>
                     <Image
-                      src={`/img/logo/${config?.localizationCode}/logo.png`}
+                      src={`/img/logo/${config?.localizationCode}/logo_full_white.png`}
                       alt=""
                       width={182}
                       height={26}
                       loading="eager"
                       objectFit="contain"
+                      unoptimized
                     />
                   </a>
                 </Link>
@@ -202,6 +204,7 @@ useEffect(() => {
                       height={26}
                       loading="eager"
                       objectFit="contain"
+                      unoptimized
                     />
                   </a>
                 </Link>
